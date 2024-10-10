@@ -43,34 +43,84 @@ function removeOption(selectId) {
 
 // Function to generate the bill preview
 function generateBill() {
-    document.getElementById("preview-lr-no").innerText = document.getElementById("lr-no").value;
-    document.getElementById("preview-manual-bill-no").innerText = document.getElementById("manual-bill-no").value;
-    document.getElementById("preview-bill-no").innerText = document.getElementById("bill-no").value;
-    document.getElementById("preview-customer-name").innerText = document.getElementById("customer-name").value;
-    document.getElementById("preview-goods").innerText = document.getElementById("goods").value;
-    document.getElementById("preview-no-articles").innerText = document.getElementById("no-articles").value;
-    document.getElementById("preview-gst-amt").innerText = document.getElementById("gst-amt").value;
-    document.getElementById("preview-total").innerText = document.getElementById("total").value;
+    // Fetch form inputs
+    const lrNo = document.getElementById('lr-no').value;
+    const manualBillNo = document.getElementById('manual-bill-no').value;
+    const billNo = document.getElementById('bill-no').value;
+    const customerName = document.getElementById('customer-name').value;
+    const fromLocation = document.getElementById('from').value;
+    const toLocation = document.getElementById('to').value;
+    const consignor = document.getElementById('consigner').value;
+    const consignee = document.getElementById('consignee').value;
+    const goods = document.getElementById('goods').value;
+    const noOfArticles = document.getElementById('no-articles').value;
+    const ratePerArticle = document.getElementById('rate-per-article').value;
+    const gstAmt = document.getElementById('gst-amt').value;
+    const freight = document.getElementById('freight').value;
+    const totalAmount = document.getElementById('total').value;
+    const date = document.getElementById('date').value;
 
-    document.getElementById("bill-preview").style.display = 'block'; // Show the bill preview
+    // Populate the preview section
+    document.getElementById('preview-lr-no').textContent = lrNo;
+    document.getElementById('preview-bill-no').textContent = billNo;
+    document.getElementById('preview-from').textContent = fromLocation;
+    document.getElementById('preview-to').textContent = toLocation;
+    document.getElementById('preview-consignor').textContent = consignor;
+    document.getElementById('preview-consignee').textContent = consignee;
+    document.getElementById('preview-goods').textContent = goods;
+    document.getElementById('preview-no-articles').textContent = noOfArticles;
+    document.getElementById('preview-rate-per-article').textContent = ratePerArticle;
+    document.getElementById('preview-gst-amt').textContent = gstAmt;
+    document.getElementById('preview-total').textContent = totalAmount;
+    document.getElementById('preview-date').textContent = date;
 }
 
-// Function to print the bill preview
 function printBill() {
-    const printContents = document.getElementById("bill-preview").innerHTML;
-    const newWindow = window.open('', '', 'width=600,height=400');
-    newWindow.document.write('<html><head><title>Print Bill</title></head><body>');
-    newWindow.document.write(printContents);
-    newWindow.document.write('</body></html>');
-    newWindow.document.close();
-    newWindow.print();
+    generateBill();  // Ensure the details are populated
+    window.print();
 }
 
-// Function to save the bill (simulation)
 function saveBill() {
-    alert("Bill saved successfully!");
-    // Here you can implement saving logic (e.g., save to database)
+    generateBill();  // Ensure the details are populated before saving
+    alert('Bill saved successfully!');
+    // Code to save the bill data can be added here (e.g., sending data to the backend)
 }
+
+function calculateTotal() {
+    const noOfArticles = parseFloat(document.getElementById('no-articles').value) || 0;
+    const ratePerArticle = parseFloat(document.getElementById('rate-per-article').value) || 0;
+    const gstPercent = parseFloat(document.getElementById('gst').value) || 0;
+    const freight = parseFloat(document.getElementById('freight').value) || 0;
+
+    // Calculate the total before GST
+    const totalBeforeGST = noOfArticles * ratePerArticle;
+    
+    // Calculate GST Amount
+    const gstAmt = (totalBeforeGST * gstPercent) / 100;
+    
+    // Set GST Amount
+    document.getElementById('gst-amt').value = gstAmt.toFixed(2);
+
+    // Calculate the total including GST and freight
+    const total = totalBeforeGST + gstAmt + freight;
+    document.getElementById('total').value = total.toFixed(2);
+}
+
+function addNewOption(selectId) {
+    const selectElement = document.getElementById(selectId);
+    const newOption = prompt(`Enter new value for ${selectId}`);
+    if (newOption) {
+        const option = document.createElement('option');
+        option.text = newOption;
+        selectElement.add(option);
+    }
+}
+
+function removeOption(selectId) {
+    const selectElement = document.getElementById(selectId);
+    selectElement.remove(selectElement.selectedIndex);
+}
+
 
 // Function to modify the bill (simulation)
 function modifyBill() {

@@ -43,6 +43,31 @@ window.onload = function() {
     showSection('vehicle-records'); // Default to vehicle records
     showBillingSection('bill'); // Default to billing tab
 };
+function showSection(sectionId) {
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => {
+        section.style.display = 'none'; // Hide all sections
+    });
+
+    document.getElementById(sectionId).style.display = 'block'; // Show the clicked section
+    
+    // Show sub-tabs for billing section
+    if (sectionId === 'billing') {
+        document.getElementById('billing-sub-tabs').style.display = 'flex';
+    } else {
+        document.getElementById('billing-sub-tabs').style.display = 'none';
+    }
+}
+
+function showBillingSection(sectionId) {
+    if (sectionId === 'bill') {
+        // Load index1.html inside the 'billing' section using an iframe
+        document.getElementById('billing-content').innerHTML = '<iframe src="home/bill/index1.html" style="width: 100%; height: 100vh; border: none;"></iframe>';
+    } else {
+        // Handle other sections if needed
+        document.getElementById('billing-content').innerHTML = '<p>' + sectionId + ' content will go here.</p>';
+    }
+}
 
 // Vehicle Records Functions
 document.addEventListener("DOMContentLoaded", loadVehicleRecords);
@@ -311,3 +336,105 @@ window.onload = function() {
         notepadContent.value = savedNote;
     }
 };
+
+function fetchBills() {
+    const reportsSection = document.getElementById("reports-section");
+    reportsSection.innerHTML = ''; // Clear existing reports
+
+    // Get bills from local storage
+    let bills = JSON.parse(localStorage.getItem('bills')) || [];
+
+    if (bills.length === 0) {
+        reportsSection.innerHTML = '<tr><td colspan="17" class="no-records">No records found</td></tr>';
+        return;
+    }
+
+    // Loop through each bill and create a table row
+    bills.forEach((bill, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${bill.lr_no}</td>
+            <td>${bill.manual_bill_no}</td>
+            <td>${bill.bill_no}</td>
+            <td>${bill.customer_name}</td>
+            <td>${bill.from_location}</td>
+            <td>${bill.to_location}</td>
+            <td>${bill.consignor}</td>
+            <td>${bill.consignee}</td>
+            <td>${bill.goods}</td>
+            <td>${bill.no_of_articles}</td>
+            <td>${bill.rate_per_article}</td>
+            <td>${bill.gst_amount}</td>
+            <td>${bill.freight}</td>
+            <td>${bill.total}</td>
+            <td>${new Date(bill.date).toLocaleDateString()}</td>
+            <td>${new Date(`1970-01-01T${bill.time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+            <td><button onclick="deleteBill(${index})">Delete</button></td>
+        `;
+        reportsSection.appendChild(row);
+    });
+}
+
+function deleteBill(index) {
+    // Get bills from local storage
+    let bills = JSON.parse(localStorage.getItem('bills')) || [];
+
+    // Remove the bill at the specified index
+    bills.splice(index, 1);
+
+    // Save updated bills back to local storage
+    localStorage.setItem('bills', JSON.stringify(bills));
+
+    // Refresh the report display
+    fetchBills();
+}
+
+function sortBills() {
+    const criteria = document.getElementById('sort-by').value;
+    let bills = JSON.parse(localStorage.getItem('bills')) || [];
+
+    // Sort bills based on the selected criteria
+    bills.sort((a, b) => {
+        if (criteria === 'date') {
+            return new Date(a.date) - new Date(b.date);
+        } else if (criteria === 'branch') {
+            return a.branch ? a.branch.localeCompare(b.branch) : 0; // Assuming branch exists in bill data
+        } else if (criteria === 'consigner') {
+            return a.consignor.localeCompare(b.consignor);
+        }
+    });
+
+    // Update the displayed bills
+    fetchBills(); // Call fetchBills to re-render sorted data
+}
+
+// Call fetchBills when the page loads
+window.onload = fetchBills;
+
+
+
+app.post('/api/bills', (req, res) => {
+    const { lrNo, manualBillNo, billNo, customerName, from, to, consignor, consignee, goods, noOfArticles, ratePerArticle, gstPercentage, gstAmount, freight, totalAmount, date, time } = req.body;
+
+    const query = 'INSERT INTO bills (lrNo, manualBillNo, billNo, customerName, `from`, `to`, consignor, consignee, goods, noOfArticles, ratePerArticle, gstPercentage, gstAmount, freight, totalAmount, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    
+    connection.query(query, [lrNo, manualBillNo, billNo, customerName, from, to, consignor, consignee, goods, noOfArticles, ratePerArticle, gstPercentage, gstAmount, freight, totalAmount, date, time], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: "Error saving bill", error: err });
+        }
+        res.status(201).json({ message: "Bill saved successfully", billId: result.insertId });
+    });
+});
+
+
+// Endpoint to fetch bills
+app.get('/api/get-bills', (req, res) => {
+    db.query('SELECT * FROM bills ORDER BY date DESC', (error, results) => {
+        if (error) {
+            console.error('Error fetching bills:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.json(results);
+    });
+});

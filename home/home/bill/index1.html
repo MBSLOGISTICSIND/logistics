@@ -116,22 +116,80 @@
                 </div>
             </form>
         </div>
+        
+       <!-- Bill Preview Section -->
+<div id="bill-preview" class="bill-preview" style="border: 1px solid black; padding: 20px; margin: 20px 0;">
+    <div class="header" style="text-align: center;">
+        <h1> <div class="logo"></div>
+            <img src="MBSLOGO.jpg" alt="Company Logo" style="height: 90px;">
+        </div> </h1>
+<div style="text-align: center;">
+        <h2 style="font-size: 16px;">   86, 3rd Main Road, New Tharagupet, Bangalore - 560002</h2>
+        <h2 style="font-size: 16px;"> Email: mbslorryservice@gmail.com | GSTIN: 29ACYPN6946Q2Z1</h2>
+        <h2 style="font-size: 16px;"> Mob: 080-41554121, 41283507</h2>
+    
+</div>
+    <table class="company-details" style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>From:</strong> <span id="preview-from"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>To:</strong> <span id="preview-to"></span></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Consignor Details:</strong> <span id="preview-consignor"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Consignee Details:</strong> <span id="preview-consignee"></span></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Name:</strong> <span id="preview-consignor-name"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Name:</strong> <span id="preview-consignee-name"></span></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Address:</strong> <span id="preview-consignor-address"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Address:</strong> <span id="preview-consignee-address"></span></td>
+        </tr>
+    </table>
 
-        <!-- Bill Preview Section -->
-        <div id="bill-preview" class="bill-preview">
-            <h3><div class="logo">
-                <img src="MBSLOGO.jpg" alt="Company Logo" style="height: 80px;">
-            </div></h3>
-            <p><strong>LR No.:</strong> <span id="preview-lr-no"></span></p>
-            <p><strong>Manual Bill No.:</strong> <span id="preview-manual-bill-no"></span></p>
-            <p><strong>Bill No.:</strong> <span id="preview-bill-no"></span></p>
-            <p><strong>Customer Name:</strong> <span id="preview-customer-name"></span></p>
-            <p><strong>Goods:</strong> <span id="preview-goods"></span></p>
-            <p><strong>No of Articles:</strong> <span id="preview-no-articles"></span></p>
-            <p><strong>GST Amount:</strong> <span id="preview-gst-amt"></span></p>
-            <p><strong>Total Amount:</strong> <span id="preview-total"></span></p>
-        </div>
+    <table class="bill-details" style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>L.R. No:</strong> <span id="preview-lr-no"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Date:</strong> <span id="preview-date"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>BR No:</strong> <span id="preview-bill-no"></span></td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #003366; color: white;">
+                <th style="border: 1px solid black; padding: 8px;">No</th>
+                <th style="border: 1px solid black; padding: 8px;">Description</th>
+                <th style="border: 1px solid black; padding: 8px;">No of Articles</th>
+                <th style="border: 1px solid black; padding: 8px;">Rate per Article</th>
+                <th style="border: 1px solid black; padding: 8px;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid black; padding: 8px;">1</td>
+                <td style="border: 1px solid black; padding: 8px;"><span id="preview-goods"></span></td>
+                <td style="border: 1px solid black; padding: 8px;"><span id="preview-no-articles"></span></td>
+                <td style="border: 1px solid black; padding: 8px;"><span id="preview-rate-per-article"></span></td>
+                <td style="border: 1px solid black; padding: 8px;"><span id="preview-amount"></span></td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+
+    <p class="notes" style="font-size: 12px; margin-top: 20px;">Note: Carriers are not responsible for leakage. No charge for liquid drums and glassware. The company is not responsible for loss due to any "ACT OF GOD".</p>
+    
+    <div class="total">
+        <p><strong>GST Amount:</strong> <span id="preview-gst-amt"></span></p>
+        <p><strong>Total Amount:</strong> <span id="preview-total"></span></p>
     </div>
+
+    <div class="footer" style="text-align: center; margin-top: 20px;">
+        <p>For MBS LORRY SERVICE</p>
+    </div>
+</div>
+
 
     <script src="billing-script.js"></script>
 </body>

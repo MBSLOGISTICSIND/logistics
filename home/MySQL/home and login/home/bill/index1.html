@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Form</title>
+    <link rel="stylesheet" href="billing-style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .billing-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            height: 80px;
+        }
+
+        h2, h3, h4 {
+            color: #003366;
+            text-align: center;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #003366;
+            outline: none;
+        }
+
+        button {
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #00509e;
+        }
+
+        table {
+            width: 100%;
+            margin: 10px 0;
+            border-collapse: collapse;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #003366;
+            color: white;
+            padding: 8px;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .bill-preview {
+            border: 1px solid #003366;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
+
+        .total {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .billing-container {
+                padding: 15px;
+            }
+
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="billing-container">
+        <h2> <div class="logo">
+            <img src="MBSLOGO.jpg" alt="Company Logo" style="height: 80px;">
+        </div> </h2>
+        <h3>Billing Form</h3>
+
+        <!-- Customer Info Section -->
+        <div class="form-section">
+            <h4>Customer Info</h4>
+            <form id="billing-form">
+                <label for="lr-no">LR No.:</label>
+                <input type="text" id="lr-no" required>
+    
+
+                <label for="manual-bill-no">Manual Bill No.:</label>
+                <input type="text" id="manual-bill-no" required>
+            
+
+                <label for="bill-no">Bill No.:</label>
+                <input type="text" id="bill-no" required>
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" required><br>
+
+                <label for="gst-paid-by">GST Paid By:</label>
+                <select id="gst-paid-by" required>
+                    <option value="consigner">consigner</option>
+                    <option value="consignee">consignee</option>
+                    <option value="To be billed">To be billed</option>
+                </select><br>
+
+                <label for="payment-mode">Payment Mode:</label>
+                <select id="payment-mode" required>
+                    <option value="cash">Cash</option>
+                    <option value="cheque">Cheque</option>
+                    <option value="online">Online</option>
+                </select><br>
+
+               
+                <label for="from">From:</label>
+                <select id="from" required>
+                    <option value="">Select Location</option>
+                </select>
+                <button type="button" onclick="addNewOption('from')">Add New Location</button>
+                <button type="button" onclick="removeOption('from')">Remove Location</button><br>
+
+                <label for="to">To:</label>
+                <select id="to" required>
+                    <option value="">Select Destination</option>
+                </select>
+                <button type="button" onclick="addNewOption('to')">Add New Destination</button>
+                <button type="button" onclick="removeOption('to')">Remove Destination</button><br>
+            </form>
+        </div>
+
+        <!-- Consignor and Consignee Section -->
+        <div class="form-section">
+            <h4>Consignor & Consignee</h4>
+            <form id="consignee-form">
+                <label for="consigner">Consignor:</label>
+                <select id="consigner" required>
+                    <option value="">Select Consignor</option>
+                </select>
+                <button type="button" onclick="addNewOption('consigner')">Add New Consignor</button>
+                <button type="button" onclick="removeOption('consigner')">Remove Consignor</button><br>
+
+                
+                <label for="consigner-address">Consigner Address:</label>
+                <textarea id="consigner-address" required></textarea><br>
+
+                <label for="consignee">Consignee:</label>
+                <select id="consignee" required>
+                    <option value="">Select Consignee</option>
+                </select>
+                <button type="button" onclick="addNewOption('consignee')">Add New Consignee</button>
+                <button type="button" onclick="removeOption('consignee')">Remove Consignee</button><br>
+
+                <label for="consignee-address">Consignee Address:</label>
+                <textarea id="consignee-address" required></textarea><br>
+            </form>
+        </div>
+
+        <!-- Goods Info Section -->
+        <div class="form-section">
+            <h4>Goods Info</h4>
+            <table id="goods-table" style="width: 100%; margin: 10px 0; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #003366; color: white;">
+                        <th style="border: 1px solid black; padding: 8px;">Goods</th>
+                        <th style="border: 1px solid black; padding: 8px;">No of Articles</th>
+                        <th style="border: 1px solid black; padding: 8px;">Rate per Article</th>
+                        <th style="border: 1px solid black; padding: 8px;">GST %</th>
+                        <th style="border: 1px solid black; padding: 8px;">GST Amount</th>
+                        <th style="border: 1px solid black; padding: 8px;">Freight</th>
+                        <th style="border: 1px solid black; padding: 8px;">Total Amount</th>
+                        <th style="border: 1px solid black; padding: 8px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="goods-entries">
+                    <tr>
+                        <td>
+                            <select class="goods" required>
+                                <option value="">Select Goods</option>
+                            </select>
+                        </td>
+                        <td><input type="number" class="no-articles" required oninput="calculateTotal(this)"></td>
+                        <td><input type="number" class="rate-per-article" required oninput="calculateTotal(this)"></td>
+                        <td>
+                            <select class="gst" required onchange="calculateTotal(this)">
+                                <option value="5">5%</option>
+                                <option value="12">12%</option>
+                                <option value="18">18%</option>
+                            </select>
+                        </td>
+                        <td><input type="number" class="gst-amt" required readonly></td>
+                        <td><input type="number" class="freight" required oninput="calculateTotal(this)"></td>
+                        <td><input type="number" class="total" required readonly></td>
+                        <td><button type="button" onclick="removeGoodsEntry(this)">Remove</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" onclick="addGoodsEntry()">Add More Goods</button>
+        </div>
+
+        <div class="form-buttons">
+            <button type="button" onclick="generateBill()">View Bill</button>
+            <button type="button" onclick="printBill()">Print Bill</button>
+            <button type="button" onclick="saveBill()">Save Bill</button>
+            <button type="button" onclick="modifyBill()">Modify Bill</button>
+            <button type="button" onclick="deleteBill()">Delete Bill</button>
+            <button type="button" onclick="closeForm()">Close</button>
+        </div>
+    </form>
+</div>
+
+
+
+       <!-- Bill Preview Section -->
+<div id="bill-preview" class="bill-preview" style="border: 1px solid black; padding: 20px; margin: 20px 0;">
+    <div class="header" style="text-align: center;">
+            <p>Subject to Benglore Jurisdiction</p>
+        <h1> <div class="logo"></div>
+            <img src="MBSLOGO.jpg" alt="Company Logo" style="height: 90px;">
+        </div> </h1>
+<div style="text-align: center;">
+        <h2 style="font-size: 16px;">   86, 3rd Main Road, New Tharagupet, Bangalore - 560002</h2>
+        <h2 style="font-size: 16px;"> Email: mbslorryservice@gmail.com | GSTIN: 29ACYPN6946Q2Z1</h2>
+        <h2 style="font-size: 16px;"> Mob: 080-41554121, 41283507</h2>
+    
+</div>
+    <table class="company-details" style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>From:</strong> <span id="preview-from"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>To:</strong> <span id="preview-to"></span></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>L.R. No:</strong> <span id="preview-lr-no"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Date:</strong> <span id="preview-date"></span></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Consignor:</strong> <span id="preview-consignor"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Consignee:</strong> <span id="preview-consignee"></span></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Consignor GST:</strong> <span id="preview-consignor-name"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Consignee GST:</strong> <span id="preview-consignee-name"></span></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Address:</strong> <span id="preview-consignor-address"></span></td>
+            <td style="border: 1px solid black; padding: 5px;"><strong>Address:</strong> <span id="preview-consignee-address"></span></td>
+        </tr>
+    </table>
+
+    <table class="bill-details" style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+       
+    </table>
+
+    <table id="preview-table" style="width: 100%; margin: 10px 0; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #003366; color: white;">
+                <th style="border: 1px solid black; padding: 8px;">Goods</th>
+                <th style="border: 1px solid black; padding: 8px;">No of Articles</th>
+                <th style="border: 1px solid black; padding: 8px;">Rate per Article</th>
+                <th style="border: 1px solid black; padding: 8px;">GST %</th>
+                <th style="border: 1px solid black; padding: 8px;">GST Amount</th>
+                <th style="border: 1px solid black; padding: 8px;">Freight</th>
+                <th style="border: 1px solid black; padding: 8px;">Total Amount</th>
+            </tr>
+        </thead>
+        <tbody id="preview-entries">
+            <!-- Preview entries will be populated here dynamically -->
+        </tbody>
+    </table>
+
+
+    <p class="notes" style="font-size: 12px; margin-top: 20px;">Note: Carriers are not responsible for leakage. No charge for liquid drums and glassware. The company is not responsible for loss due to any "ACT OF GOD".</p>
+    
+    <div class="total">
+        <p><strong>GST Amount:</strong> <span id="preview-gst-amt">0.00</span></p>
+        <p><strong>Total Amount:</strong> <span id="preview-total">0.00</span></p>
+    </div>
+
+    <div class="footer" style="text-align: center; margin-top: 20px;">
+        <p>For MBS LORRY SERVICE</p>
+    </div>
+</div>
+
+    <script src="billing-script.js"></script>
+</body>
+</html>

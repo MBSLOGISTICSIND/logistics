@@ -1,0 +1,517 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    color: #e0e0e0;
+    line-height: 1.6;
+}
+
+/* Futuristic Login Page */
+.login-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+}
+
+.login-page h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.login-page form {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.login-page input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1rem;
+}
+
+.login-page input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px #4caf50, 0 0 40px #4caf50;
+}
+
+.login-page button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-page button:hover {
+    background-color: #3e8e41;
+    box-shadow: 0 0 15px #4caf50, 0 0 30px #4caf50, 0 0 45px #4caf50;
+}
+
+/* Error Message Styling */
+.error-message {
+    margin-top: 10px;
+    color: #ff4d4d;
+    display: none;
+}
+
+/* Main Application Styling */
+.main-content {
+    display: none;
+    padding: 20px;
+}
+
+/* Header Styling */
+header {
+    background-color: #000;
+    color: white;
+    padding: 10px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.main-nav ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+}
+
+.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.main-nav ul li a:hover {
+    background-color: #333;
+    color: #4caf50;
+    box-shadow: 0 0 10px #4caf50, 0 0 20px #4caf50;
+}
+
+/* Secondary Navigation Bar */
+.secondary-nav ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    background: rgba(52, 73, 94, 0.7); /* Semi-transparent */
+    backdrop-filter: blur(10px); /* Adds glass effect */
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px; /* Smooth round corners */
+}
+
+.secondary-nav ul li a {
+    color: #ecf0f1; /* Light text color */
+    text-decoration: none;
+    padding: 10px;
+    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.secondary-nav ul li a:hover {
+    background-color: rgba(44, 62, 80, 0.5); /* Slight glow effect */
+    color: #00ff99; /* Neon glow color */
+    border-radius: 5px;
+}
+
+
+
+
+/* Home Page Section */
+#home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: radial-gradient(circle at center, #111, #000);
+    color: white;
+    text-align: center;
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+}
+
+#home h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+}
+
+#home p {
+    font-size: 1.5em;
+    margin-bottom: 40px;
+    width: 70%;
+    max-width: 800px;
+}
+
+#home .btn-primary {
+    padding: 15px 30px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.3em;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+#home .btn-primary:hover {
+    background-color: #3e8e41;
+    transform: scale(1.05);
+}
+
+
+/* Secondary Section Wrapper */
+.secondary-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 40px;
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+}
+
+/* Shared Styles for Cards (Calculator, Notepad, Billing) */
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    margin: 20px;
+    width: 300px;
+    max-width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+}
+
+/* Calculator Styling */
+.calculator {
+    margin: 0;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 15px;
+    width: 100%;
+    box-shadow: none; /* Cards will now handle shadows */
+}
+
+#calc-display {
+    width: 100%;
+    padding: 12px;
+    font-size: 22px;
+    margin-bottom: 15px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #4caf50;
+    text-align: right;
+}
+
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+}
+
+.calc-buttons button {
+    padding: 15px;
+    font-size: 18px;
+    background-color: #444;
+    color: #ddd;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s;
+}
+
+.calc-buttons button:hover {
+    background-color: #555;
+    transform: scale(1.05);
+}
+
+.equal-btn {
+    grid-column: span 4;
+    background-color: #4caf50;
+}
+
+.equal-btn:hover {
+    background-color: #3e8e41;
+}
+
+/* Notepad Styling */
+.notepad {
+    width: 100%;
+}
+
+#notepad-content {
+    width: 100%;
+    height: 150px;
+    padding: 12px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #333;
+    border-radius: 10px;
+    color: white;
+}
+
+.notepad-buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.notepad-buttons button {
+    padding: 10px 15px;
+    font-size: 16px;
+    margin-left: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.notepad-buttons button:hover {
+    background-color: #3e8e41;
+    transform: scale(1.05);
+}
+
+/* Billing Software Styling */
+.billing-software {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.billing-sub-tabs {
+    margin-bottom: 20px;
+}
+
+.billing-sub-tabs ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.billing-sub-tabs ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.billing-sub-tabs ul li a:hover {
+    background-color: #4caf50;
+    color: white;
+    border-radius: 5px;
+}
+
+/* Billing Form Styling */
+.billing-form {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.billing-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.billing-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.billing-form input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px #4caf50;
+}
+
+.billing-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.billing-form button:hover {
+    background-color: #3e8e41;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .secondary-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .calculator, .notepad, .billing-software {
+        width: 100%;
+    }
+}
+
+
+
+/* Vehicle Records Styling */
+#vehicle-records {
+    padding: 20px;
+    margin-top: 50px;
+}
+
+#vehicle-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#vehicle-table th,
+#vehicle-table td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+    background-color: #222;
+    color: #ddd;
+    transition: background-color 0.3s;
+}
+
+#vehicle-table th {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+}
+
+#vehicle-table td img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+}
+
+#vehicle-table tbody tr:nth-child(even) {
+    background-color: #333;
+}
+
+#vehicle-table tbody tr:hover {
+    background-color: #444;
+}
+
+/* Calculator Styles */
+.calculator {
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    width: 220px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+#calc-display {
+    width: 100%;
+    padding: 12px;
+    font-size: 22px;
+    margin-bottom: 15px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #4caf50;
+    text-align: right;
+}
+
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+}
+
+.calc-buttons button {
+    padding: 15px;
+    font-size: 18px;
+    background-color: #444;
+    color: #ddd;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s;
+}
+
+.calc-buttons button:hover {
+    background-color: #555;
+    transform: scale(1.05);
+}
+
+.equal-btn {
+    grid-column: span 4;
+    background-color: #4caf50;
+}
+
+.equal-btn:hover {
+    background-color: #3e8e41;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    #home {
+        padding: 20px;
+    }
+
+    #home h1 {
+        font-size: 2.5em;
+    }
+
+    #home p {
+        font-size: 1.2em;
+    }
+
+    .calculator {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logistics Billing Software</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="script.sql">
 </head>
 <body>
     <!-- Header with Main Tabs and Logo -->
@@ -79,12 +80,13 @@
                     <thead>
                         <tr>
                             <th>Image</th>
-                            <th>Vehicle Name</th>
+                            <th>Vehicle Number</th>
                             <th>Owner Name</th>
                             <th>Driver Name</th>
                             <th>Driver License</th>
                             <th>Vehicle FC</th>
                             <th>Insurance Expiry Date</th>
+                            <th>Permit Expiry Date</th>
                         </tr>
                     </thead>
                     <tbody id="vehicle-body">
@@ -96,11 +98,105 @@
         </section>
 
 
-        <section id="reports" class="content-section">Reports Content</section>
+        <section id="reports" class="content-section"><!-- Reports Section -->
+            <h3>Reports</h3>
+            <div class="reports-container">
+                <div class="sorting-options">
+                    <label for="sort-by">Sort by:</label>
+                    <select id="sort-by" onchange="sortBills()">
+                        <option value="date">Date</option>
+                        <option value="branch">Branch</option>
+                        <option value="consigner">Consigner</option>
+                    </select>
+                    <button id="load-button" onclick="fetchBills()">Load</button> <!-- Load button to fetch bills -->
+                </div>
+                
+                <table class="reports-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>LR No</th>
+                            <th>Manual Bill No</th>
+                            <th>Bill No</th>
+                            <th>Customer Name</th>
+                            <th>From Location</th>
+                            <th>To Location</th>
+                            <th>Consignor</th>
+                            <th>Consignee</th>
+                            <th>Goods</th>
+                            <th>No of Articles</th>
+                            <th>Rate per Article</th>
+                            <th>GST Amount</th>
+                            <th>Freight</th>
+                            <th>Total Amount</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reports-section">
+                        <!-- Rows will be dynamically inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+       
+        
+            <style>
+                .sorting-options {
+                    margin-bottom: 20px;
+                }
+        
+                .reports-container {
+                    margin: 20px 0;
+                    overflow-x: auto;
+                }
+        
+                .reports-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    background-color: #f9f9f9;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s;
+                }
+        
+                .reports-table:hover {
+                    transform: scale(1.01);
+                }
+        
+                th, td {
+                    padding: 12px;
+                    text-align: center;
+                    border-bottom: 1px solid #ddd;
+                }
+        
+                th {
+                    background-color: #4CAF50;
+                    color: white;
+                }
+        
+                tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                }
+        
+                .no-records {
+                    color: #ff0000;
+                    font-weight: bold;
+                    text-align: center;
+                }
+        
+                .error-message {
+                    color: #ff0000;
+                    font-weight: bold;
+                    text-align: center;
+                }
+            </style>
+        </section>
+        
+    
 
         <!-- Other Sections -->
         <section id="transactions" class="content-section">Transactions Content</section>
         <section id="services" class="content-section">Services Content</section>
+
         <section id="money-reports" class="content-section">Money Reports Content</section>
         <section id="security" class="content-section">Security Content</section>
         <section id="help" class="content-section">Help Content</section>
@@ -153,7 +249,6 @@
         <section id="billing" class="content-section">Billing Content</section>
     </main>
    
-
     <script src="script.js"></script>
 </body>
 </html>
