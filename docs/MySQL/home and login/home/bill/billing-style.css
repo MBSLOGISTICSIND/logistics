@@ -1,0 +1,250 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #e0e7ff, #f4f7f9);
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* Billing Container */
+.billing-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    transition: all 0.3s ease;
+}
+
+.billing-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.logo img {
+    height: 80px;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+/* Heading Styles */
+h2, h3, h4 {
+    color: #003366;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    width: 100%;
+}
+
+/* Form Section */
+.form-section {
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    flex: 1 1 48%;
+    margin: 10px 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.form-section:hover {
+    transform: scale(1.01);
+}
+
+/* Input Styles */
+label {
+    font-weight: bold;
+    color: #003366;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, 
+textarea:focus, 
+select:focus {
+    border-color: #003366;
+    box-shadow: 0 0 10px rgba(0, 51, 102, 0.2);
+    outline: none;
+}
+
+/* Button Styles */
+button {
+    background: linear-gradient(135deg, #003366, #00509e);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #004080, #0060bf);
+    transform: translateY(-3px);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    border-spacing: 0 10px;
+}
+
+th {
+    background: #003366;
+    color: white;
+    padding: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 8px 8px 0 0;
+}
+
+td {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Bill Preview Styles */
+.bill-preview {
+    border: 1px solid #003366;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffffff, #e6f7ff);
+    box-shadow: 0 6px 20px rgba(0, 51, 102, 0.1);
+}
+
+.total {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 30px;
+    font-size: 18px;
+    color: #00509e;
+}
+
+/* Footer Styles */
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 14px;
+    color: #777;
+}
+
+/* New Bill Button Styles */
+.new-bill-btn {
+    position: fixed; /* Fix the button's position relative to the viewport */
+    right: 20px; /* Adjust distance from the right edge of the page */
+    top: 20px; /* Adjust distance from the top edge of the page */
+    padding: 10px 15px; /* Add padding for a better appearance */
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Slightly rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    z-index: 1000; /* Ensure button appears on top of other elements */
+}
+
+.new-bill-btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+    .billing-container {
+        padding: 20px;
+        flex-direction: column;
+    }
+
+    .form-section {
+        flex: 1 1 100%;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .billing-container {
+        padding: 10px;
+    }
+
+    button {
+        padding: 10px;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .bill-preview {
+        padding: 15px;
+    }
+
+    .total {
+        font-size: 16px;
+    }
+}

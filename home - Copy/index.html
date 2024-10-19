@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Billing Software</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header with Main Tabs -->
+    <header>
+        <div class="header-container">
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#" onclick="showSection('vehicle-records')">Vehicle Records</a></li>
+                    <li><a href="#" onclick="showSection('transactions')">Transactions</a></li>
+                    <li><a href="#" onclick="showSection('services')">Services</a></li>
+                    <li><a href="#" onclick="showSection('reports')">Reports</a></li>
+                    <li><a href="#" onclick="showSection('money-reports')">Money Reports</a></li>
+                    <li><a href="#" onclick="showSection('security')">Security</a></li>
+                    <li><a href="#" onclick="showSection('help')">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sidebar Tabs -->
+    <aside class="sidebar">
+        <ul>
+            <li><a href="#" onclick="showSection('calculator')">Calculator</a></li>
+            <li><a href="#" onclick="showSection('notepad')">Notepad</a></li>
+            <li><a href="#" onclick="showSection('billing')">Billing Software</a></li>
+        </ul>
+
+        <!-- Billing Software Sub-Tabs -->
+        <div class="billing-tabs">
+            <ul>
+                <li><a href="home\bill\index1.html" onclick="showBillingSection('bill')">Bill</a></li>
+                <li><a href="#" onclick="showBillingSection('receipts')">Res</a></li>
+                <li><a href="#" onclick="showBillingSection('expense')">Expense</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+        <section id="vehicle-records" class="content-section">Vehicle Records Content</section>
+        <section id="transactions" class="content-section">Transactions Content</section>
+        <section id="services" class="content-section">Services Content</section>
+        <section id="reports" class="content-section">Reports Content</section>
+        <section id="money-reports" class="content-section">Money Reports Content</section>
+        <section id="security" class="content-section">Security Content</section>
+        <section id="help" class="content-section">Help Content</section>
+
+        <!-- Calculator Section -->
+        <section id="calculator" class="content-section">
+            <div class="calculator">
+                <input type="text" id="calc-display" disabled>
+                <div class="calc-buttons">
+                    <button onclick="appendValue('7')">7</button>
+                    <button onclick="appendValue('8')">8</button>
+                    <button onclick="appendValue('9')">9</button>
+                    <button onclick="appendValue('/')">/</button>
+
+                    <button onclick="appendValue('4')">4</button>
+                    <button onclick="appendValue('5')">5</button>
+                    <button onclick="appendValue('6')">6</button>
+                    <button onclick="appendValue('*')">*</button>
+
+                    <button onclick="appendValue('1')">1</button>
+                    <button onclick="appendValue('2')">2</button>
+                    <button onclick="appendValue('3')">3</button>
+                    <button onclick="appendValue('-')">-</button>
+
+                    <button onclick="appendValue('0')">0</button>
+                    <button onclick="appendValue('.')">.</button>
+                    <button onclick="clearDisplay()">C</button>
+                    <button onclick="appendValue('+')">+</button>
+
+                    <button class="equal-btn" onclick="calculateResult()">=</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notepad Section -->
+        <section id="notepad" class="content-section">
+            <textarea id="notepad-content" rows="10" cols="30" placeholder="Write your notes here..."></textarea>
+            <div>
+                <button onclick="saveNote()">Save Note</button>
+                <button onclick="clearNote()">Clear Note</button>
+            </div>
+        </section>
+
+        <!-- Billing Section -->
+        <section id="bill" class="content-section billing-section">Bill Form and Details</section>
+        <section id="receipts" class="content-section billing-section">Receipts Form and Details</section>
+        <section id="expense" class="content-section billing-section">Expense Form and Details</section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

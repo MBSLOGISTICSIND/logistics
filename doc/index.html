@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Billing Software - Login</title>
+    <style>
+        /* General Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            background: none;
+        }
+
+        /* Background Image Container */
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('IMG.png') no-repeat center center/cover;
+            filter: blur(5px); /* Blur only the background */
+            z-index: -1;
+        }
+
+        /* Login Box Styling */
+        #login-page {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 40px;
+            text-align: center;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        /* Heading Style */
+        #login-page h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+
+        /* Input Field Styling */
+        #login-page input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Button Styling */
+        #login-page button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #007bff;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        #login-page button:hover {
+            background: #0056b3;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            display: none;
+        }
+
+        /* Smooth Animations */
+        #login-page {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #login-page {
+                padding: 30px;
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Image -->
+    <div class="background-image"></div>
+
+    <!-- Login Page -->
+    <section id="login-page">
+        <h2>MBS Logistics Software</h2>
+        <form id="login-form" onsubmit="event.preventDefault(); login();">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+            <p id="login-error" class="error-message">Invalid username or password</p>
+        </form>
+    </section>
+
+    <script>
+      function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    const validUsername = 'admin';
+    const validPassword = 'password';
+
+    if (username === validUsername && password === validPassword) {
+        // Correct relative path to Home.html
+        window.location.href = 'MySQL/home%20and%20login/Home.html'; 
+    } else {
+        const errorMessage = document.getElementById('login-error');
+        errorMessage.style.display = 'block';
+    }
+}
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "logistics",
+  "version": "1.0.0",
+  "description": "A logistics management application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Asrar",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "mysql2": "^3.11.3"
+  }
+}

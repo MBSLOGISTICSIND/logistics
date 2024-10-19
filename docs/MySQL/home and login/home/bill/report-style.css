@@ -1,0 +1,144 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #e0e7ff, #f4f7f9);
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* Reports Container */
+.reports-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    padding: 40px;
+    transition: all 0.3s ease;
+}
+
+.reports-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Heading Styles */
+h2, h3, h4 {
+    color: #003366;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    width: 100%;
+}
+
+/* Search Bar */
+.search-bar {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.search-bar input {
+    width: 350px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: #003366;
+    box-shadow: 0 0 10px rgba(0, 51, 102, 0.2);
+    outline: none;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    border-spacing: 0 10px;
+}
+
+th {
+    background: #003366;
+    color: white;
+    padding: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 8px 8px 0 0;
+}
+
+td {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Button Styles */
+button {
+    background: linear-gradient(135deg, #003366, #00509e);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #004080, #0060bf);
+    transform: translateY(-3px);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Total Styles */
+.total {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 30px;
+    font-size: 18px;
+    color: #00509e;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+    .reports-container {
+        padding: 20px;
+    }
+
+    .search-bar {
+        margin-bottom: 20px;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    button {
+        width: 100%;
+        margin: 5px 0;
+        padding: 10px; /* Adjust padding for smaller screens */
+        font-size: 16px; /* Increase font size for better readability */
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    h2, h3, h4 {
+        font-size: 1.5em; /* Adjust heading size for mobile */
+    }
+}

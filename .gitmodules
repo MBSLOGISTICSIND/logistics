@@ -1,0 +1,3 @@
+[submodule "logistics"]
+	path = logistics
+	url = https://github.com/SAKSAUD7/logistics.git

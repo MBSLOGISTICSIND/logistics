@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Entry</title>
+    <link rel="stylesheet" href="Recipt-styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Receipt Entry</h2>
+        <form id="receiptForm">
+            <div class="input-group">
+                <label for="slipNumber">Slip Number:</label>
+                <input type="text" id="slipNumber" required>
+            </div>
+            <div class="input-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" required>
+            </div>
+            <div class="input-group">
+                <label for="from">From:</label>
+                <input type="text" id="from" required>
+            </div>
+            <div class="input-group">
+                <label for="to">To:</label>
+                <input type="text" id="to" required>
+            </div>
+            <div class="input-group">
+                <label for="consigneeName">Consignee Name:</label>
+                <input type="text" id="consigneeName" required>
+            </div>
+            <div class="input-group">
+                <label for="paymentType">Payment Type:</label>
+                <select id="paymentType" required>
+                    <option value="Paid">Paid</option>
+                    <option value="To pay">To pay</option>
+                    <option value="To be billed">To be billed</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" required>
+            </div>
+            <button type="button" onclick="saveReceipt()">Save</button>
+            <button type="button" onclick="printReceipts()">Print</button>
+            <button type="button" onclick="exportReceipts()">Export</button>
+        </form>
+
+        <h3>Saved Receipts</h3>
+        <table id="receiptTable">
+            <thead>
+                <tr>
+                    <th>Slip Number</th>
+                    <th>Date</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Consignee Name</th>
+                    <th>Payment Type</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="receiptBody"></tbody>
+        </table>
+    </div>
+
+    <script src="Recipt-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,637 @@
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #home h1 {
+        font-size: 2.2em;
+        margin-bottom: 10px;
+    }
+
+    #home p {
+        font-size: 1.1em;
+        width: 90%;
+    }
+
+    #home .btn-primary {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+
+    .main-nav ul,
+    .secondary-nav ul {
+        flex-direction: column; /* Stack navigation items vertically */
+        padding: 0;
+    }
+
+    .main-nav ul li a,
+    .secondary-nav ul li a {
+        padding: 10px; /* Adjust padding for smaller screens */
+        width: 100%; /* Full width for easier tapping */
+        text-align: center; /* Center the text */
+    }
+
+    .secondary-section {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px; /* Less padding for smaller screens */
+    }
+
+    .card {
+        width: 90%; /* Full width on smaller screens */
+        margin: 10px 0; /* Vertical margin for spacing */
+    }
+
+    .calculator, .notepad, .billing-software {
+        width: 90%; /* Full width on smaller screens */
+        margin: 10px 0; /* Vertical margin for spacing */
+    }
+
+    .billing-form {
+        margin: 10px; /* Reduced margin for smaller screens */
+    }
+
+    .billing-form input,
+    .billing-form select,
+    .billing-form textarea {
+        padding: 8px; /* Reduced padding for smaller screens */
+        font-size: 16px; /* Adjusted font size */
+    }
+}
+
+
+/* Header Styling */
+header {
+    background-color: #000; /* Black for header */
+    color: #fff; /* White text */
+    padding: 10px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Navigation Styling */
+.main-nav ul,
+.secondary-nav ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+}
+
+/* Links Styling */
+.main-nav ul li a,
+.secondary-nav ul li a {
+    color: #e0e0e0; /* Light grey */
+    text-decoration: none;
+    padding: 10px 20px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 5px; /* Added rounded corners */
+}
+
+.main-nav ul li a:hover,
+.secondary-nav ul li a:hover {
+    background-color: #333;
+    color: #4caf50; /* Green on hover */
+    box-shadow: 0 0 10px #4caf50, 0 0 20px #4caf50;
+}
+
+/* Secondary Navigation Bar */
+.secondary-nav {
+    background: rgba(52, 73, 94, 0.7);
+    backdrop-filter: blur(10px);
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+/* Mobile View Styling */
+@media (max-width: 768px) {
+    .main-nav ul,
+    .secondary-nav ul {
+        flex-direction: column; /* Stack items vertically */
+        padding: 0; /* Remove padding */
+    }
+
+    .main-nav ul li,
+    .secondary-nav ul li {
+        width: 100%; /* Full width for mobile */
+        padding: 5px 0; /* Padding for list items */
+    }
+
+    /* Add container for mobile view */
+    .mobile-container {
+        max-width: 600px; /* Limit container width */
+        margin: 0 auto; /* Center the container */
+        padding: 0 20px; /* Add horizontal padding */
+    }
+}
+
+
+/* Home Page Section */
+#home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: radial-gradient(circle at center, #f0f0f0, #d0d0d0);
+    color: white;
+    text-align: center;
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+}
+
+/* Hero Heading */
+#home h1 {
+    font-size: 3em;
+    margin-bottom: 15px;
+    color: #333; /* Neutral color for readability */
+    text-shadow: 0 0 10px rgba(0, 128, 0, 0.3); /* Softer green glow */
+    animation: fadeIn 0.8s ease;
+    font-weight: bold;
+}
+
+/* Hero Subheading */
+#home p {
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    width: 80%;
+    max-width: 750px;
+    line-height: 1.6;
+    color: #555; /* Softer text color */
+    animation: fadeIn 1s ease;
+    text-align: center;
+}
+
+/* Primary Button */
+#home .btn-primary {
+    padding: 12px 25px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+#home .btn-primary:hover {
+    background-color: #3e8e41;
+    transform: translateY(-2px); /* Gentle hover lift */
+}
+
+/* Animation for Fade-In */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #home {
+        height: auto; /* Allow height to adjust */
+        padding: 40px 20px; /* Increase padding for mobile */
+    }
+
+    #home h1 {
+        font-size: 2.2em;
+        margin-bottom: 10px;
+    }
+
+    #home p {
+        font-size: 1.1em;
+        width: 90%;
+    }
+
+    #home .btn-primary {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+
+    /* Add container for mobile view */
+    .mobile-container {
+        max-width: 600px; /* Limit container width */
+        margin: 0 auto; /* Center the container */
+        padding: 0 20px; /* Add horizontal padding */
+    }
+}
+
+/* Secondary Section Wrapper */
+.secondary-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 40px;
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+}
+
+/* Shared Styles for Cards (Calculator, Notepad, Billing) */
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    margin: 20px;
+    width: 300px; /* Fixed width for desktop */
+    max-width: 100%; /* Responsive on smaller screens */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    .secondary-section {
+        padding: 20px; /* Reduced padding for mobile */
+    }
+
+    .card {
+        width: calc(100% - 40px); /* Full width minus margin */
+        margin: 10px; /* Reduced margin for mobile */
+    }
+}
+
+/* Calculator Container */
+.calculator {
+    background: #1c1c1c; /* Dark grey background for a modern look */
+    padding: 30px; /* Adjusted padding for a balanced feel */
+    border-radius: 12px; /* Slightly more rounded corners */
+    width: 100%;
+    max-width: 400px; /* Increased max width for better layout */
+    margin: auto; /* Center the calculator */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Enhanced shadow for depth */
+}
+
+/* Display Styling */
+#calc-display {
+    width: 100%; /* Full width for display */
+    padding: 20px; /* Increased padding for better touch targets */
+    font-size: 32px; /* Increased font size for better readability */
+    margin-bottom: 20px; /* More space below the display */
+    border: none; /* No border */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #2a2a2a; /* Darker background for contrast */
+    color: #ffffff; /* White text for high contrast */
+    text-align: right; /* Right-aligned text */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle inner shadow */
+}
+
+/* Button Grid */
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Four columns for buttons */
+    grid-gap: 15px; /* Increased gap for better spacing */
+}
+
+/* Updated Button Styling with More Specificity */
+.calc-buttons button {
+    padding: 15px; /* Comfortable padding */
+    font-size: 24px; /* Increased font size for better readability */
+    background-color: #007bff; /* Blue background for buttons */
+    color: #ffffff; /* White text */
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s ease, transform 0.2s; /* Smooth transitions */
+    cursor: pointer; /* Pointer cursor on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle button shadow */
+}
+
+/* Button Hover Effect */
+.calc-buttons button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Button Active Effect */
+.calc-buttons button:active {
+    transform: translateY(1px); /* Pressed effect */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .calculator {
+        width: 90%; /* Make it responsive */
+        padding: 15px; /* Reduced padding for smaller screens */
+    }
+
+    #calc-display {
+        font-size: 28px; /* Adjusted font size for smaller screens */
+    }
+
+    .calc-buttons button {
+        padding: 10px; /* Adjust button padding for smaller screens */
+        font-size: 20px; /* Adjusted font size for buttons */
+    }
+}
+
+
+/* Billing Sub-Tabs Styling */
+.billing-sub-tabs {
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    border-radius: 15px;
+    margin: 20px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    padding: 10px; /* Added padding for a better appearance */
+}
+
+/* Unordered list styling */
+.billing-sub-tabs ul {
+    list-style: none; /* Remove bullet points */
+    display: flex; /* Horizontal alignment */
+    justify-content: space-around; /* Even spacing */
+    padding: 10px;
+    margin: 0; /* Remove default margin */
+}
+
+/* List item styling */
+.billing-sub-tabs ul li {
+    flex: 1; /* Each tab takes equal space */
+}
+
+/* Link styling */
+.billing-sub-tabs ul li a {
+    display: flex; /* Makes the entire area clickable */
+    padding: 15px;
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    color: #e0e0e0; /* Light grey text */
+    background-color: rgba(0, 0, 0, 0.5); /* Dark background */
+    border-radius: 10px; /* Rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+/* Active Tab Styling */
+.billing-sub-tabs ul li a.active {
+    background-color: #4caf50; /* Highlight active tab */
+    color: #fff; /* White text on active */
+    box-shadow: 0 4px 10px rgba(0, 255, 0, 0.5); /* Green glow */
+}
+
+/* Hover Effect */
+.billing-sub-tabs ul li a:hover {
+    background-color: #333; /* Darker background on hover */
+    color: #4caf50; /* Change text color on hover */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .billing-sub-tabs ul {
+        flex-direction: row; /* Keep tabs in a row on mobile */
+        overflow-x: auto; /* Allow horizontal scrolling */
+    }
+
+    .billing-sub-tabs ul li {
+        min-width: 100px; /* Minimum width for tabs to ensure usability */
+    }
+
+    .billing-sub-tabs ul li a {
+        padding: 10px; /* Reduced padding for smaller screens */
+        font-size: 16px; /* Adjust font size for readability */
+    }
+}
+
+
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #e0e7ff, #f4f7f9);
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* Vehicle Records Styling */
+#vehicle-records {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    padding: 20px;
+    margin-top: 50px;
+    background: rgba(255, 255, 255, 0.9); /* Blending with the background */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Vehicle Table Styling */
+#vehicle-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#vehicle-table th,
+#vehicle-table td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+    background-color: #ffffff; /* Matching with general styles */
+    color: #333; /* Dark text for contrast */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#vehicle-table th {
+    background-color: #003366; /* Consistent with general styles */
+    color: white;
+    font-weight: bold;
+}
+
+#vehicle-table td img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+}
+
+#vehicle-table tbody tr:nth-child(even) {
+    background-color: rgba(0, 51, 102, 0.05); /* Light background for even rows */
+}
+
+#vehicle-table tbody tr:hover {
+    background-color: rgba(0, 51, 102, 0.1); /* Hover effect */
+    color: #333; /* Ensuring readability on hover */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    #vehicle-records {
+        padding: 10px; /* Reduced padding for mobile */
+    }
+
+    #vehicle-table th,
+    #vehicle-table td {
+        padding: 8px; /* Adjusted padding for smaller screens */
+        font-size: 14px; /* Smaller font size for better fit */
+    }
+
+    #vehicle-table td img {
+        max-width: 80px; /* Smaller images for mobile */
+        max-height: 80px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #vehicle-records {
+        padding: 5px; /* Further reduce padding for small screens */
+    }
+
+    #vehicle-table th,
+    #vehicle-table td {
+        font-size: 12px; /* Smaller font size for very small screens */
+    }
+
+    #vehicle-table td img {
+        max-width: 60px; /* Even smaller images for very small screens */
+        max-height: 60px;
+    }
+}
+
+
+
+
+
+/* Notepad Section Styles */
+#notepad {
+    background: rgba(255, 255, 255, 0.9); /* Light background for contrast */
+    border-radius: 10px; /* Rounded corners for a modern look */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 20px; /* Padding for inner spacing */
+    max-width: 600px; /* Max width to constrain the notepad */
+    margin: 20px auto; /* Centering the notepad section */
+}
+
+/* Textarea Styles */
+#notepad-content {
+    width: 100%; /* Full width of the notepad */
+    height: 200px; /* Fixed height for textarea */
+    padding: 15px; /* Inner spacing for comfort */
+    border: 2px solid #a8dbbc; /* Light green border */
+    border-radius: 5px; /* Slightly rounded corners */
+    font-size: 1rem; /* Font size for readability */
+    font-family: 'Roboto', sans-serif; /* Consistent font style */
+    background: #f9f9f9; /* Light background for textarea */
+    color: #333; /* Dark text color */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for focus effects */
+}
+
+/* Textarea Focus Styles */
+#notepad-content:focus {
+    outline: none; /* Remove default outline */
+    border-color: #2e7d32; /* Dark green border on focus */
+    box-shadow: 0 0 5px #a8dbbc; /* Light green shadow on focus */
+}
+
+/* Button Styles */
+#notepad button {
+    padding: 10px 15px; /* Inner spacing for buttons */
+    margin: 10px 5px; /* Spacing between buttons */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Slightly rounded corners */
+    background-color: #4caf50; /* Green background for buttons */
+    color: #fff; /* White text color */
+    font-size: 1rem; /* Font size for buttons */
+    cursor: pointer; /* Pointer cursor for hover effect */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions for hover effects */
+}
+
+/* Button Hover Styles */
+#notepad button:hover {
+    background-color: #388e3c; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    #notepad {
+        padding: 15px; /* Reduce padding on smaller screens */
+        max-width: 90%; /* Allow more width on mobile */
+    }
+
+    #notepad-content {
+        height: 180px; /* Smaller height for textarea on tablets */
+    }
+
+    #notepad button {
+        width: 100%; /* Full width buttons on smaller screens */
+        margin: 5px 0; /* Stack buttons vertically */
+    }
+}
+
+@media (max-width: 480px) {
+    #notepad-content {
+        height: 150px; /* Smaller height for textarea on mobile */
+    }
+}
+/* Modal styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0; /* Align to the left */
+    top: 0; /* Align to the top */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.4); /* Black background with transparency */
+}
+
+.modal-content {
+    background-color: #fff; /* White background */
+    margin: 15% auto; /* Centered with a margin from the top */
+    padding: 20px; /* Inner spacing */
+    border: 1px solid #888; /* Border color */
+    width: 90%; /* Full width of the screen */
+    max-width: 500px; /* Max width for larger screens */
+    text-align: center; /* Center text */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.close-btn {
+    color: #aaa; /* Light grey color */
+    float: right; /* Position to the right */
+    font-size: 28px; /* Font size */
+    font-weight: bold; /* Bold text */
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black; /* Dark color on hover/focus */
+    cursor: pointer; /* Pointer cursor */
+}
+
+#confirmBtn {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Inner spacing */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+#confirmBtn:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 10% auto; /* Reduce margin on mobile */
+        padding: 15px; /* Adjust padding on mobile */
+    }
+
+    .close-btn {
+        font-size: 24px; /* Smaller close button font on mobile */
+    }
+
+    #confirmBtn {
+        padding: 8px 15px; /* Smaller button padding on mobile */
+    }
+}

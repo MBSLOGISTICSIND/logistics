@@ -1,0 +1,167 @@
+[33mcommit b32813a57acf1aac4cf493a6c7acac598ff486d6[m[33m ([m[1;36mHEAD -> [m[1;32mbill-creation[m[33m)[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Tue Oct 15 08:01:14 2024 +0200
+
+    changed whole css and made changes in js
+
+[33mcommit d0562b66d23b2aa55da917785f0324f340132e64[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Thu Oct 10 20:14:50 2024 +0200
+
+    BILLING UPDATED
+
+[33mcommit 3082cc00f9a8108e4a4840677bfdcaf5375c0d4b[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Thu Oct 10 17:46:10 2024 +0200
+
+    made changes in billing sodtware added dropdown and upgraded the preview section
+
+[33mcommit 1c59a4df1bfb82eb8e6ced218d222b384a8d3b39[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Wed Oct 9 14:02:12 2024 +0200
+
+    Made changes accordingly
+
+[33mcommit d178a2c6e497d0858880753ffd54e49e753af121[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Mon Sep 30 12:51:54 2024 +0200
+
+    added bilingb template
+
+[33mcommit d535aed3971f2c16730133f153a064258994739d[m
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sun Sep 29 17:26:20 2024 +0530
+
+    i have inserted the bill and i have changed the sidebar into navigation bar
+
+[33mcommit b0a54582bd2685858f4274ee48d9bfb6ac2a7413[m[33m ([m[1;32mmain[m[33m, [m[1;32mBill-design[m[33m)[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 15:15:58 2024 +0200
+
+    Login page
+
+[33mcommit 67a1a70e397ecabf9a69f7128c86c90540fb8239[m
+Merge: 7310f2a 0a05e42
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 12:51:55 2024 +0200
+
+    Merge branch 'main' of https://github.com/SAKSAUD7/logistics
+
+[33mcommit 7310f2a591c5f621efb216f1b5d40f3276444a9c[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 12:51:51 2024 +0200
+
+    added Home Page
+
+[33mcommit 0a05e421915159b41587d40e333903278fa25a94[m
+Merge: 09ab8d2 88898fe
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sat Sep 28 16:20:36 2024 +0530
+
+    Merge branch 'main' of https://github.com/SAKSAUD7/logistics
+
+[33mcommit 09ab8d28b9e11baa9a9495b877675b8129fb8c53[m
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sat Sep 28 16:20:27 2024 +0530
+
+    login page html and css changes including the bar
+
+[33mcommit 88898fef08d5b591e4068fb20814f794393770e8[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 11:39:47 2024 +0200
+
+    Revert "delete"
+    
+    This reverts commit de83cacba8d226188b1275d8366dfaecec82a9ca.
+
+[33mcommit de83cacba8d226188b1275d8366dfaecec82a9ca[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 09:11:21 2024 +0200
+
+    delete
+
+[33mcommit df6c26ff90163ff1b37e2443741829045696f9c6[m
+Merge: 8daa9a8 0dd0436
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 09:11:03 2024 +0200
+
+    Merge branch 'main' of https://github.com/SAKSAUD7/logistics
+
+[33mcommit 8daa9a8de1169683304825f13445f2247a11d07f[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 09:02:18 2024 +0200
+
+    changes
+
+[33mcommit 0dd0436ada3b7247a886af1370abac724f1afe6b[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 09:01:04 2024 +0200
+
+    vehicle recpord
+
+[33mcommit c41348bfe2855156cda6855c77aba8c9135e11c2[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 08:28:13 2024 +0200
+
+    Made the Changes in  Vehicle Record section and added and adjusted CSS Setting
+
+[33mcommit e56bd887a9fb04155e6b5f5b678d1999814572c6[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 07:15:58 2024 +0200
+
+    LOGO AND SLIDER BAR ADJUSTMENT
+
+[33mcommit e27fae4c786ea73a33865da9261d130d5c0c6d89[m
+Merge: 92657d4 55af178
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 06:59:33 2024 +0200
+
+    Merge branch 'main' of https://github.com/SAKSAUD7/logistics
+
+[33mcommit 92657d4ed01dde126254b176164ad4b5da518660[m
+Author: mohammed Asrar <moham@LAPTOP-CGCN2NU7>
+Date:   Sat Sep 28 06:59:23 2024 +0200
+
+    #Added Logo
+
+[33mcommit 55af1788504f1cd81db368ecf2f55bbf82563d46[m
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sat Sep 28 05:39:53 2024 +0530
+
+    changes
+
+[33mcommit 490686728f4cc00c3a2366483a9799b12fb6badc[m
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sat Sep 28 05:39:34 2024 +0530
+
+    vehical changes
+
+[33mcommit bbfbc37adab062486563e57b9db2275f60bd750b[m
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sat Sep 28 05:13:06 2024 +0530
+
+    bill backend corrections
+
+[33mcommit acbdbedfe75ec663bba7a4fc1548bb6cfd5ed402[m
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sat Sep 28 02:31:13 2024 +0530
+
+    recipct
+
+[33mcommit 242c49d9904f626e2ae4fd73a54bd6981347cf03[m
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sat Sep 28 01:38:53 2024 +0530
+
+    first commit
+
+[33mcommit 70486a268e26bfda3b4741c559cb9c3fd7eaa258[m
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sat Sep 28 01:06:56 2024 +0530
+
+    logistics
+
+[33mcommit 8082302cb2a6c4601fb3120f85d0dbbab607f7b9[m
+Author: SAKSAUD7 <saksaud7411@gmail.com>
+Date:   Sat Sep 28 00:21:40 2024 +0530
+
+    logistics

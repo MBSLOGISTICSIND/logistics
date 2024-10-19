@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Entry</title>
+    <link rel="stylesheet" href="Expenses-styles.css">
+</head>
+<body>
+
+    <!-- Button to open the modal -->
+    <button id="addExpenseBtn">Add Expense</button>
+
+    <!-- The Modal -->
+    <div id="expenseModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Expense Entry</h2>
+            <form id="Expenses">
+                <div class="input-group">
+                    <label for="description">Expense Description:</label>
+                    <input type="text" id="description" required>
+                </div>
+                <div class="input-group">
+                    <label for="reason">Reason for Expense:</label>
+                    <input type="text" id="reason" required>
+                </div>
+                <div class="input-group">
+                    <label for="person">Person Who Took Money:</label>
+                    <input type="text" id="person" required>
+                </div>
+                <div class="input-group">
+                    <label for="date">Expense Date:</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="input-group">
+                    <label for="amount">Expense Amount:</label>
+                    <input type="number" id="amount" required>
+                </div>
+                <div class="input-group">
+                    <label for="source">Source of Funds:</label>
+                    <input type="text" id="source" required>
+                </div>
+                <div class="input-group">
+                    <button type="button" onclick="saveExpense()">Save</button>
+                    <button type="button" onclick="printExpenses()">Print</button>
+                    <button type="button" onclick="exportExpenses()">Export</button>
+                </div>
+            </form>
+        </div>
+    </div>
+            <h3>Saved Expenses</h3>
+            <div class="reports-container">
+                <button onclick="exportExpenses()">Export to CSV</button>
+                <button onclick="printExpenses()">Print Table</button>
+            <table id="expenseTable">
+                <thead>
+                    <tr>
+                        <th>Serial No</th>
+                        <th>Description</th>
+                        <th>Reason</th>
+                        <th>Person</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Source</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="expenseBody"></tbody>
+            </table>
+        </div>
+    
+
+    <script src="Expenses-script.js"></script>
+    <script>
+           // Get modal and button elements
+           const modal = document.getElementById('expenseModal');
+        const btn = document.getElementById('addExpenseBtn');
+        const span = document.getElementsByClassName('close')[0];
+
+        // Open modal when button is clicked
+        btn.onclick = function() {
+            modal.style.display = 'block';
+        }
+
+        // Close modal when 'x' is clicked
+        span.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal if clicked outside the modal content
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

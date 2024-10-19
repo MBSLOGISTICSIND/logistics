@@ -1,0 +1,183 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Billing Software</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <!-- Header with Main Tabs and Logo -->
+    <header>
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="logo">
+                <img src="LOGO.png" alt="Company Logo" style="height: 80px;">
+            </div>
+            <!-- Navigation -->
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#" onclick="event.preventDefault(); showSection('home')">Home</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showSection('vehicle-records')">Vehicle Records</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showSection('transactions')">E-Way Billing</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showSection('services')">Services</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showSection('reports')">Reports</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showSection('money-reports')">Money Reports</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showSection('security')">Security</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showSection('help')">Help</a></li>
+                    
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+<!-- Secondary Navigation Bar -->
+<nav class="secondary-nav">
+    <ul>
+        <li><a href="#" onclick="showSection('calculator')">Calculator</a></li>
+        <li><a href="#" onclick="showSection('notepad')">Notepad</a></li>
+        <li><a href="#" onclick="showSection('billing')">Billing Software</a></li>
+    </ul>
+</nav>
+<!-- Billing Section in the Main Content -->
+<div id="billing" class="content-section" style="display: none;">
+    <div id="billing-content">
+        <!-- The content (like index1.html) will be loaded here -->
+    </div>
+</div>
+
+<!-- Billing Sub-Tabs -->
+<div class="billing-sub-tabs" id="billing-sub-tabs" style="display: none;">
+    <ul>
+        <li><a href="#" onclick="showBillingSection('bill'); setActiveTab(this)">Bill</a></li>
+        <li><a href="#" onclick="showBillingSection('receipts'); setActiveTab(this)">Receipts</a></li>
+        <li><a href="#" onclick="showBillingSection('expenses'); setActiveTab(this)">Expenses</a></li>
+    </ul>
+</div>
+
+    <!-- Main Content Area -->
+    <main>
+      <!-- Home Section -->
+<section id="home" class="content-section" style="display: block;" style="background: #e0e7ff; padding: 60px 20px; text-align: center;">
+    <div class="hero" style="max-width: 800px; margin: auto; display: block;">
+        <h1 style="font-size: 2.5em; color: #003366; margin-bottom: 20px;">Welcome to MBS Logistics</h1>
+        <div class="IMG" style="margin-bottom: 30px;">
+            <img src="IMG.png" alt="Company Logo" style="height: 300px; max-width: 100%; object-fit: contain;">
+        </div>
+        <a href="home\bill\index1.html" class="cta-button"  style="background: linear-gradient(135deg, #003366, #00509e); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 1.1em; transition: background 0.3s ease;">
+            Get Started
+        </a>
+    </div>
+</section>
+
+        <!-- Vehicle Records Section -->
+        <section id="vehicle-records" class="content-section" style="display: none;">
+            <h2>Vehicle Records</h2>
+            <div id="vehicle-container">
+                <table id="vehicle-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Vehicle Number</th>
+                            <th>Owner Name</th>
+                            <th>Driver Name</th>
+                            <th>Driver License</th>
+                            <th>Vehicle FC</th>
+                            <th>Insurance Expiry Date</th>
+                            <th>Permit Expiry Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vehicle-body">
+                        <!-- Rows will be dynamically added here -->
+                    </tbody>
+                </table>
+                <button onclick="addVehicleRow()">Add Vehicle</button>
+            </div>
+        </section>
+
+<!-- Modal Structure -->
+<div id="insuranceModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Insurance Expiry Alert</h2>
+      <p id="modalText"></p>
+      <button id="confirmBtn">Confirm</button>
+    </div>
+  </div>
+  
+        <!-- E-Way Billing Section -->
+        <section id="transactions" class="content-section" style="display: none;" style="background-color: #f7f9fc; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 20px auto;">
+            <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center;">E-Way Billing</h2>
+            <p style="font-size: 16px; color: #555; text-align: center;">Click the button below to access the E-Way Bill system:</p>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="https://ewaybillgst.gov.in/" target="_blank" style="font-size: 18px; color: #fff; background-color: #007bff; padding: 12px 24px; border-radius: 5px; text-decoration: none; display: inline-block; box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);">
+                    Go to E-Way Bill Website
+                </a>
+            </div>
+        </section>
+    
+
+        <!-- Other Sections -->
+        <section id="services" class="content-section" style="display: none;">Services Content</section>
+        <section id="reports" class="content-section" style="display: none;"> 
+             <iframe id="reports-content" style="width: 100%; height: 100vh; border: none;"></iframe> </section>
+        <section id="money-reports" class="content-section" style="display: none;"> 
+            <iframe id="money-reports-content" style="width: 100%; height: 100vh; border: none;"></iframe></section>
+        <section id="security" class="content-section" style="display: none;">Security Content</section>
+        <section id="help" class="content-section" style="display: none;">Help Content</section>
+        
+        <!-- Calculator Section -->
+        <section id="calculator" class="content-section" style="display: none;">
+            <div class="calculator">
+                <input type="text" id="calc-display" disabled>
+                <div class="calc-buttons">
+                    <button onclick="appendValue('7')">7</button>
+                    <button onclick="appendValue('8')">8</button>
+                    <button onclick="appendValue('9')">9</button>
+                    <button onclick="appendValue('/')">/</button>
+
+                    <button onclick="appendValue('4')">4</button>
+                    <button onclick="appendValue('5')">5</button>
+                    <button onclick="appendValue('6')">6</button>
+                    <button onclick="appendValue('*')">*</button>
+
+                    <button onclick="appendValue('1')">1</button>
+                    <button onclick="appendValue('2')">2</button>
+                    <button onclick="appendValue('3')">3</button>
+                    <button onclick="appendValue('-')">-</button>
+
+                    <button onclick="appendValue('0')">0</button>
+                    <button onclick="appendValue('.')">.</button>
+                    <button onclick="clearDisplay()">C</button>
+                    <button onclick="appendValue('+')">+</button>
+
+                    <button class="equal-btn" onclick="calculateResult()">=</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notepad Section -->
+        <section id="notepad" class="content-section" style="display: none;">
+            <textarea id="notepad-content" rows="10" cols="30" placeholder="Write your notes here..."></textarea>
+            <div>
+                <button onclick="saveNote()">Save Note</button>
+                <button onclick="clearNote()">Clear Note</button>
+            </div>
+        </section>
+
+        <!-- Billing Section -->
+        <section id="bill" class="content-section billing-section" style="display: none;">Bill Form and Details</section>
+        <section id="receipts" class="content-section billing-section" style="display: none;">Receipts Form and Details
+        </section>
+        <section id="Expenses" class="content-section billing-section" style="display: none;">Expense Form and Details</section>
+        <section id="notepad" class="content-section" style="display: none;">Notepad Content</section>   
+        <section id="billing" class="content-section" style="display: none;">Billing Content</section>
+    </main>
+   
+    <script src="script.js"></script>
+</body>
+</html>

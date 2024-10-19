@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Reports</title>
+    <link rel="stylesheet" href="report-style.css">
+    <style>
+        /* Add some basic styles for better visibility */
+        input[type="number"] {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="reports-section" class="reports-section">
+        <h2>Saved Billing Reports</h2>
+        <div class="search-bar">
+            <label for="search-input">Search:</label>
+            <input type="text" id="search-input" placeholder="Search by LR No, Consignor, or Date">
+        </div>
+         <!-- Export and Print Buttons -->
+         <div class="buttons">
+            <button onclick="exportToExcel()">Export to Excel</button>
+            <button onclick="printTable()">Print</button>
+        </div>
+
+        <table id="reports-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">LR No</th>
+                    <th onclick="sortTable(1)">Date</th>
+                    <th onclick="sortTable(2)">GST Paid By</th>
+                    <th onclick="sortTable(3)">Payment Mode</th>
+                    <th onclick="sortTable(4)">From</th>
+                    <th onclick="sortTable(5)">To</th>
+                    <th onclick="sortTable(6)">Consignor</th>
+                    <th onclick="sortTable(7)">Consignor Address</th>
+                    <th onclick="sortTable(8)">Consignor Invoice No</th>
+                    <th onclick="sortTable(9)">Consignee</th>
+                    <th onclick="sortTable(10)">Consignee Address</th>
+                    <th onclick="sortTable(11)">Consignee Invoice No</th>
+                    <th onclick="sortTable(12)">Total Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="reportsBody">
+                <!-- Data will be dynamically populated here -->
+            </tbody>
+        </table>
+    </div>
+    
+
+    <script src="report-script.js"></script>
+    <script src="billing-script.js"></script>
+
+   
+</body>
+</html>

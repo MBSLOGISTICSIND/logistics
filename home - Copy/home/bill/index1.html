@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Form</title>
+    <link rel="stylesheet" href="billing-style.css">
+</head>
+<body>
+    <div class="billing-container">
+        <h2>Your Company Name</h2>
+        <h3>Billing Form</h3>
+
+        <form id="billing-form">
+            <label for="lr-no">LR No.:</label>
+            <input type="text" id="lr-no" required><br>
+
+            <label for="manual-bill-no">Manual Bill No.:</label>
+            <input type="text" id="manual-bill-no" required><br>
+
+            <label for="customer-name">Customer Name:</label>
+            <input type="text" id="customer-name" required><br>
+
+            <label for="item-description">Item Description:</label>
+            <textarea id="item-description" rows="3" required></textarea><br>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" required><br>
+
+            <label for="rate">Rate:</label>
+            <input type="number" id="rate" required><br>
+
+            <label for="total">Total:</label>
+            <input type="number" id="total" disabled><br>
+
+            <div class="form-buttons">
+                <button type="button" onclick="generateBill()">View Bill</button>
+                <button type="button" onclick="printBill()">Print Bill</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bill Preview Section -->
+    <div id="bill-preview" class="bill-preview">
+        <h2>Your Company Name</h2>
+        <h3>Bill Preview</h3>
+        <p><strong>LR No.:</strong> <span id="preview-lr-no"></span></p>
+        <p><strong>Manual Bill No.:</strong> <span id="preview-bill-no"></span></p>
+        <p><strong>Customer Name:</strong> <span id="preview-customer-name"></span></p>
+        <p><strong>Item Description:</strong> <span id="preview-item-desc"></span></p>
+        <p><strong>Quantity:</strong> <span id="preview-quantity"></span></p>
+        <p><strong>Rate:</strong> <span id="preview-rate"></span></p>
+        <p><strong>Total:</strong> <span id="preview-total"></span></p>
+    </div>
+
+    <script src="billing-script.js"></script>
+</body>
+</html>
