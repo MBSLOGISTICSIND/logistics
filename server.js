@@ -20,6 +20,16 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'docs/MySQL/home and login', 'Home.html'));
 });
 
+app.get('/api/get-bills', (req, res) => {
+    // Your logic here
+    res.json({ message: 'Bills retrieved successfully' });
+});
+
+app.listen(4000, () => {
+    console.log('Server is running on port 4000');
+});
+
+
 // API route to fetch all bills
 app.get('/api/get-bills', async (req, res) => {
     const query = `SELECT * FROM bills`; // Select all fields from the bills table
