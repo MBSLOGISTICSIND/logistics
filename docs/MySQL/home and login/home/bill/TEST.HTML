@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Modal Example</title>
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Button to open the modal -->
+    <button id="createBillBtn">Create Bill</button>
+
+    <!-- The Modal -->
+    <div id="billModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create Bill</h2>
+            <form id="createBillForm">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>LR No</th>
+                            <th>Date</th>
+                            <th>To</th>
+                            <th>Invoice No</th>
+                            <th>Articles</th>
+                            <th>Rate</th>
+                            <th>GC.C</th>
+                            <th>Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billTableBody">
+                        <!-- Dynamic content will be injected here -->
+                    </tbody>
+                </table>
+                <button type="submit">Submit Bill</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Example data from reports
+        const reportsData = [
+            { lrNo: "123", date: "2024-10-20", to: "XYZ Company", invoiceNo: "INV123", articles: 5 },
+            { lrNo: "124", date: "2024-10-21", to: "ABC Ltd", invoiceNo: "INV124", articles: 3 },
+            { lrNo: "125", date: "2024-10-22", to: "DEF Inc", invoiceNo: "INV125", articles: 7 }
+        ];
+
+        // Function to open the modal and populate the table with report data
+        document.getElementById("createBillBtn").addEventListener("click", function () {
+            const tableBody = document.getElementById("billTableBody");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            // Populate the table with data from reports
+            reportsData.forEach(function (report, index) {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${report.lrNo}</td>
+                    <td>${report.date}</td>
+                    <td>${report.to}</td>
+                    <td>${report.invoiceNo}</td>
+                    <td>${report.articles}</td>
+                    <td><input type="number" class="rateInput" data-index="${index}" placeholder="Enter Rate"></td>
+                    <td>10</td> <!-- GC.C is default 10 -->
+                    <td><input type="number" class="totalAmount" readonly></td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Open the modal
+            document.getElementById("billModal").style.display = "block";
+        });
+
+        // Handle closing of the modal
+        document.querySelector(".close").addEventListener("click", function () {
+            document.getElementById("billModal").style.display = "none";
+        });
+
+        // Optional: Close modal on clicking outside the modal content
+        window.onclick = function(event) {
+            const modal = document.getElementById("billModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        // Handle rate input and total amount calculation
+        document.getElementById("billTableBody").addEventListener("input", function (event) {
+            if (event.target.classList.contains("rateInput")) {
+                const index = event.target.getAttribute("data-index");
+                const rate = parseFloat(event.target.value) || 0;
+                const articles = reportsData[index].articles;
+                const gcc = 10; // Default value for GC.C
+
+                // Calculate total amount for that row
+                const totalAmount = (articles * rate) + gcc;
+                event.target.parentElement.nextElementSibling.nextElementSibling.querySelector(".totalAmount").value = totalAmount.toFixed(2);
+            }
+        });
+
+        // Handle form submission
+        document.getElementById("createBillForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Collect all the data and save the bill
+            const billData = reportsData.map((report, index) => {
+                const rateInput = document.querySelector(`.rateInput[data-index="${index}"]`).value || 0;
+                const totalAmount = document.querySelectorAll(".totalAmount")[index].value;
+
+                return {
+                    lrNo: report.lrNo,
+                    date: report.date,
+                    to: report.to,
+                    invoiceNo: report.invoiceNo,
+                    articles: report.articles,
+                    rate: rateInput,
+                    gcc: 10, // Default value
+                    totalAmount: totalAmount
+                };
+            });
+
+            console.log("Bill Data:", billData);
+            alert("Bill created successfully!");
+
+            // Close the modal after submission
+            document.getElementById("billModal").style.display = "none";
+        });
+    </script>
+</body>
+</html>

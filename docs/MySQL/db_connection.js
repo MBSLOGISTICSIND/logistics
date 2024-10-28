@@ -1,40 +1,50 @@
+const mysql = require('mysql2');
 
-const mysql = require('mysql2'); 
-
-const connection = mysql.createConnection({
+// Create a connection pool to manage database connections
+const pool = mysql.createPool({
     host: 'localhost',
-    user: 'root',
-    password: 'Asrar@121',
-    database: 'logistics_billing'
+    user: 'root', // Your MySQL username
+    password: 'Asrar@121', // Update this to your MySQL password
+    database: 'logistics_billing', // Ensure this is the correct database name
+    waitForConnections: true,
+    connectionLimit: 10, // Adjust based on your application's needs
+    queueLimit: 0
 });
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Error connecting to the database:', err);
-        return;
+// Function to execute a query and return results
+const queryDatabase = async (query, params) => {
+    try {
+        const [results] = await pool.promise().query(query, params);
+        return results; // Return the results from the query
+    } catch (error) {
+        console.error('Database query error:', error);
+        throw error; // Rethrow the error for further handling
     }
-    console.log('Connected to the database');
-});
+};
 
-module.exports = connection; // Ensure this line is present
- 
-// Connect to the database
-connection.connect(function(err) {
-    if (err) {
-        console.error('Error connecting to the database:', err.stack);
-        return;
+// Test connection to the database
+const testConnection = async () => {
+    try {
+        const results = await queryDatabase('SELECT * FROM bills');
+        console.log('Results:', results); // Log the results
+    } catch (error) {
+        console.error('Error fetching data:', error);
     }
-    console.log('Connected to the database as id ' + connection.threadId);
+};
 
-    // Example query to select data
-    connection.query('SELECT * FROM your_table_name', function (err, results, fields) {
+// Call the testConnection function to test the database connection
+testConnection();
+
+// Close the pool when the application terminates
+process.on('SIGINT', () => {
+    pool.end((err) => {
         if (err) {
-            console.error('Error executing query:', err);
-            return;
+            console.error('Error closing the connection pool:', err);
+        } else {
+            console.log('Connection pool closed');
         }
-        console.log('Results:', results);
-
-        // Close the connection
-        connection.end();
+        process.exit(0);
     });
 });
+
+module.exports = { pool, queryDatabase }; // Export the pool and query function

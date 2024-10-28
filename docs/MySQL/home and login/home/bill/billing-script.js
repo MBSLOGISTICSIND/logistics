@@ -21,9 +21,6 @@ function generateLRNo() {
 }
 
 
-
-
-
 // Function to calculate GST and total amount
 function calculateTotal() {
     // Get the values from the input fields
@@ -45,7 +42,6 @@ function calculateTotal() {
     document.getElementById("preview-gst-amt").value = gstAmount.toFixed(2); // Show GST amount
     document.getElementById("preview-total").value = totalAmount.toFixed(2); // Show total amount
 }
-
 
 function calculateRowTotal(input) {
     const row = input.closest('tr');
@@ -77,19 +73,18 @@ function calculateRowTotal(input) {
     }
 }
 
-
 // Function to calculate the grand total
 function calculateGrandTotal() {
     const totalElements = document.querySelectorAll('.total');
     let grandTotal = 0;
 
     totalElements.forEach(element => {
-        grandTotal += parseFloat(element.querySelector('.total').value) || 0; // Ensure we sum the total from the correct element
+        grandTotal += parseFloat(element.value) || 0;
     });
 
-  // Update the preview total for grand total
-  document.getElementById('total-amount').value = grandTotal.toFixed(2);
-  document.getElementById("preview-total").innerText = grandTotal.toFixed(2); // Update displayed grand total
+    // Update the preview total for grand total
+    document.getElementById('total-amount').value = grandTotal.toFixed(2);
+    document.getElementById("preview-total").innerText = grandTotal.toFixed(2); // Update displayed grand total
 }
 
 // Attach event listeners for other inputs to calculate totals
@@ -98,7 +93,6 @@ document.addEventListener('input', function (event) {
         calculateRowTotal(event.target);
     }
 });
-
 
 // Function to add a new option
 function addNewOption(selectId) {
@@ -120,10 +114,6 @@ function removeOption(selectId) {
         select.remove(selectedIndex);
     }
 }
-
-
-
-
 
 // Function to generate the bill preview
 function generateBill() {
@@ -156,8 +146,6 @@ function generateBill() {
         const gstAmount = entry.querySelector('.gst-amt').value || 0;
         const freight = entry.querySelector('.freight').value || 0;
         const total = entry.querySelector('.total').value || 0;
-        const gstAmtElement = document.getElementById("gst-amt");
-
 
         if (selectedGood) { // Only add to preview if a valid good is selected
             const newRow = `
@@ -173,28 +161,17 @@ function generateBill() {
             `;
             previewEntries.insertAdjacentHTML('beforeend', newRow);
             grandTotal += parseFloat(total);
-            totalGstAmount += gstAmount; // Accumulate GST amounts
+            totalGstAmount += parseFloat(gstAmount) || 0;
         }
     });
 
-     // Update total amounts in the preview
-
-    if (!gstamt) {
-        console.error("Element with ID 'gst-amt' not found.");
-        return; // Exit the function early
-    }
-     
+    // Update total amounts in the preview
+    document.getElementById("preview-gst-amt").innerText = totalGstAmount.toFixed(2); // Total GST amount
     document.getElementById("preview-total").innerText = grandTotal.toFixed(2); // Grand total
 
     document.getElementById("bill-preview").style.display = 'block'; // Show the bill preview
 
-    const isSaved = saveBill();
-
-    if (!isSaved) {
-        alert("Retry: Bill not saved!");
-    } else {
-        alert("Bill generated and saved successfully!");
-    }
+   
 }
 
     // Initialize data
@@ -422,6 +399,12 @@ function populateGoodsDropdown(selectElement) {
     });
 }
 
+// Function to initialize the first goods entry row on page load
+function initializeFirstRow() {
+    addGoodsEntry(); // This automatically adds the first row and populates the dropdown
+}
+
+
 // Function to add a goods entry row
 function addGoodsEntry() {
     const goodsEntries = document.getElementById("goods-entries");
@@ -437,6 +420,7 @@ function addGoodsEntry() {
         <td><input type="number" class="rate-per-article" required></td>
         <td>
             <select class="gst" required>
+                <option value="0">0%</option>
                 <option value="5">5%</option>
                 <option value="12">12%</option>
                 <option value="18">18%</option>
@@ -467,17 +451,6 @@ function removeGoodsEntry(button) {
     calculateGrandTotal(); // Recalculate grand total when a row is removed
 }
 
-// Function to initialize the first goods entry row on page load
-function initializeFirstRow() {
-    const goodsEntries = document.getElementById("goods-entries");
-    addGoodsEntry(); // Add the first row
-
-    // Populate the dropdown of the first row
-    const firstGoodsSelect = goodsEntries.querySelector('.goods');
-    if (firstGoodsSelect) {
-        populateGoodsDropdown(firstGoodsSelect); // Populate dropdown for the first row
-    }
-}
 
 // Call the function to initialize on page load
 window.onload = function() {
@@ -512,6 +485,15 @@ function saveBill() {
         const consigneeAddress = document.getElementById('consignee-address').value;
         const consigneeInvoiceNo = document.getElementById('Consignee-Invoice-no').value;
 
+// Log values for debugging
+console.log("From Location: ", from);
+console.log("To Location: ", to);
+
+// Validate required fields
+if (!from || !to) {
+    console.error("From and To locations must not be empty.");
+    return; // Prevent saving the bill
+}
 
         
         // Get goods info
@@ -558,41 +540,65 @@ function saveBill() {
             goodsEntries // Save the goods entries in the bill
         };
 
+ // Retrieve saved bills from localStorage
+ const bills = JSON.parse(localStorage.getItem('bills')) || [];
 
-           // Retrieve saved bills from localStorage
-           const bills = JSON.parse(localStorage.getItem('bills')) || [];
+ // Check if editing an existing bill
+ const editIndex = localStorage.getItem("editBillIndex");
+ if (editIndex !== null) {
+     const index = parseInt(editIndex, 10);
+     // Update the existing bill at the given index
+     bills[index] = bill;
+     alert("Bill updated successfully!");
 
-           // Check if editing an existing bill
-           const editIndex = localStorage.getItem("editBillIndex");
-           if (editIndex !== null) {
-               // Convert editIndex to a number (localStorage stores everything as strings)
-               const index = parseInt(editIndex, 10);
-   
-               // Update the existing bill at the given index
-               bills[index] = bill;
-               alert("Bill updated successfully!");
-   
+     // Update the server data
+     saveBillToServer(bill);
+     localStorage.removeItem("editBillIndex");
+ } else {
+     // New bill
+     bills.push(bill);
+     alert("Bill saved successfully!");
+     saveBillToServer(bill); // Save to server on new bill
+ }
 
-            // Now remove the editBillIndex after updating the bill
-            localStorage.removeItem("editBillIndex");
-            localStorage.removeItem("editBillIndex"); // Clear edit index
-           } else {
-               // No edit index, it's a new bill, so push it to the array
-               bills.push(bill);
-               alert("Bill saved successfully!");
-           }
-   
-           // Save the updated bills array back to localStorage
-           localStorage.setItem('bills', JSON.stringify(bills));
-   
-           console.log("Bills saved to localStorage:", bills); // Debugging line
-   
-           // Optionally load reports right after saving (if you're still on the same page)
-           loadReports();
-       } catch (error) {
-           alert("Error saving bill: " + error.message);
-       }
-   }
+ // Save the updated bills array back to localStorage
+ localStorage.setItem('bills', JSON.stringify(bills));
+ console.log("Bills saved to localStorage:", bills); // Debugging line
+
+ // Optionally load reports right after saving (if you're still on the same page)
+ loadReports();
+} catch (error) {
+ alert("Error saving bill: " + error.message);
+}
+}
+
+function saveBillToServer(bill) {
+    const url = bill.id ? `http://localhost:4000/api/update-bill/${bill.id}` : 'http://localhost:4000/api/save-bill'; // Dynamic URL
+    const method = bill.id ? 'PUT' : 'POST';  // Use PUT for updating and POST for new bills
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bill)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Bill saved to server:", data);
+        // Optionally, update local storage with the server's response if needed
+        loadReports(); // Reload reports after saving
+    })
+    .catch(error => {
+        console.error("Error saving bill to server:", error);
+    });
+}
+
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -710,5 +716,3 @@ function closeForm() {
     document.getElementById("billing-details-form").reset();
     document.getElementById("bill-preview").style.display = 'none'; // Hide the bill preview
 }
-
-

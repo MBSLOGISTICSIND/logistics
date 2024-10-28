@@ -1,38 +1,57 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Fetch saved bills from localStorage and display them in the report table
-    loadReports(); // Changed from loadSavedBills to loadReports
+    // Load saved bills from localStorage and display them in the report table
+    loadReports();
 
     // Search functionality
     const searchInput = document.getElementById("search-input");
     searchInput.addEventListener("input", searchReports);
 }); 
 
-function loadReports() {
-    console.log("Loading reports..."); // Add this line
+async function loadReports() {
+    console.log("Loading reports..."); // Log the loading process
     const reportsBody = document.getElementById('reportsBody');
     if (!reportsBody) {
         console.error("reportsBody element not found!");
         return;
     }
-    reportsBody.innerHTML = ''; // Clear the existing content
+    reportsBody.innerHTML = ''; // Clear existing content
 
-    const bills = JSON.parse(localStorage.getItem('bills')) || [];
-    console.log("Bills fetched:", bills);
+    // Fetch bills from the server
+    let serverBills = [];
+    try {
+        const response = await fetch('/api/get-bills'); // Make sure the endpoint is correct
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        serverBills = await response.json();
+    } catch (error) {
+        console.error('Error fetching bills from server:', error);
+    }
 
-     // Filter out null entries in the bills array
-     const validBills = bills.filter(bill => bill !== null);
-     console.log("Valid bills:", validBills);
+    // Fetch bills from localStorage
+    const localBills = JSON.parse(localStorage.getItem('bills')) || [];
+    console.log("Bills fetched from local storage:", localBills);
+
+    // Combine server bills and local storage bills
+    const allBills = [...serverBills, ...localBills]; // Merging both arrays
+    console.log("Combined bills:", allBills);
+
+    // Filter out null entries in the allBills array
+    const validBills = allBills.filter(bill => bill !== null);
+    console.log("Valid bills:", validBills);
 
     if (validBills.length === 0) {
-        reportsBody.innerHTML = '<tr><td colspan="10">No bills saved.</td></tr>';
+        reportsBody.innerHTML = '<tr><td colspan="14">No bills saved.</td></tr>';
         return;
     }
 
-    validBills.forEach((bill, index) => {
-        const total = bill.total; // Use the total saved in the bill object directly
+    validBills.forEach((bill, index,) => {
+         // Sum the total number of articles from the goods entries
+         const totalNoOfArticles = bill.goodsEntries.reduce((sum, entry) => sum + (parseInt(entry.noOfArticles) || 0), 0);
+        const total = bill.total || bill.totalAmount || 0; // Use total saved in the bill object directly
         const row = `<tr>
             <td>${bill.lrNo}</td>
-            <td>${bill.date}</td>
+            <td>${new Date(bill.date).toLocaleDateString()}</td>
             <td>${bill.gstPaidBy}</td>
             <td>${bill.paymentMode}</td>
             <td>${bill.from}</td>
@@ -43,6 +62,7 @@ function loadReports() {
             <td>${bill.consignee}</td>
             <td>${bill.consigneeAddress}</td>
             <td>${bill.consigneeInvoiceNo}</td>
+            <td>${totalNoOfArticles}</td> 
             <td>${total}</td>
             <td>
                 <button onclick="editBill(${index})">Edit</button>
@@ -54,14 +74,16 @@ function loadReports() {
     });
 }
 
-               
+
 
 // Ensure loadReports is called when reports section is displayed
 document.getElementById("goToReportsBtn").addEventListener("click", function () {
     loadReports(); // Ensure that reports are loaded when button is clicked
     const reportsSection = document.getElementById("reports-section");
     reportsSection.scrollIntoView({ behavior: 'smooth' });
-});
+}); 
+
+
 
 
 // Function to search reports
@@ -173,27 +195,206 @@ function exportToExcel() {
     document.body.removeChild(link);
 }
 
+
 function printTable() {
+    // Get the table body from the modal
+    const billTableBody = document.getElementById('billTableBody');
+    
+    // Collect the filled data into a string
+    let tableHTML = '<table style="width:100%; border-collapse: collapse;">';
+    tableHTML += `
+        <thead>
+            <tr>
+                <th>LR No</th>
+                <th>Date</th>
+                <th>To</th>
+                <th>Invoice No</th>
+                <th>Articles</th>
+                <th>Rate</th>
+                <th>GC.C</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+    
+     // Get the bill number, recipient's name and address, and month/year from input fields
+     const billNo = document.getElementById('billNoInput').value;
+     const recipientName = document.getElementById('recipientName').value;
+     const recipientAddress = document.getElementById('recipientAddress').value;
+     const monthYear = document.getElementById('monthYearInput').value; // Format: YYYY-MM
+     
+     // Initialize total amount variable
+    let totalAmount = 0;
+
+
+
+    // Loop through each row in the billTableBody
+    Array.from(billTableBody.rows).forEach(row => {
+        tableHTML += '<tr>';
+        
+        // Loop through each cell in the row
+        Array.from(row.cells).forEach((cell, index) => { // Include index here
+            // Check if the cell has an input field and get its value
+            const input = cell.querySelector('input');
+            if (input) {
+                tableHTML += `<td style="border: 1px solid black; padding: 8px;">${input.value}</td>`;
+            } else {
+                tableHTML += `<td style="border: 1px solid black; padding: 8px;">${cell.innerHTML}</td>`;
+            }
+
+            // If it's the last cell (Total Amount), add its value to the totalAmount
+            if (index === 7) { // Assuming the 8th column is the Total Amount column
+                totalAmount += parseFloat(cell.innerText) || 0;
+            }
+        });
+
+        tableHTML += '</tr>';
+    });
+
+    tableHTML += `</tbody></table>`;
+
+    // Convert total amount to words
+    const totalAmountWords = numberToWords(totalAmount);
     // Create a new window for printing
     const printWindow = window.open('', '_blank');
-    const reportTable = document.getElementById('reports-table').outerHTML;
-
-    // Set up the content of the new window
     printWindow.document.write(`
         <html>
             <head>
-                <title>Print Report</title>
-                <link rel="stylesheet" href="report-style.css">
+                <title>Print Bill</title>
+                <style>
+                  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    padding: 20px;
+    line-height: 1.6;
+}
+.header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.header .logo img {
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.header .company-info {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    text-align: center; /* Center-align the company info */
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+td {
+    font-size: 14px;
+}
+
+.total {
+    text-align: right;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.footer {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #777;
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
+.clear {
+    clear: both;
+}
+
+@media print {
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .header, .footer {
+        page-break-inside: avoid;
+    }
+}
+
+                </style>
             </head>
             <body>
-                <h2>Billing Report</h2>
-                ${reportTable}
+               <div class="header">
+                   
+                    <div class="company-info">
+                        <p>GST No: 1234567890</p>
+                        <p>Phone: +91 9876543210</p>
+                    </div>
+                    <div class="clear"></div>
+                   <h1>
+    <img src="MBSLOGO.jpg" alt="MBS Lorry Service" style="width: 50%; height: auto;">
+</h1>
+                    <h3>H.O: No 91, New No 86, 3rd Main Road, N.T. Pet, Bangalore-02</h3>
+                </div>
+                
+                <h2>Billing Details</h2>
+                <p><strong>Bill No:</strong> ${billNo}</p> <!-- Use the bill number from input -->
+                <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+              
+                  <p><strong>TO:</strong> ${recipientName}<br>${recipientAddress}</p> <!-- Recipient details -->
+
+                <p><em>Dear Sir,</em></p>
+                <p><em>Statement of Accounts for the monthly bill of ${monthYear ? new Date(monthYear).toLocaleString('default', { month: 'long' }) + ' ' + new Date(monthYear).getFullYear() : 'N/A'}. Kindly confirm and settle the bill at your earliest convenience.</em></p>
+
+                ${tableHTML}
+
+ <div class="total">
+                    <p><strong>Total Amount:</strong> ₹${parseFloat(totalAmount).toFixed(2)} (${totalAmountWords})</p> <!-- Display total amount in numbers and words -->
+                </div>
+
+              <div class="footer">
+                    <p>Thank you,</p>
+                    <p>Yours faithfully,</p>
+                    <p><strong>MBS Lorry Service Reg</strong></p>
+                </div>
+
                 <script>
                     window.onload = function() {
                         window.print();
                         window.close();
                     };
-                <\/script>
+                </script>
             </body>
         </html>
     `);
@@ -202,32 +403,46 @@ function printTable() {
     printWindow.focus();
 }
 
-function populateTable(data) {
-    const reportsBody = document.getElementById('reportsBody');
-    reportsBody.innerHTML = ''; // Clear previous data
 
-    data.forEach(item => {
-        const row = document.createElement('tr');
-        
-        // Assuming `item` has properties like `lrNo`, `date`, etc.
-        row.innerHTML = `
-            <td>${item.lrNo}</td>
-            <td>${item.date}</td>
-            <td>${item.gstPaidBy}</td>
-            <td>${item.paymentMode}</td>
-            <td>${item.from}</td>
-            <td>${item.to}</td>
-            <td>${item.consignor}</td>
-            <td>${item.consignorAddress}</td>
-            <td>${item.consignorInvoiceNo}</td>
-            <td>${item.consignee}</td>
-            <td>${item.consigneeAddress}</td>
-            <td>${item.consigneeInvoiceNo}</td>
-            <td><input type="number" value="${item.totalAmount}" onchange="updateTotal(${item.lrNo}, this.value)"></td>
-            <td><button onclick="deleteRow(${item.lrNo})">Delete</button></td>
-        `;
-        reportsBody.appendChild(row);
-    });
+// Function to convert numbers to words
+function numberToWords(num) {
+    const units = [
+        '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+        'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 
+        'Seventeen', 'Eighteen', 'Nineteen'
+    ];
+    const tens = [
+        '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
+    ];
+    const thousands = [
+        '', 'Thousand'
+    ];
+
+    if (num === 0) return 'Zero';
+
+    let words = '';
+    let currentNum = Math.floor(num);
+    
+    if (currentNum >= 1000) {
+        words += units[Math.floor(currentNum / 1000)] + ' ' + thousands[1] + ' ';
+        currentNum %= 1000;
+    }
+    
+    if (currentNum >= 100) {
+        words += units[Math.floor(currentNum / 100)] + ' Hundred ';
+        currentNum %= 100;
+    }
+    
+    if (currentNum >= 20) {
+        words += tens[Math.floor(currentNum / 10)] + ' ';
+        currentNum %= 10;
+    }
+    
+    if (currentNum > 0) {
+        words += units[currentNum] + ' ';
+    }
+
+    return words.trim();
 }
 
 function updateTotal(lrNo, newPrice) {

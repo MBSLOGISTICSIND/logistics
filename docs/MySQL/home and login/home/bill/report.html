@@ -10,6 +10,42 @@
         input[type="number"] {
             width: 80px;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -23,7 +59,7 @@
          <!-- Export and Print Buttons -->
          <div class="buttons">
             <button onclick="exportToExcel()">Export to Excel</button>
-            <button onclick="printTable()">Print</button>
+            <button id="createBillBtn">Create Bill</button>
         </div>
 
         <table id="reports-table">
@@ -41,7 +77,8 @@
                     <th onclick="sortTable(9)">Consignee</th>
                     <th onclick="sortTable(10)">Consignee Address</th>
                     <th onclick="sortTable(11)">Consignee Invoice No</th>
-                    <th onclick="sortTable(12)">Total Amount</th>
+                    <th onclick="sortTable(12)">No Of Articles</th>
+                    <th onclick="sortTable(13)">Total Amount</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -51,10 +88,127 @@
         </table>
     </div>
     
+    <!-- Modal Structure -->
+    <div id="billModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create Bill</h2>
+            <form id="createBillForm">
+                <h2>Billing Information</h2>
+        <label for="billNoInput">Bill No:</label>
+        <input type="text" id="billNoInput" placeholder="Enter Bill No" required>
 
+        <label for="recipientName">To:</label>
+        <input type="text" id="recipientName" placeholder="Enter Name" required>
+
+        <label for="recipientAddress">Address:</label>
+        <textarea id="recipientAddress" placeholder="Enter Address" required></textarea>
+
+        <label for="monthYearInput">Select Month & Year:</label>
+        <input type="month" id="monthYearInput" required>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>LR No</th>
+                            <th>Date</th>
+                            <th>Branch</th>
+                            <th>Invoice No</th>
+                            <th>Articles</th>
+                            <th>Rate</th>
+                            <th>GC.C</th>
+                            <th>Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billTableBody">
+                        <tr>
+                            <td><input type="text" value="LR123" /></td>
+                            <td><input type="date" value="2024-10-24" /></td>
+                            <td><input type="text" value="Mr. XYZ" /></td>
+                            <td><input type="text" value="INV1234" /></td>
+                            <td><input type="text" value="Box" /></td>
+                            <td><input type="number" value="100" /></td>
+                            <td><input type="number" value="10" /></td>
+                            <td><input type="number" value="1000" /></td>
+                        </tr>
+                        <!-- More rows can be added here -->
+                    </tbody>
+                </table>
+                <button type="submit">Submit Bill</button>
+                <button type="button" onclick="printTable()">Print</button>
+            </form>
+        </div>
+    </div>
     <script src="report-script.js"></script>
     <script src="billing-script.js"></script>
 
-   
+    <script>
+        document.getElementById("createBillBtn").addEventListener("click", function () {
+    const tableBody = document.getElementById("billTableBody");
+    tableBody.innerHTML = ""; // Clear existing rows
+
+    // Get only visible rows from the reports table
+    const reportRows = Array.from(document.querySelectorAll("#reports-table tbody tr"));
+    const visibleRows = reportRows.filter(row => {
+        return row.style.display !== "none"; // Include only rows that are visible
+    });
+
+    visibleRows.forEach(function (row) {
+        const cells = row.querySelectorAll("td");
+        const reportData = {
+            lrNo: cells[0].innerText,
+            date: cells[1].innerText,
+            to: cells[6].innerText, // Adjust based on your actual column index for "To"
+            invoiceNo: cells[8].innerText, // Adjust for "Consignor Invoice No"
+            articles: parseInt(cells[12].innerText) // Assuming this is the number of articles
+        };
+
+        const newRow = document.createElement("tr");
+
+        newRow.innerHTML = `
+            <td>${reportData.lrNo}</td>
+            <td>${reportData.date}</td>
+            <td>${reportData.to}</td>
+            <td>${reportData.invoiceNo}</td>
+            <td>${reportData.articles}</td>
+            <td><input type="number" class="rateInput" data-index="${row.rowIndex - 1}" placeholder="Enter Rate"></td>
+            <td>10</td> <!-- GC.C is default 10 -->
+            <td><input type="number" class="totalAmount" readonly></td>
+        `;
+        tableBody.appendChild(newRow);
+    });
+
+    // Add event listeners for calculating totals
+    const rateInputs = document.querySelectorAll(".rateInput");
+    rateInputs.forEach(function (input) {
+        input.addEventListener("input", function () {
+            const row = input.closest("tr");
+            const articles = parseInt(row.cells[4].innerText); // Get articles count from the corresponding cell
+            const rate = parseFloat(input.value) || 0; // Get rate from the input or default to 0
+            const gcValue = parseFloat(row.cells[6].innerText); // Get GC.C value from the corresponding cell (fixed value of 10)
+            const totalAmountInput = row.querySelector(".totalAmount");
+            const total = (rate * articles) + gcValue; // Calculate total with GC.C
+            totalAmountInput.value = total.toFixed(2); // Set total amount with 2 decimal precision
+        });
+    });
+
+    // Open the modal
+    document.getElementById("billModal").style.display = "block";
+});
+
+
+
+        // Handle closing of the modal
+        document.querySelector(".close").addEventListener("click", function () {
+            document.getElementById("billModal").style.display = "none";
+        });
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target === document.getElementById("billModal")) {
+                document.getElementById("billModal").style.display = "none";
+            }
+        };
+    </script>
 </body>
 </html>
