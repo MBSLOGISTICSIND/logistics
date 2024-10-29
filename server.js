@@ -22,13 +22,13 @@ app.get('/', (req, res) => {
 
 // API route to fetch all vehicle records
 app.get('/api/get-vehicles', async (req, res) => {
-    const query = `SELECT * FROM \`vehicle records\``; // Use backticks for table name with space
+    const query = `SELECT * FROM vehicle_records`; // Corrected table name
 
     try {
-        const results = await queryDatabase(query); // Use the queryDatabase function
-        console.log('SQL Query:', query); // Log the query
-        console.log('Results:', results); // Log results to check if data is correct
-        res.json(results); // Send the results as JSON
+        const results = await queryDatabase(query);
+        console.log('SQL Query:', query);
+        console.log('Results:', results);
+        res.json(results);
     } catch (error) {
         console.error('Error fetching vehicle records:', error);
         res.status(500).send('Internal Server Error');
@@ -39,10 +39,16 @@ app.get('/api/get-vehicles', async (req, res) => {
 app.post('/api/save-vehicle', async (req, res) => {
     const { image, name, owner, driver, license, fc, expiry, permit } = req.body;
 
+    // Check the length of the image data
+    const maxImageSize = 4294967295; // LongText max size in bytes (4GB)
+    if (image.length > maxImageSize) {
+        return res.status(400).send('Image data is too long.');
+    }
+
     const query = `
-        INSERT INTO \`vehicle records\` (image, name, owner, driver, license, fc, expiry, permit)
+        INSERT INTO vehicle_records (image, name, owner, driver, license, fc, expiry, permit)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `; // Use backticks here as well
+    `;
 
     try {
         await queryDatabase(query, [image, name, owner, driver, license, fc, expiry, permit]);
@@ -53,17 +59,18 @@ app.post('/api/save-vehicle', async (req, res) => {
     }
 });
 
+
 // API route to update a vehicle record
 app.put('/api/update-vehicle/:id', async (req, res) => {
     const { id } = req.params;
     const { image, name, owner, driver, license, fc, expiry, permit } = req.body;
 
     const query = `
-        UPDATE \`vehicle records\` SET
+        UPDATE vehicle_records SET
             image = ?, name = ?, owner = ?, driver = ?, license = ?,
             fc = ?, expiry = ?, permit = ?
         WHERE id = ?
-    `; // Use backticks here as well
+    `;
 
     try {
         await queryDatabase(query, [image, name, owner, driver, license, fc, expiry, permit, id]);
@@ -78,7 +85,7 @@ app.put('/api/update-vehicle/:id', async (req, res) => {
 app.delete('/api/delete-vehicle/:id', async (req, res) => {
     const { id } = req.params;
 
-    const query = `DELETE FROM \`vehicle records\` WHERE id = ?`; // Use backticks here as well
+    const query = `DELETE FROM vehicle_records WHERE id = ?`; // Corrected table name
 
     try {
         await queryDatabase(query, [id]);
