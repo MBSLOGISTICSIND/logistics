@@ -2,12 +2,12 @@ const mysql = require('mysql2');
 
 // Create a connection pool to manage database connections
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root', // Your MySQL username
-    password: 'Asrar@121', // Update this to your MySQL password
-    database: 'logistics_billing', // Ensure this is the correct database name
+    host: process.env.DB_HOST || 'localhost',        // Use your external DB host if deployed
+    user: process.env.DB_USER || 'root',             // Use environment variable for DB username
+    password: process.env.DB_PASSWORD || 'Asrar@121', // Use environment variable for DB password
+    database: process.env.DB_NAME || 'logistics_billing', // Use environment variable for DB name
     waitForConnections: true,
-    connectionLimit: 10, // Adjust based on your application's needs
+    connectionLimit: 10,
     queueLimit: 0
 });
 
@@ -15,10 +15,10 @@ const pool = mysql.createPool({
 const queryDatabase = async (query, params) => {
     try {
         const [results] = await pool.promise().query(query, params);
-        return results; // Return the results from the query
+        return results;
     } catch (error) {
         console.error('Database query error:', error);
-        throw error; // Rethrow the error for further handling
+        throw error;
     }
 };
 
@@ -26,7 +26,7 @@ const queryDatabase = async (query, params) => {
 const testConnection = async () => {
     try {
         const results = await queryDatabase('SELECT * FROM bills');
-        console.log('Results:', results); // Log the results
+        console.log('Results:', results);
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -47,4 +47,4 @@ process.on('SIGINT', () => {
     });
 });
 
-module.exports = { pool, queryDatabase }; // Export the pool and query function
+module.exports = { pool, queryDatabase };
