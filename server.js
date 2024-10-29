@@ -2,14 +2,15 @@ const express = require('express');
 const path = require('path');
 const { queryDatabase } = require(path.join(__dirname, 'docs/MySQL/db_connection')); // Import queryDatabase correctly
 const cors = require('cors');
+require('dotenv').config(); // To manage environment variables
 
 const PORT = process.env.PORT || 4000; // Set the port
 const app = express();
 
 app.use(express.json()); // Middleware for parsing JSON
 app.use(cors({
-    origin: '*', // Allows requests from any origin
-    methods: ['GET', 'POST', 'PUT'] // Allows GET, POST, and PUT methods
+    origin: '*', // Adjust to specific domains if necessary
+    methods: ['GET', 'POST', 'PUT', 'DELETE'] // Allows all relevant methods
 }));
 
 // Serve static files from the specified directory
@@ -22,7 +23,7 @@ app.get('/', (req, res) => {
 
 // API route to fetch all vehicle records
 app.get('/api/get-vehicles', async (req, res) => {
-    const query = `SELECT * FROM vehicle_records`; // Corrected table name
+    const query = `SELECT * FROM vehicle_records`;
 
     try {
         const results = await queryDatabase(query);
@@ -39,8 +40,7 @@ app.get('/api/get-vehicles', async (req, res) => {
 app.post('/api/save-vehicle', async (req, res) => {
     const { image, name, owner, driver, license, fc, expiry, permit } = req.body;
 
-    // Check the length of the image data
-    const maxImageSize = 4294967295; // LongText max size in bytes (4GB)
+    const maxImageSize = 4294967295; // LongText max size in bytes
     if (image.length > maxImageSize) {
         return res.status(400).send('Image data is too long.');
     }
@@ -58,7 +58,6 @@ app.post('/api/save-vehicle', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
 
 // API route to update a vehicle record
 app.put('/api/update-vehicle/:id', async (req, res) => {
@@ -85,7 +84,7 @@ app.put('/api/update-vehicle/:id', async (req, res) => {
 app.delete('/api/delete-vehicle/:id', async (req, res) => {
     const { id } = req.params;
 
-    const query = `DELETE FROM vehicle_records WHERE id = ?`; // Corrected table name
+    const query = `DELETE FROM vehicle_records WHERE id = ?`;
 
     try {
         await queryDatabase(query, [id]);
@@ -98,13 +97,13 @@ app.delete('/api/delete-vehicle/:id', async (req, res) => {
 
 // API route to fetch all bills
 app.get('/api/get-bills', async (req, res) => {
-    const query = `SELECT * FROM bills`; // Select all fields from the bills table
+    const query = `SELECT * FROM bills`;
 
     try {
-        const results = await queryDatabase(query); // Use the queryDatabase function
-        console.log('SQL Query:', query); // Log the query
-        console.log('Results:', results); // Log results to check if data is correct
-        res.json(results); // Send the results as JSON
+        const results = await queryDatabase(query);
+        console.log('SQL Query:', query);
+        console.log('Results:', results);
+        res.json(results);
     } catch (error) {
         console.error('Error fetching bills:', error);
         res.status(500).send('Internal Server Error');
@@ -132,7 +131,7 @@ app.post('/api/save-bill', async (req, res) => {
         await queryDatabase(query, [
             lrNo, date, gstPaidBy, paymentMode, from,
             to, consignor, consignorAddress, consignorInvoiceNo,
-            consignee, consigneeAddress, consigneeInvoiceNo, totalAmount, JSON.stringify(goodsEntries) // Store goods entries as JSON
+            consignee, consigneeAddress, consigneeInvoiceNo, totalAmount, JSON.stringify(goodsEntries)
         ]);
         res.status(201).send('Bill saved successfully');
     } catch (error) {
