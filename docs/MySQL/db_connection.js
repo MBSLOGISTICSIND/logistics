@@ -22,15 +22,24 @@ const queryDatabase = async (query, params) => {
     }
 };
 
-// Test connection to the database
 const testConnection = async () => {
     try {
         const results = await queryDatabase('SELECT * FROM bills');
         console.log('Results:', results);
     } catch (error) {
         console.error('Error fetching data:', error);
+        if (error.code === 'ECONNREFUSED') {
+            console.error('Connection refused. Please check your database server and configuration.');
+        } else if (error.code === 'ER_ACCESS_DENIED_ERROR') {
+            console.error('Access denied. Check your username and password.');
+        } else if (error.code === 'ENOTFOUND') {
+            console.error('Database host not found. Please check your host configuration.');
+        } else {
+            console.error('An unknown error occurred:', error);
+        }
     }
 };
+
 
 // Call the testConnection function to test the database connection
 testConnection();
