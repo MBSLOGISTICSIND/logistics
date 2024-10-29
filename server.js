@@ -20,15 +20,74 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'docs/MySQL/home and login', 'Home.html'));
 });
 
-app.get('/api/get-bills', (req, res) => {
-    // Your logic here
-    res.json({ message: 'Bills retrieved successfully' });
+// API route to fetch all vehicle records
+app.get('/api/get-vehicles', async (req, res) => {
+    const query = `SELECT * FROM \`vehicle records\``; // Use backticks for table name with space
+
+    try {
+        const results = await queryDatabase(query); // Use the queryDatabase function
+        console.log('SQL Query:', query); // Log the query
+        console.log('Results:', results); // Log results to check if data is correct
+        res.json(results); // Send the results as JSON
+    } catch (error) {
+        console.error('Error fetching vehicle records:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
-app.listen(4000, () => {
-    console.log('Server is running on port 4000');
+// API route to save a vehicle record
+app.post('/api/save-vehicle', async (req, res) => {
+    const { image, name, owner, driver, license, fc, expiry, permit } = req.body;
+
+    const query = `
+        INSERT INTO \`vehicle records\` (image, name, owner, driver, license, fc, expiry, permit)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `; // Use backticks here as well
+
+    try {
+        await queryDatabase(query, [image, name, owner, driver, license, fc, expiry, permit]);
+        res.status(201).send('Vehicle record saved successfully');
+    } catch (error) {
+        console.error('Error saving vehicle record:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
+// API route to update a vehicle record
+app.put('/api/update-vehicle/:id', async (req, res) => {
+    const { id } = req.params;
+    const { image, name, owner, driver, license, fc, expiry, permit } = req.body;
+
+    const query = `
+        UPDATE \`vehicle records\` SET
+            image = ?, name = ?, owner = ?, driver = ?, license = ?,
+            fc = ?, expiry = ?, permit = ?
+        WHERE id = ?
+    `; // Use backticks here as well
+
+    try {
+        await queryDatabase(query, [image, name, owner, driver, license, fc, expiry, permit, id]);
+        res.send('Vehicle record updated successfully');
+    } catch (error) {
+        console.error('Error updating vehicle record:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// API route to delete a vehicle record
+app.delete('/api/delete-vehicle/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const query = `DELETE FROM \`vehicle records\` WHERE id = ?`; // Use backticks here as well
+
+    try {
+        await queryDatabase(query, [id]);
+        res.send('Vehicle record deleted successfully');
+    } catch (error) {
+        console.error('Error deleting vehicle record:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // API route to fetch all bills
 app.get('/api/get-bills', async (req, res) => {

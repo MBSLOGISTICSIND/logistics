@@ -19,8 +19,9 @@ async function loadReports() {
     // Fetch bills from the server
     let serverBills = [];
     try {
-        const response = await fetch('/api/get-bills'); // Make sure the endpoint is correct
+        const response = await fetch('http://localhost:4000/api/get-bills');
         if (!response.ok) {
+            console.error('Fetch error: ', response.status, response.statusText);
             throw new Error('Network response was not ok');
         }
         serverBills = await response.json();
@@ -36,18 +37,31 @@ async function loadReports() {
     const allBills = [...serverBills, ...localBills]; // Merging both arrays
     console.log("Combined bills:", allBills);
 
-    // Filter out null entries in the allBills array
-    const validBills = allBills.filter(bill => bill !== null);
-    console.log("Valid bills:", validBills);
+    // Create a map to filter out duplicate lrNo while keeping the latest entry
+    const uniqueBillsMap = new Map();
 
-    if (validBills.length === 0) {
+    allBills.forEach(bill => {
+        if (bill && bill.lrNo) { // Ensure bill is valid and has lrNo
+            const existingBill = uniqueBillsMap.get(bill.lrNo);
+            // Compare dates and keep the latest one
+            if (!existingBill || new Date(bill.date) > new Date(existingBill.date)) {
+                uniqueBillsMap.set(bill.lrNo, bill);
+            }
+        }
+    });
+
+    // Convert the map values back to an array
+    const uniqueBills = Array.from(uniqueBillsMap.values());
+    console.log("Unique bills (latest by lrNo):", uniqueBills);
+
+    if (uniqueBills.length === 0) {
         reportsBody.innerHTML = '<tr><td colspan="14">No bills saved.</td></tr>';
         return;
     }
 
-    validBills.forEach((bill, index,) => {
-         // Sum the total number of articles from the goods entries
-         const totalNoOfArticles = bill.goodsEntries.reduce((sum, entry) => sum + (parseInt(entry.noOfArticles) || 0), 0);
+    uniqueBills.forEach((bill, index) => {
+        // Sum the total number of articles from the goods entries
+        const totalNoOfArticles = bill.goodsEntries.reduce((sum, entry) => sum + (parseInt(entry.noOfArticles) || 0), 0);
         const total = bill.total || bill.totalAmount || 0; // Use total saved in the bill object directly
         const row = `<tr>
             <td>${bill.lrNo}</td>

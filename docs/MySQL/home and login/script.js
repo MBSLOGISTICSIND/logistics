@@ -129,7 +129,7 @@ function addVehicleRow() {
     tableBody.appendChild(newRow);
 }
 
-function saveRecord(button) {
+async function saveRecord(button) {
     const row = button.closest('tr');
     const imageInput = row.querySelector('.vehicle-image').files[0];
     const vehicleName = row.querySelector('.vehicle-name').value;
@@ -144,7 +144,7 @@ function saveRecord(button) {
         let vehicleRecords = JSON.parse(localStorage.getItem('vehicleRecords')) || [];
 
         const reader = new FileReader();
-        reader.onload = function(event) {
+        reader.onload = async function(event) {
             const imageBase64 = imageInput ? event.target.result : '';
 
             const newRecord = {
@@ -158,8 +158,26 @@ function saveRecord(button) {
                 permit: permitExpiry
             };
 
+            // Save to local storage
             vehicleRecords.push(newRecord);
             localStorage.setItem('vehicleRecords', JSON.stringify(vehicleRecords));
+
+            // Send to server
+            try {
+                const response = await fetch('http://localhost:4000/api/save-vehicle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newRecord),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save to server: ' + response.statusText);
+                }
+            } catch (error) {
+                console.error('Error saving vehicle record to server:', error);
+            }
 
             checkInsuranceExpiry(insuranceExpiry);
             loadVehicleRecords();
@@ -175,11 +193,34 @@ function saveRecord(button) {
     }
 }
 
-function loadVehicleRecords() {
+async function loadVehicleRecords() {
     const tableBody = document.getElementById('vehicle-body');
     tableBody.innerHTML = '';
 
+    // Load vehicle records from local storage
     const vehicleRecords = JSON.parse(localStorage.getItem('vehicleRecords')) || [];
+    
+    // Fetch vehicle records from server
+    try {
+        const response = await fetch('http://localhost:4000/api/get-vehicles');
+        if (response.ok) {
+            const serverRecords = await response.json();
+            // Merge server records with local records if needed
+            // Assuming server records have the same structure
+            serverRecords.forEach(record => {
+                if (!vehicleRecords.some(localRecord => localRecord.license === record.license)) {
+                    vehicleRecords.push(record);
+                }
+            });
+            // Save updated records back to local storage
+            localStorage.setItem('vehicleRecords', JSON.stringify(vehicleRecords));
+        } else {
+            console.error('Failed to fetch records from server:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching vehicle records:', error);
+    }
+
     const today = new Date();
     let expiringSoon = [];
 
@@ -196,7 +237,7 @@ function loadVehicleRecords() {
             <td>${record.license}</td>
             <td>${record.fc}</td>
             <td>${record.expiry}</td>
-             <td>${record.permit}</td>
+            <td>${record.permit}</td>
             <td>
                 <button onclick="editRecord(${index})">Edit</button>
                 <button onclick="deleteRecord(${index})">Delete</button>
@@ -204,39 +245,59 @@ function loadVehicleRecords() {
         `;
         tableBody.appendChild(newRow);
 
-            // Check if insurance expiry is within a month or has expired
-            const oneMonthLater = new Date(today);
-            oneMonthLater.setMonth(today.getMonth() + 1);
-            if (expiryDate < oneMonthLater) {
-                expiringSoon.push(`${record.name} (expires on: ${record.expiry})`);
-            }
-        });
-    
-        // Show a modal for expiring or expired insurance
-        if (expiringSoon.length > 0) {
-            const message = `
-            🚨 <strong>Insurance Alert!</strong> 🚨
-            
-            The following vehicles have insurance that is <strong>expiring soon</strong> or <strong>has already expired</strong>:
-            
-            ${expiringSoon.map(vehicle => `• <strong>${vehicle}</strong>`).join('<br>')}
-            
-            Please take action to renew the insurance as soon as possible to avoid any issues.
-            📝 Stay Safe!
-            `;
-            
-            showModal(message); // Use the modal instead of alert
+        // Check if insurance expiry is within a month or has expired
+        const oneMonthLater = new Date(today);
+        oneMonthLater.setMonth(today.getMonth() + 1);
+        if (expiryDate < oneMonthLater) {
+            expiringSoon.push(`${record.name} (expires on: ${record.expiry})`);
         }
-    }
+    });
 
-function deleteRecord(index) {
+    // Show a modal for expiring or expired insurance
+    if (expiringSoon.length > 0) {
+        const message = `
+        🚨 <strong>Insurance Alert!</strong> 🚨
+
+        The following vehicles have insurance that is <strong>expiring soon</strong> or <strong>has already expired</strong>:
+        
+        ${expiringSoon.map(vehicle => `• <strong>${vehicle}</strong>`).join('<br>')}
+        
+        Please take action to renew the insurance as soon as possible to avoid any issues.
+        📝 Stay Safe!
+        `;
+        
+        showModal(message); // Use the modal instead of alert
+    }
+}
+
+
+async function deleteRecord(index) {
     let vehicleRecords = JSON.parse(localStorage.getItem('vehicleRecords')) || [];
+    
+    // Get the license of the vehicle to be deleted
+    const licenseToDelete = vehicleRecords[index].license;
+
+    // Remove from local storage
     vehicleRecords.splice(index, 1);
     localStorage.setItem('vehicleRecords', JSON.stringify(vehicleRecords));
+
+    // Send delete request to the server
+    try {
+        const response = await fetch(`http://localhost:4000/api/delete-vehicle/${licenseToDelete}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            console.error('Failed to delete vehicle record from server:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error deleting vehicle record from server:', error);
+    }
+
     loadVehicleRecords();
 }
 
-function editRecord(index) {
+
+async function editRecord(index) {
     let vehicleRecords = JSON.parse(localStorage.getItem('vehicleRecords')) || [];
     const record = vehicleRecords[index];
 
@@ -251,7 +312,7 @@ function editRecord(index) {
         <td><input type="text" value="${record.license}" class="driver-license"></td>
         <td><input type="date" value="${record.fc}" class="vehicle-fc"></td>
         <td><input type="date" value="${record.expiry}" class="insurance-expiry"></td>
-           <td><input type="date" value="${record.permit}" class="permit-expiry"></td>
+        <td><input type="date" value="${record.permit}" class="permit-expiry"></td>
         <td>
             <button onclick="updateRecord(${index})">Update</button>
             <button onclick="cancelEdit()">Cancel</button>
@@ -259,7 +320,8 @@ function editRecord(index) {
     `;
 }
 
-function updateRecord(index) {
+
+async function updateRecord(index) {
     const row = document.getElementById('vehicle-body').children[index];
     const imageInput = row.querySelector('.vehicle-image').files[0];
     const vehicleName = row.querySelector('.vehicle-name').value;
@@ -270,11 +332,10 @@ function updateRecord(index) {
     const insuranceExpiry = row.querySelector('.insurance-expiry').value;
     const permitExpiry = row.querySelector('.permit-expiry').value;
 
-
     let vehicleRecords = JSON.parse(localStorage.getItem('vehicleRecords')) || [];
 
     const reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = async function(event) {
         const imageBase64 = imageInput ? event.target.result : vehicleRecords[index].image;
 
         vehicleRecords[index] = {
@@ -288,7 +349,24 @@ function updateRecord(index) {
             permit: permitExpiry
         };
 
+        // Update local storage
         localStorage.setItem('vehicleRecords', JSON.stringify(vehicleRecords));
+
+        // Send update request to the server
+        try {
+            const response = await fetch(`http://localhost:4000/api/update-vehicle/${driverLicense}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(vehicleRecords[index]),
+            });
+            if (!response.ok) {
+                console.error('Failed to update vehicle record on server:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error updating vehicle record on server:', error);
+        }
 
         checkInsuranceExpiry(insuranceExpiry);
         loadVehicleRecords();
