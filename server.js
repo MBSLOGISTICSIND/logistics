@@ -171,8 +171,6 @@ app.put('/api/update-bill/:id', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
