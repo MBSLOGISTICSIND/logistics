@@ -171,6 +171,11 @@ app.put('/api/update-bill/:id', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-app.listen(PORT, '0.0.0.0', () => {
+
+// Start the server and set the timeouts
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
+// Set timeout values
+server.keepAliveTimeout = 120000; // 120 seconds
+server.headersTimeout = 120000; // 120 seconds
