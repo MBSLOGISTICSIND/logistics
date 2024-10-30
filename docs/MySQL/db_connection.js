@@ -1,16 +1,15 @@
 const mysql = require('mysql2');
 
-// Create a connection pool to manage database connections
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',        // Use your external DB host if deployed
-    user: process.env.DB_USER || 'root',             // Use environment variable for DB username
-    password: process.env.DB_PASSWORD || 'Asrar@121', // Use environment variable for DB password
-    database: process.env.DB_NAME || 'logistics_billing', // Use environment variable for DB name
+    host: 'sql7.freemysqlhosting.net',
+    user: 'sql7741727',
+    password: 'cGIsXPn2ls', // Replace with actual password
+    database: 'sql7741727',
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    connectTimeout: 20000 // Increased to 20 seconds
 });
-
 // Function to execute a query and return results
 const queryDatabase = async (query, params) => {
     try {
@@ -54,7 +53,6 @@ const testConnection = async () => {
         }
     }
 };
-
 
 // Call the testConnection function to test the database connection
 testConnection();
