@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.json()); // Middleware for parsing JSON
 app.use(cors({
-    origin: 'https://mbslogisticsind.github.io/logistics/', // Adjust to specific domains if necessary
+    origin: '*', // Adjust to specific domains if necessary
     methods: ['GET', 'POST', 'PUT', 'DELETE'] // Allows all relevant methods
 }));
 
