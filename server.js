@@ -133,12 +133,17 @@ app.post('/api/save-bill', async (req, res) => {
             to, consignor, consignorAddress, consignorInvoiceNo,
             consignee, consigneeAddress, consigneeInvoiceNo, totalAmount, JSON.stringify(goodsEntries)
         ]);
-        res.status(201).send('Bill saved successfully');
+        
+        // Optionally, fetch the saved bill for returning in the response
+        // const savedBill = await getBillById( /* logic to fetch the last inserted bill */ );
+
+        res.status(201).json({ message: 'Bill saved successfully' /* , bill: savedBill */ });
     } catch (error) {
         console.error('Error saving bill:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 
 // API route to update a bill
 app.put('/api/update-bill/:id', async (req, res) => {
