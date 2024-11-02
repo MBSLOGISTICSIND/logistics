@@ -162,8 +162,8 @@ async function saveRecord(button) {
             vehicleRecords.push(newRecord);
             localStorage.setItem('vehicleRecords', JSON.stringify(vehicleRecords));
 
-            // Send to server
-            try {
+             // Send to server
+             try {
                 const response = await fetch('https://logistics-87vc.onrender.com/api/save-vehicle', {
                     method: 'POST',
                     headers: {
@@ -175,23 +175,33 @@ async function saveRecord(button) {
                 if (!response.ok) {
                     throw new Error('Failed to save to server: ' + response.statusText);
                 }
+
+                alert('Vehicle record saved successfully!'); // Feedback for success
             } catch (error) {
                 console.error('Error saving vehicle record to server:', error);
+                alert('Failed to save the vehicle record to the server. Please try again.'); // Feedback for error
             }
 
             checkInsuranceExpiry(insuranceExpiry);
             loadVehicleRecords();
         };
 
+        // Error handling for FileReader
+        reader.onerror = function() {
+            console.error('File could not be read! Code ' + reader.error.code);
+            alert('Error reading the image file. Please try again.');
+        };
+
         if (imageInput) {
             reader.readAsDataURL(imageInput);
         } else {
-            reader.onload();
+            reader.onload(); // If no image, still call onload
         }
     } else {
-        alert('Please fill in all fields.');
+        alert('Please fill in all fields.'); // Validation alert
     }
 }
+
 
 async function loadVehicleRecords() {
     const tableBody = document.getElementById('vehicle-body');

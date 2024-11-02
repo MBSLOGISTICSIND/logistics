@@ -7,12 +7,12 @@ require('dotenv').config(); // To manage environment variables
 const PORT = process.env.PORT || 4000; // Set the port
 const app = express();
 
-app.use(express.json()); // Middleware for parsing JSON
+// Middleware
+app.use(express.json({ limit: '10mb' })); // Increased payload limit
 app.use(cors({
-    origin: '*', // Adjust to specific domains if necessary
-    methods: ['GET', 'POST', 'PUT', 'DELETE'] // Allows all relevant methods
+    origin: 'https://mbslogisticsind.github.io', // Specify your GitHub Pages URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
-
 // Serve static files from the specified directory
 app.use(express.static(path.join(__dirname, 'docs/MySQL/home and login')));
 
