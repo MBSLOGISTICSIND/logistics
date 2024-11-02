@@ -8,49 +8,44 @@ document.addEventListener("DOMContentLoaded", function () {
 }); 
 
 async function loadReports() {
-    console.log("Loading reports..."); // Log the loading process
+    console.log("Loading reports...");
     const reportsBody = document.getElementById('reportsBody');
     if (!reportsBody) {
         console.error("reportsBody element not found!");
         return;
     }
-    reportsBody.innerHTML = ''; // Clear existing content
+    reportsBody.innerHTML = '';
 
     // Fetch bills from the server
     let serverBills = [];
     try {
-        const response = await fetch('http://localhost:4000/api/get-bills');
+        const response = await fetch('https://logistics-87vc.onrender.com/api/get-bills');
         if (!response.ok) {
-            console.error('Fetch error: ', response.status, response.statusText);
+            console.error('Fetch error:', response.status, response.statusText);
             throw new Error('Network response was not ok');
         }
         serverBills = await response.json();
+        console.log("Server bills fetched:", serverBills);
     } catch (error) {
         console.error('Error fetching bills from server:', error);
     }
 
-    // Fetch bills from localStorage
     const localBills = JSON.parse(localStorage.getItem('bills')) || [];
     console.log("Bills fetched from local storage:", localBills);
 
-    // Combine server bills and local storage bills
-    const allBills = [...serverBills, ...localBills]; // Merging both arrays
-    console.log("Combined bills:", allBills);
+    const allBills = [...serverBills, ...localBills];
+    console.log("Combined bills array:", allBills);
 
-    // Create a map to filter out duplicate lrNo while keeping the latest entry
     const uniqueBillsMap = new Map();
-
     allBills.forEach(bill => {
-        if (bill && bill.lrNo) { // Ensure bill is valid and has lrNo
+        if (bill && bill.lrNo) {
             const existingBill = uniqueBillsMap.get(bill.lrNo);
-            // Compare dates and keep the latest one
             if (!existingBill || new Date(bill.date) > new Date(existingBill.date)) {
                 uniqueBillsMap.set(bill.lrNo, bill);
             }
         }
     });
 
-    // Convert the map values back to an array
     const uniqueBills = Array.from(uniqueBillsMap.values());
     console.log("Unique bills (latest by lrNo):", uniqueBills);
 
@@ -60,9 +55,10 @@ async function loadReports() {
     }
 
     uniqueBills.forEach((bill, index) => {
-        // Sum the total number of articles from the goods entries
-        const totalNoOfArticles = bill.goodsEntries.reduce((sum, entry) => sum + (parseInt(entry.noOfArticles) || 0), 0);
-        const total = bill.total || bill.totalAmount || 0; // Use total saved in the bill object directly
+        const totalNoOfArticles = Array.isArray(bill.goodsEntries)
+            ? bill.goodsEntries.reduce((sum, entry) => sum + (parseInt(entry.noOfArticles) || 0), 0)
+            : 0;
+        const total = bill.total || bill.totalAmount || 0;
         const row = `<tr>
             <td>${bill.lrNo}</td>
             <td>${new Date(bill.date).toLocaleDateString()}</td>
@@ -83,7 +79,7 @@ async function loadReports() {
                 <button onclick="deleteBill(${index})">Delete</button>
             </td>
         </tr>`;
-        console.log("Adding row for bill:", bill); // Log the bill being added
+        console.log("Adding row for bill:", bill);
         reportsBody.innerHTML += row;
     });
 }

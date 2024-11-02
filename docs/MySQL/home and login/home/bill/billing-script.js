@@ -573,7 +573,7 @@ if (!from || !to) {
 }
 
 function saveBillToServer(bill) {
-    const url = bill.id ? `http://localhost:4000/api/update-bill/${bill.id}` : 'http://localhost:4000/api/save-bill'; // Dynamic URL
+    const url = bill.id ? `https://logistics-87vc.onrender.com/api/update-bill/${bill.id}` : 'https://logistics-87vc.onrender.com/api/save-bill'; // Dynamic URL
     const method = bill.id ? 'PUT' : 'POST';  // Use PUT for updating and POST for new bills
 
     fetch(url, {
@@ -585,7 +585,9 @@ function saveBillToServer(bill) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            return response.text().then(text => {
+                throw new Error(`Error ${response.status}: ${text}`);
+            });
         }
         return response.json();
     })
@@ -598,6 +600,7 @@ function saveBillToServer(bill) {
         console.error("Error saving bill to server:", error);
     });
 }
+
 
 
 
