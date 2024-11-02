@@ -164,7 +164,7 @@ async function saveRecord(button) {
 
             // Send to server
             try {
-                const response = await fetch('http://localhost:4000/api/save-vehicle', {
+                const response = await fetch('https://logistics-87vc.onrender.com/api/save-vehicle', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -199,10 +199,10 @@ async function loadVehicleRecords() {
 
     // Load vehicle records from local storage
     const vehicleRecords = JSON.parse(localStorage.getItem('vehicleRecords')) || [];
-    
+
     // Fetch vehicle records from server
     try {
-        const response = await fetch('http://localhost:4000/api/get-vehicles');
+        const response = await fetch('https://logistics-87vc.onrender.com/api/get-vehicles');
         if (response.ok) {
             const serverRecords = await response.json();
             // Merge server records with local records if needed
@@ -283,7 +283,7 @@ async function deleteRecord(index) {
 
     // Send delete request to the server
     try {
-        const response = await fetch(`http://localhost:4000/api/delete-vehicle/${licenseToDelete}`, {
+        const response = await fetch(`https://logistics-87vc.onrender.com/api/delete-vehicle/${licenseToDelete}`, {
             method: 'DELETE',
         });
         if (!response.ok) {
@@ -320,7 +320,6 @@ async function editRecord(index) {
     `;
 }
 
-
 async function updateRecord(index) {
     const row = document.getElementById('vehicle-body').children[index];
     const imageInput = row.querySelector('.vehicle-image').files[0];
@@ -354,7 +353,7 @@ async function updateRecord(index) {
 
         // Send update request to the server
         try {
-            const response = await fetch(`http://localhost:4000/api/update-vehicle/${driverLicense}`, {
+            const response = await fetch(`https://logistics-87vc.onrender.com/api/update-vehicle/${driverLicense}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -394,9 +393,24 @@ window.onload = function() {
     checkInsuranceExpiry();
 };
 
+
 // Function to check all vehicle records for insurance expiry
-function checkInsuranceExpiry() {
-    const vehicleRecords = JSON.parse(localStorage.getItem('vehicleRecords')) || [];
+async function checkInsuranceExpiry() {
+    // Fetch vehicle records from the server instead of local storage
+    let vehicleRecords = [];
+    try {
+        const response = await fetch('https://logistics-87vc.onrender.com/api/get-vehicles');
+        if (response.ok) {
+            vehicleRecords = await response.json();
+        } else {
+            console.error('Failed to fetch vehicle records from server:', response.statusText);
+            return; // Exit the function if there's an error
+        }
+    } catch (error) {
+        console.error('Error fetching vehicle records from server:', error);
+        return; // Exit the function if there's an error
+    }
+
     const today = new Date();
     const expiringSoon = [];
 
@@ -439,12 +453,16 @@ function showModal(message) {
 
     // Close modal if user clicks outside of it
     window.onclick = function(event) {
-        if (event.target == modal) {
+        if (event.target === modal) {
             modal.style.display = 'none';
         }
     };
 }
 
+// Check insurance expiry on window load
+window.onload = function() {
+    checkInsuranceExpiry();
+};
 
 
 // Use environment variables for sensitive information
