@@ -8,44 +8,45 @@ document.addEventListener("DOMContentLoaded", function () {
 }); 
 
 async function loadReports() {
-    console.log("Loading reports...");
+    console.log("Loading reports..."); // Log the loading process
     const reportsBody = document.getElementById('reportsBody');
     if (!reportsBody) {
         console.error("reportsBody element not found!");
         return;
     }
-    reportsBody.innerHTML = '';
+    reportsBody.innerHTML = ''; // Clear existing content
 
     // Fetch bills from the server
     let serverBills = [];
     try {
         const response = await fetch('https://logistics-87vc.onrender.com/api/get-bills');
         if (!response.ok) {
-            console.error('Fetch error:', response.status, response.statusText);
+            console.error('Fetch error: ', response.status, response.statusText);
             throw new Error('Network response was not ok');
         }
         serverBills = await response.json();
-        console.log("Server bills fetched:", serverBills);
     } catch (error) {
         console.error('Error fetching bills from server:', error);
     }
 
-    const localBills = JSON.parse(localStorage.getItem('bills')) || [];
-    console.log("Bills fetched from local storage:", localBills);
+    // Combine server bills and local storage bills
+    const allBills = [...serverBills, ...JSON.parse(localStorage.getItem('bills')) || []]; // Merging both arrays
+    console.log("Combined bills:", allBills);
 
-    const allBills = [...serverBills, ...localBills];
-    console.log("Combined bills array:", allBills);
-
+    // Create a map to filter out duplicate lrNo while keeping the latest entry
     const uniqueBillsMap = new Map();
+
     allBills.forEach(bill => {
-        if (bill && bill.lrNo) {
+        if (bill && bill.lrNo) { // Ensure bill is valid and has lrNo
             const existingBill = uniqueBillsMap.get(bill.lrNo);
+            // Compare dates and keep the latest one
             if (!existingBill || new Date(bill.date) > new Date(existingBill.date)) {
                 uniqueBillsMap.set(bill.lrNo, bill);
             }
         }
     });
 
+    // Convert the map values back to an array
     const uniqueBills = Array.from(uniqueBillsMap.values());
     console.log("Unique bills (latest by lrNo):", uniqueBills);
 
@@ -55,35 +56,48 @@ async function loadReports() {
     }
 
     uniqueBills.forEach((bill, index) => {
-        const totalNoOfArticles = Array.isArray(bill.goodsEntries)
-            ? bill.goodsEntries.reduce((sum, entry) => sum + (parseInt(entry.noOfArticles) || 0), 0)
-            : 0;
-        const total = bill.total || bill.totalAmount || 0;
-        const row = `<tr>
-            <td>${bill.lrNo}</td>
-            <td>${new Date(bill.date).toLocaleDateString()}</td>
-            <td>${bill.gstPaidBy}</td>
-            <td>${bill.paymentMode}</td>
-            <td>${bill.from}</td>
-            <td>${bill.to}</td>
-            <td>${bill.consignor}</td>
-            <td>${bill.consignorAddress}</td>
-            <td>${bill.consignorInvoiceNo}</td>
-            <td>${bill.consignee}</td>
-            <td>${bill.consigneeAddress}</td>
-            <td>${bill.consigneeInvoiceNo}</td>
-            <td>${totalNoOfArticles}</td> 
-            <td>${total}</td>
-            <td>
-                <button onclick="editBill(${index})">Edit</button>
-                <button onclick="deleteBill(${index})">Delete</button>
-            </td>
-        </tr>`;
-        console.log("Adding row for bill:", bill);
-        reportsBody.innerHTML += row;
+        // Parse goodsEntries if it is a string
+        if (typeof bill.goodsEntries === 'string') {
+            try {
+                bill.goodsEntries = JSON.parse(bill.goodsEntries);
+            } catch (error) {
+                console.error('Error parsing goodsEntries for bill:', bill, error);
+                bill.goodsEntries = []; // Fallback to an empty array if parsing fails
+            }
+        }
+    
+        // Check if goodsEntries is an array
+        if (Array.isArray(bill.goodsEntries)) {
+            // Sum the total number of articles from the goods entries
+            const totalNoOfArticles = bill.goodsEntries.reduce((sum, entry) => sum + (parseInt(entry.noOfArticles) || 0), 0);
+            const total = bill.total || bill.totalAmount || 0; // Use total saved in the bill object directly
+            const row = `<tr>
+                <td>${bill.lrNo}</td>
+                <td>${new Date(bill.date).toLocaleDateString()}</td>
+                <td>${bill.gstPaidBy}</td>
+                <td>${bill.paymentMode}</td>
+                <td>${bill.from}</td>
+                <td>${bill.to}</td>
+                <td>${bill.consignor}</td>
+                <td>${bill.consignorAddress}</td>
+                <td>${bill.consignorInvoiceNo}</td>
+                <td>${bill.consignee}</td>
+                <td>${bill.consigneeAddress}</td>
+                <td>${bill.consigneeInvoiceNo}</td>
+                <td>${totalNoOfArticles}</td> 
+                <td>${total}</td>
+                <td>
+                    <button onclick="editBill(${index})">Edit</button>
+                    <button onclick="deleteBill(${index})">Delete</button>
+                </td>
+            </tr>`;
+            console.log("Adding row for bill:", bill); // Log the bill being added
+            reportsBody.innerHTML += row;
+        } else {
+            console.error(`goodsEntries is not an array for bill:`, bill);
+        }
     });
-}
-
+}    
 
 
 // Ensure loadReports is called when reports section is displayed
