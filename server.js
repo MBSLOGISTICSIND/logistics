@@ -144,24 +144,30 @@ app.post('/api/save-bill', async (req, res) => {
     }
 });
 
-// API route to get a specific bill by ID
 app.get('/api/bill/:id', async (req, res) => {
     const { id } = req.params;
+
+    // Validate ID
+    if (isNaN(id) || id <= 0) {
+        return res.status(400).json({ error: 'Invalid bill ID' });
+    }
 
     const query = `SELECT * FROM bills WHERE id = ?`;
     
     try {
+        console.log('Querying for bill ID:', id); // Debugging line
         const bill = await queryDatabase(query, [id]);
         if (bill.length > 0) {
             res.status(200).json(bill[0]);
         } else {
-            res.status(404).send('Bill not found');
+            res.status(404).json({ error: 'Bill not found for the given ID' });
         }
     } catch (error) {
         console.error('Error fetching bill:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 // API route to update a bill
 app.put('/api/update-bill/:id', async (req, res) => {
