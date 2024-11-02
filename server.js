@@ -144,6 +144,24 @@ app.post('/api/save-bill', async (req, res) => {
     }
 });
 
+// API route to get a specific bill by ID
+app.get('/api/bill/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const query = `SELECT * FROM bills WHERE id = ?`;
+    
+    try {
+        const bill = await queryDatabase(query, [id]);
+        if (bill.length > 0) {
+            res.status(200).json(bill[0]);
+        } else {
+            res.status(404).send('Bill not found');
+        }
+    } catch (error) {
+        console.error('Error fetching bill:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // API route to update a bill
 app.put('/api/update-bill/:id', async (req, res) => {
