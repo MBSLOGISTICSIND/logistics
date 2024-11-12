@@ -2,18 +2,18 @@ const mysql = require('mysql2');
 
 // Create a connection pool
 const pool = mysql.createPool({
-    host: 'localhost',           // Use 'localhost' for local MySQL server
-    user: 'root',                // Your MySQL username, which is 'root' for local
-    password: 'Asrar@121',   // Replace with your MySQL root password
-    database: 'logistics_billing',  // The database you want to use
+    host: 'database-1.cfwkgks48tas.eu-north-1.rds.amazonaws.com', // RDS endpoint
+    user: 'admin',               // Master username
+    password: 'Asrar94811',      // Master password
+    database: 'logistics',  // Replace with the actual database name
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    connectTimeout: 20000,        // Connection timeout
-    ssl: false                    // Disable SSL for local connection (unless required)
+    connectTimeout: 20000,
+    ssl: {
+        rejectUnauthorized: true // Enable SSL for secure connection
+    }
 });
-
-
 
 // Function to execute a query and return results
 const queryDatabase = async (query, params) => {
@@ -29,15 +29,12 @@ const queryDatabase = async (query, params) => {
 // Function to test the database connection
 const testConnection = async () => {
     try {
-        // Test if we can get a connection from the pool
         const connection = await pool.promise().getConnection();
         console.log("Successfully connected to the database.");
 
-        // Perform a simple query to further check the connection
         const [results] = await connection.query('SELECT 1'); // Simple query to check connection
         console.log('Connection test result:', results);
         
-        // Release the connection back to the pool
         connection.release();
     } catch (error) {
         console.error('Error testing the database connection:', error);
