@@ -677,26 +677,18 @@ function saveBillToServer(bill) {
     });
 }
 
-// Function to load bill from server
-function loadBillFromServer(billId) {
-    fetch(`https://logistics-87vc.onrender.com/api/get-bill/${billId}`)
-        .then(response => response.json())
-        .then(bill => {
-            populateBillForm(bill);
-            localStorage.setItem("editBillIndex", bill.id);
-        })
-        .catch(error => {
-            console.error("Error loading bill from server:", error);
-        });
-}
 
-function editBill(billId) {
-    loadBillFromServer(billId);  // Load data from server and populate the form
-    // Optionally redirect to the billing form page if required
-}
 
-function populateBillForm(bill) {
-    // Populate the form fields with bill details
+
+document.addEventListener("DOMContentLoaded", function() {
+    const editBillIndex = localStorage.getItem("editBillIndex");
+
+    if (editBillIndex !== null) {
+        const bills = JSON.parse(localStorage.getItem("bills")) || [];
+        const bill = bills[editBillIndex];
+
+        if (bill) {
+            // Populate the form with the bill details
     document.getElementById('lr-no').value = bill.lrNo;
     document.getElementById('date').value = bill.date;
     document.getElementById('gst-paid-by').value = bill.gstPaidBy;
