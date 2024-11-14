@@ -120,14 +120,14 @@ app.post('/api/save-bill', async (req, res) => {
 
     // Insert the bill into the database (adjust the query according to your schema)
     const query = `
-        INSERT INTO bills (lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
-                           consignee, consigneeAddress, consigneeInvoiceNo, total, goodsEntries)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO bills (lrNo, date, gstPaidBy, paymentMode, \`from\`, \`to\`, consignor, consignorAddress,
+                           consignee, consigneeAddress, consigneeInvoiceNo, \`No of Articles\`, total, goodsEntries)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     try {
         const result = await queryDatabase(query, [
             lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
-            consignee, consigneeAddress, consigneeInvoiceNo, total, JSON.stringify(goodsEntries)
+            consignee, consigneeAddress, consigneeInvoiceNo, consignorAddress, total, JSON.stringify(goodsEntries)
         ]);
         res.status(200).json({ message: "Bill saved successfully", billId: result.insertId });
     } catch (error) {
@@ -135,6 +135,7 @@ app.post('/api/save-bill', async (req, res) => {
         res.status(500).send('Error saving bill');
     }
 });
+
 
 app.get('/api/bill/:id', async (req, res) => {
     const { id } = req.params;
@@ -172,15 +173,15 @@ app.put('/api/update-bill/:id', async (req, res) => {
 
     // Update the bill in the database
     const query = `
-        UPDATE bills SET lrNo = ?, date = ?, gstPaidBy = ?, paymentMode = ?, from = ?, to = ?,
+        UPDATE bills SET lrNo = ?, date = ?, gstPaidBy = ?, paymentMode = ?, \`from\` = ?, \`to\` = ?,
                         consignor = ?, consignorAddress = ?, consignee = ?, consigneeAddress = ?,
-                        consigneeInvoiceNo = ?, total = ?, goodsEntries = ?
+                        consigneeInvoiceNo = ?, \`No of Articles\` = ?, total = ?, goodsEntries = ?
         WHERE id = ?
     `;
     try {
         await queryDatabase(query, [
             lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
-            consignee, consigneeAddress, consigneeInvoiceNo, total, JSON.stringify(goodsEntries), id
+            consignee, consigneeAddress, consigneeInvoiceNo, consignorAddress, total, JSON.stringify(goodsEntries), id
         ]);
         res.status(200).json({ message: "Bill updated successfully" });
     } catch (error) {
