@@ -210,41 +210,68 @@ td {
     cursor: pointer;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 900px) {
-    .billing-container {
-        padding: 20px;
-        flex-direction: column;
-    }
-
-    .form-section {
-        flex: 1 1 100%;
-    }
-
-    button {
-        width: 100%;
-    }
+/* General layout for the row container */
+.row-container {
+    display: flex;
+    width: 100%;
+    border: none; /* Optional: Remove border if not needed */
+    padding: 5px;
+    box-sizing: border-box;
+    justify-content: space-between; /* Align the content in a row */
+    flex-wrap: nowrap; /* Ensure it stays in one row */
 }
 
-@media (max-width: 600px) {
-    .billing-container {
-        padding: 10px;
+/* Left column */
+.row-container .left {
+    flex: 1;
+    text-align: left;
+}
+
+/* Center column */
+.row-container .center {
+    flex: 1;
+    text-align: center;
+}
+
+/* Right column */
+.row-container .right {
+    flex: 1;
+    text-align: right;
+}
+
+/* Print-specific adjustments */
+@media print {
+    /* Ensure row stays in one line */
+    .row-container {
+        display: flex; /* Maintain flexbox layout */
+        width: 100%;
+        border: none; /* Remove border for print */
+        padding: 5px;
+        box-sizing: border-box;
+        margin: 0;
+        justify-content: space-between; /* Keep items spaced evenly */
+        flex-wrap: nowrap; /* Ensure everything stays on one line */
     }
 
-    button {
-        padding: 10px;
+    .row-container > div {
+        flex: 1;
+        padding: 0 10px;  /* Padding between columns for print */
+        text-align: center; /* Center the content */
     }
 
-    th, td {
-        padding: 8px;
-        font-size: 12px;
+    /* Ensure no unwanted margins or padding */
+    body {
+        width: 100%;
+        margin: 0;
     }
 
-    .bill-preview {
-        padding: 15px;
+    /* Adjust font size for print */
+    body, .row-container {
+        font-size: 12pt; /* Adjust size as needed */
     }
 
-    .total {
-        font-size: 16px;
+    /* Remove any extra borders you don’t want in print */
+    .row-container {
+        border: none; /* Remove borders during print if needed */
     }
 }

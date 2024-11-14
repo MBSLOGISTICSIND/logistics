@@ -73,7 +73,6 @@
                     <th onclick="sortTable(5)">To</th>
                     <th onclick="sortTable(6)">Consignor</th>
                     <th onclick="sortTable(7)">Consignor Address</th>
-                    <th onclick="sortTable(8)">Consignor Invoice No</th>
                     <th onclick="sortTable(9)">Consignee</th>
                     <th onclick="sortTable(10)">Consignee Address</th>
                     <th onclick="sortTable(11)">Consignee Invoice No</th>
@@ -158,8 +157,8 @@
         const reportData = {
             lrNo: cells[0].innerText,
             date: cells[1].innerText,
-            to: cells[6].innerText, // Adjust based on your actual column index for "To"
-            invoiceNo: cells[8].innerText, // Adjust for "Consignor Invoice No"
+            to: cells[5].innerText, // Adjust based on your actual column index for "To"
+            invoiceNo: cells[11].innerText, // Adjust for "Consignor Invoice No"
             articles: parseInt(cells[12].innerText) // Assuming this is the number of articles
         };
 

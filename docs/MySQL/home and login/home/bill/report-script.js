@@ -80,7 +80,6 @@ async function loadReports() {
                 <td>${bill.to}</td>
                 <td>${bill.consignor}</td>
                 <td>${bill.consignorAddress}</td>
-                <td>${bill.consignorInvoiceNo}</td>
                 <td>${bill.consignee}</td>
                 <td>${bill.consigneeAddress}</td>
                 <td>${bill.consigneeInvoiceNo}</td>

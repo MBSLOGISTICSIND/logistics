@@ -295,8 +295,6 @@
     <label for="consigner-gst">Consignor GST No.:</label>
     <input type="text" id="consigner-gst" placeholder="Consignor GST No." required><br><br>
 
-    <label for="bill-no">Consignor Invoice No.:</label>
-    <input type="text" id="Consignor-Invoice-no" placeholder="Consignor Invoice No." required><br><br>
 
     <!-- Consignee Section -->
     <label for="consignee">Consignee:</label>
@@ -313,8 +311,16 @@
     <label for="consignee-gst">Consignee GST No.:</label>
     <input type="text" id="consignee-gst" placeholder="Consignee GST No." required><br><br>
 
-    <label for="bill-no">Consignee Invoice No.:</label>
+    <label for="bill-no">Invoice No.:</label>
     <input type="text" id="Consignee-Invoice-no" placeholder="Consignee Invoice No." required><br><br>
+
+    <!-- Add DD/C Amount and DC/C Amount fields -->
+<label for="ddc-amount">DD/C Amount:</label>
+<input type="number" id="ddc-amount" placeholder="Enter DD/C Amount" step="0.01"><br><br>
+
+<label for="dcc-amount">DC/C Amount:</label>
+<input type="number" id="dcc-amount" placeholder="Enter DC/C Amount" step="0.01"><br><br>
+
 </form>
 
 <!-- Modal HTML -->
@@ -420,58 +426,93 @@
         <h2 style="font-size: 16px;"> Email: mbslorryservice@gmail.com | GSTIN: 29ACYPN6946Q2Z1</h2>
         <h2 style="font-size: 16px;"> Mob: 080-41554121, 41283507</h2>
     
+        <div class="row-container">
+            <div class="left">
+                <strong>L.R. No:</strong> <span id="preview-lr-no">BR001</span>
+            </div>
+            <div class="center">
+                <strong>Invoice No:</strong> <span id="preview-Consignee-Invoice-no">INV123</span>
+            </div>
+            <div class="right">
+                <strong>Date:</strong> <span id="preview-date">01/12/2022</span>
+            </div>
+        </div>
+        
+
 </div>
     <table class="company-details" style="width: 100%; margin: 20px 0; border-collapse: collapse;">
         <tr>
             <td style="border: 1px solid black; padding: 5px;vertical-align: top;text-align: left;"><strong>From:</strong> <span id="preview-from"></span></td>
             <td style="border: 1px solid black; padding: 5px;vertical-align: top;text-align: left;"><strong>To:</strong> <span id="preview-to"></span></td>
         </tr>
-        <tr>
-            <td style="border: 1px solid black; padding: 5px;vertical-align: top;text-align: left;"><strong>L.R. No:</strong> <span id="preview-lr-no"></span></td>
-            <td style="border: 1px solid black; padding: 5px;vertical-align: top;text-align: left;"><strong>Date:</strong> <span id="preview-date"></span></td>
-        </tr>
+       
         <td style="border: 1px solid black; padding: 5px; vertical-align: top;text-align: left;">
             <strong>Consignor:</strong> <span id="preview-consignor"></span><br>
             <strong>Consignor GST:</strong> <span id="preview-consigner-gst"></span><br>
-            <strong>Invoice-no:</strong> <span id="preview-Consignor-Invoice-no"></span><br>
+          
             <strong>Address:</strong> <span id="preview-consignor-address"></span>
           </td>
           <td style="border: 1px solid black; padding: 5px; vertical-align: top;text-align: left;">
             <strong>Consignee:</strong> <span id="preview-consignee"></span><br>
             <strong>Consignee GST:</strong> <span id="preview-consignee-gst"></span><br>
-            <strong>Invoice-no:</strong> <span id="preview-Consignee-Invoice-no"></span><br>
+           
             <strong>Address:</strong> <span id="preview-consignee-address"></span>
           </td>
     </table>
 
-    <table class="bill-details" style="width: 100%; margin: 20px 0; border-collapse: collapse;">
-       
-    </table>
+  <!-- Bill Details Table (Styled) -->
+<table class="bill-table" style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color: #003366; color: white;">
+            <th style="border: 1px solid black; padding: 8px;">NO</th>
+            <th style="border: 1px solid black; padding: 8px;">DESCRIPTION OF GOODS</th>
+            <th style="border: 1px solid black; padding: 8px;">NO OF ARTICLES</th>
+            <th style="border: 1px solid black; padding: 8px;">RATE PER</th>
+            <th style="border: 1px solid black; padding: 8px;">AMOUNT</th>
+            <th style="border: 1px solid black; padding: 8px;">PARTICULARS</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;">1</td>
+            <td rowspan="1" style="border: 1px solid black; padding: 8px;"></td>
+            <td style="border: 1px solid black; padding: 8px;" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 8px;" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 8px;" contenteditable="true"></td>
+            <!-- Nested table for Particulars column -->
+            <td style="border: 1px solid black; padding: 8px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="border: 1px solid black; padding: 4px; width: 50%;">DD/C</td>
+                        <td style="border: 1px solid black; padding: 4px; width: 50%;"></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black; padding: 4px;">DC/C</td>
+                        <td style="border: 1px solid black; padding: 4px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black; padding: 4px;">GST 5%</td>
+                        <td style="border: 1px solid black; padding: 4px;"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4" style="border: 1px solid black; padding: 8px; text-align: right;">TOTAL</td>
+            <td colspan="2" style="border: 1px solid black; padding: 8px;"><span id="total-amount">0</span></td>
+        </tr>
+    </tfoot>
+</table>
 
-    <table id="preview-table" style="width: 100%; margin: 10px 0; border-collapse: collapse;">
-        <thead>
-            <tr style="background-color: #003366; color: white;">
-                <th style="border: 1px solid black; padding: 8px;">Goods</th>
-                <th style="border: 1px solid black; padding: 8px;">No of Articles</th>
-                <th style="border: 1px solid black; padding: 8px;">Rate per Article</th>
-                <th style="border: 1px solid black; padding: 8px;">GST %</th>
-                <th style="border: 1px solid black; padding: 8px;">GST Amount</th>
-                <th style="border: 1px solid black; padding: 8px;">Freight</th>
-                <th style="border: 1px solid black; padding: 8px;">Total Amount</th>
-            </tr>
-        </thead>
-        <tbody id="preview-entries">
-            <!-- Preview entries will be populated here dynamically -->
-        </tbody>
-    </table>
+
+
 
 
     <p class="notes" style="font-size: 12px; margin-top: 20px;">Note: Carriers are not responsible for leakage. No charge for liquid drums and glassware. The company is not responsible for loss due to any "ACT OF GOD".</p>
     
-    <div class="total">
-        <p><strong>GST Amount:</strong> <span id="preview-gst-amt">0.00</span></p>
-        <p><strong>Total Amount:</strong> <span id="preview-total">0.00</span></p>
-    </div>
+
 
     <div class="footer" style="text-align: center; margin-top: 20px;">
         <p>For MBS LORRY SERVICE</p>
