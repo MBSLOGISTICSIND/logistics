@@ -220,19 +220,23 @@ function exportToExcel() {
 
 
 function printTable() {
+    // First, recalculate the total amount to ensure it's up-to-date
+    recalculateTotalAmount();
+
     // Get the table body from the modal
     const billTableBody = document.getElementById('billTableBody');
-    
+
     // Collect the filled data into a string
     let tableHTML = '<table style="width:100%; border-collapse: collapse;">';
     tableHTML += `
         <thead>
             <tr>
-                <th>LR No</th>
+                <th>Sl No</th> <!-- Serial number column -->
                 <th>Date</th>
+                <th>LR No</th>
                 <th>To</th>
                 <th>Invoice No</th>
-                <th>Articles</th>
+                <th>Qty</th>
                 <th>Rate</th>
                 <th>GC.C</th>
                 <th>Total Amount</th>
@@ -240,25 +244,27 @@ function printTable() {
         </thead>
         <tbody>
     `;
-    
-     // Get the bill number, recipient's name and address, and month/year from input fields
-     const billNo = document.getElementById('billNoInput').value;
-     const recipientName = document.getElementById('recipientName').value;
-     const recipientAddress = document.getElementById('recipientAddress').value;
-     const monthYear = document.getElementById('monthYearInput').value; // Format: YYYY-MM
-     
-     // Initialize total amount variable
+
+    // Get the bill number, recipient's name and address, and month/year from input fields
+    const billNo = document.getElementById('billNoInput').value;
+    const recipientName = document.getElementById('recipientName').value;
+    const recipientAddress = document.getElementById('recipientAddress').value;
+    const monthYear = document.getElementById('monthYearInput').value;
+
+    // Initialize total amount variable and row counter for serial numbers
     let totalAmount = 0;
-
-
+    let rowCounter = 1; // Serial number starts from 1
 
     // Loop through each row in the billTableBody
     Array.from(billTableBody.rows).forEach(row => {
         tableHTML += '<tr>';
         
+        // Add the serial number as the first cell
+        tableHTML += `<td style="border: 1px solid black; padding: 8px; text-align: center;">${rowCounter}</td>`;
+        rowCounter++; // Increment the counter for the next row
+
         // Loop through each cell in the row
-        Array.from(row.cells).forEach((cell, index) => { // Include index here
-            // Check if the cell has an input field and get its value
+        Array.from(row.cells).forEach((cell, index) => {
             const input = cell.querySelector('input');
             if (input) {
                 tableHTML += `<td style="border: 1px solid black; padding: 8px;">${input.value}</td>`;
@@ -267,7 +273,7 @@ function printTable() {
             }
 
             // If it's the last cell (Total Amount), add its value to the totalAmount
-            if (index === 7) { // Assuming the 8th column is the Total Amount column
+            if (index === 7) {
                 totalAmount += parseFloat(cell.innerText) || 0;
             }
         });
@@ -284,7 +290,6 @@ function printTable() {
     printWindow.document.write(`
         <html>
             <head>
-                <title>Print Bill</title>
                 <style>
                   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -296,8 +301,10 @@ function printTable() {
     text-align: center;
     border-bottom: 2px solid #000;
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin: 0;  /* Remove all margins */
+    padding: 0; /* Optionally reset padding if you don't want any spacing around the header */
 }
+
 
 .header .logo img {
     width: 150px; /* Adjust size as needed */
@@ -307,15 +314,24 @@ function printTable() {
 }
 
 .header .company-info {
-    margin-top: 10px;
+    margin-top: 1px;
     font-size: 14px;
     color: #555;
     text-align: center; /* Center-align the company info */
+    position: absolute;  /* Make the element position absolute */
+}
+
+.header .company-info-left {
+    left: 10px;  /* Adjust as needed for the left corner */
+}
+
+.header .company-info-right {
+    right: 10px; /* Adjust as needed for the right corner */
 }
 
 h2 {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 5px;
     font-size: 24px;
     color: #000;
     text-transform: uppercase;
@@ -380,18 +396,23 @@ td {
             <body>
                <div class="header">
                    
-                    <div class="company-info">
-                        <p>GST No: 1234567890</p>
-                        <p>Phone: +91 9876543210</p>
-                    </div>
+                   <div class="header">
+    <div class="company-info company-info-left">
+        <p>GSTIN: 29ACYPN6946Q2Z1</p>
+    </div>
+
+    <div class="company-info company-info-right">
+        <p> Mob: 080-41554121, 41283507</p>
+    </div>
+</div>
                     <div class="clear"></div>
                    <h1>
     <img src="MBSLOGO.jpg" alt="MBS Lorry Service" style="width: 50%; height: auto;">
 </h1>
-                    <h3>H.O: No 91, New No 86, 3rd Main Road, N.T. Pet, Bangalore-02</h3>
+                    <h2 style="font-size: 16px;">   24, 3rd Main Road, New Tharagupet, Bangalore - 560002</h2>
+        <h2 style="font-size: 16px;"> Email: mbslorryservice@gmail.com </h2>
                 </div>
                 
-                <h2>Billing Details</h2>
                 <p><strong>Bill No:</strong> ${billNo}</p> <!-- Use the bill number from input -->
                 <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
               
@@ -402,9 +423,11 @@ td {
 
                 ${tableHTML}
 
- <div class="total">
-                    <p><strong>Total Amount:</strong> ₹${parseFloat(totalAmount).toFixed(2)} (${totalAmountWords})</p> <!-- Display total amount in numbers and words -->
+    <div class="total">
+                    <p><strong>Total Amount:</strong> ₹${totalAmount.toFixed(2)} (${totalAmountWords})</p>
                 </div>
+
+
 
               <div class="footer">
                     <p>Thank you,</p>
@@ -468,8 +491,22 @@ function numberToWords(num) {
     return words.trim();
 }
 
-function updateTotal(lrNo, newPrice) {
-    // Update the total amount in your data source
-    console.log(`Updated LR No: ${lrNo}, New Price: ${newPrice}`);
-    // Implement the logic to save the new price if necessary
+// Function to recalculate the grand total
+function recalculateTotalAmount() {
+    let totalAmount = 0;
+
+    // Sum up all values from .totalAmount elements
+    document.querySelectorAll('.totalAmount').forEach((input) => {
+        totalAmount += parseFloat(input.value) || 0;
+    });
+
+    const totalAmountWords = numberToWords(totalAmount);
+
+    // Update the total display section
+    const totalDisplay = document.querySelector('.total p');
+    if (totalDisplay) {
+        totalDisplay.innerHTML = `<strong>Total Amount:</strong> ₹${totalAmount.toFixed(2)} (${totalAmountWords})`;
+    }
+
+    return { totalAmount, totalAmountWords };
 }

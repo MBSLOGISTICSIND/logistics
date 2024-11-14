@@ -109,11 +109,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>LR No</th>
+            
                             <th>Date</th>
+                            <th>LR No</th>
                             <th>Branch</th>
                             <th>Invoice No</th>
-                            <th>Articles</th>
+                            <th>Qty</th>
                             <th>Rate</th>
                             <th>GC.C</th>
                             <th>Total Amount</th>
@@ -121,8 +122,9 @@
                     </thead>
                     <tbody id="billTableBody">
                         <tr>
-                            <td><input type="text" value="LR123" /></td>
+                           
                             <td><input type="date" value="2024-10-24" /></td>
+                            <td><input type="text" value="LR123" /></td>
                             <td><input type="text" value="Mr. XYZ" /></td>
                             <td><input type="text" value="INV1234" /></td>
                             <td><input type="text" value="Box" /></td>
@@ -155,8 +157,8 @@
     visibleRows.forEach(function (row) {
         const cells = row.querySelectorAll("td");
         const reportData = {
-            lrNo: cells[0].innerText,
-            date: cells[1].innerText,
+            lrNo: cells[1].innerText,
+            date: cells[0].innerText,
             to: cells[5].innerText, // Adjust based on your actual column index for "To"
             invoiceNo: cells[10].innerText, // Adjust for "Consignor Invoice No"
             articles: parseInt(cells[11].innerText) // Assuming this is the number of articles
@@ -188,6 +190,9 @@
             const totalAmountInput = row.querySelector(".totalAmount");
             const total = (rate * articles) + gcValue; // Calculate total with GC.C
             totalAmountInput.value = total.toFixed(2); // Set total amount with 2 decimal precision
+
+       
+
         });
     });
 
