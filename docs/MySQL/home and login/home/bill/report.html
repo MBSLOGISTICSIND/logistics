@@ -75,7 +75,7 @@
                     <th onclick="sortTable(7)">Consignor Address</th>
                     <th onclick="sortTable(9)">Consignee</th>
                     <th onclick="sortTable(10)">Consignee Address</th>
-                    <th onclick="sortTable(11)">Consignee Invoice No</th>
+                    <th onclick="sortTable(11)">Invoice No</th>
                     <th onclick="sortTable(12)">No Of Articles</th>
                     <th onclick="sortTable(13)">Total Amount</th>
                     <th>Actions</th>
@@ -158,8 +158,8 @@
             lrNo: cells[0].innerText,
             date: cells[1].innerText,
             to: cells[5].innerText, // Adjust based on your actual column index for "To"
-            invoiceNo: cells[11].innerText, // Adjust for "Consignor Invoice No"
-            articles: parseInt(cells[12].innerText) // Assuming this is the number of articles
+            invoiceNo: cells[10].innerText, // Adjust for "Consignor Invoice No"
+            articles: parseInt(cells[11].innerText) // Assuming this is the number of articles
         };
 
         const newRow = document.createElement("tr");
