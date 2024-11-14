@@ -113,34 +113,26 @@ app.get('/api/get-bills', async (req, res) => {
 // API route to save a bill
 app.post('/api/save-bill', async (req, res) => {
     const {
-        lrNo, date, gstPaidBy, paymentMode, from,
-        to, consignor, consignorAddress, consignorInvoiceNo,
-        consignee, consigneeAddress, consigneeInvoiceNo,
-        totalAmount, goodsEntries
+        lrNo, date, gstPaidBy, paymentMode, from, to,
+        consignor, consignorAddress, consignee, consigneeAddress,
+        consigneeInvoiceNo, total, goodsEntries
     } = req.body;
 
+    // Insert the bill into the database (adjust the query according to your schema)
     const query = `
-        INSERT INTO bills (
-            lrNo, date, gstPaidBy, paymentMode, \`from\`,
-            \`to\`, consignor, consignorAddress, consignorInvoiceNo,
-            consignee, consigneeAddress, consigneeInvoiceNo, totalAmount, goodsEntries
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO bills (lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
+                           consignee, consigneeAddress, consigneeInvoiceNo, total, goodsEntries)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-
     try {
-        await queryDatabase(query, [
-            lrNo, date, gstPaidBy, paymentMode, from,
-            to, consignor, consignorAddress, consignorInvoiceNo,
-            consignee, consigneeAddress, consigneeInvoiceNo, totalAmount, JSON.stringify(goodsEntries)
+        const result = await queryDatabase(query, [
+            lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
+            consignee, consigneeAddress, consigneeInvoiceNo, total, JSON.stringify(goodsEntries)
         ]);
-        
-        // Optionally, fetch the saved bill for returning in the response
-        // const savedBill = await getBillById( /* logic to fetch the last inserted bill */ );
-
-        res.status(201).json({ message: 'Bill saved successfully' /* , bill: savedBill */ });
+        res.status(200).json({ message: "Bill saved successfully", billId: result.insertId });
     } catch (error) {
         console.error('Error saving bill:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        res.status(500).send('Error saving bill');
     }
 });
 
@@ -173,31 +165,27 @@ app.get('/api/bill/:id', async (req, res) => {
 app.put('/api/update-bill/:id', async (req, res) => {
     const { id } = req.params;
     const {
-        lrNo, date, gstPaidBy, paymentMode, from,
-        to, consignor, consignorAddress, consignorInvoiceNo,
-        consignee, consigneeAddress, consigneeInvoiceNo,
-        totalAmount, goodsEntries
+        lrNo, date, gstPaidBy, paymentMode, from, to,
+        consignor, consignorAddress, consignee, consigneeAddress,
+        consigneeInvoiceNo, total, goodsEntries
     } = req.body;
 
+    // Update the bill in the database
     const query = `
-        UPDATE bills SET
-            lrNo = ?, date = ?, gstPaidBy = ?, paymentMode = ?, \`from\` = ?,
-            \`to\` = ?, consignor = ?, consignorAddress = ?, consignorInvoiceNo = ?,
-            consignee = ?, consigneeAddress = ?, consigneeInvoiceNo = ?,
-            totalAmount = ?, goodsEntries = ?
+        UPDATE bills SET lrNo = ?, date = ?, gstPaidBy = ?, paymentMode = ?, from = ?, to = ?,
+                        consignor = ?, consignorAddress = ?, consignee = ?, consigneeAddress = ?,
+                        consigneeInvoiceNo = ?, total = ?, goodsEntries = ?
         WHERE id = ?
     `;
-
     try {
         await queryDatabase(query, [
-            lrNo, date, gstPaidBy, paymentMode, from,
-            to, consignor, consignorAddress, consignorInvoiceNo,
-            consignee, consigneeAddress, consigneeInvoiceNo, totalAmount, JSON.stringify(goodsEntries), id
+            lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
+            consignee, consigneeAddress, consigneeInvoiceNo, total, JSON.stringify(goodsEntries), id
         ]);
-        res.send('Bill updated successfully');
+        res.status(200).json({ message: "Bill updated successfully" });
     } catch (error) {
         console.error('Error updating bill:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send('Error updating bill');
     }
 });
 
