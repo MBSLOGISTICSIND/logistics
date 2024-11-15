@@ -190,6 +190,16 @@ app.put('/api/update-bill/:id', async (req, res) => {
     }
 });
 
+app.use((req, res) => {
+    res.status(404).json({ error: 'Not Found' });
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
+});
+
+
 // Start the server and set the timeouts
 const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);

@@ -710,10 +710,16 @@ function saveBillToServer(bill) {
     });
 }
 
-// Function to load bill from server
 function loadBillFromServer(billId) {
     fetch(`https://logistics-87vc.onrender.com/api/get-bill/${billId}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`Server Error ${response.status}: ${text}`);
+                });
+            }
+            return response.json();
+        })
         .then(bill => {
             populateBillForm(bill);
             localStorage.setItem("editBillIndex", bill.id);
@@ -724,8 +730,11 @@ function loadBillFromServer(billId) {
 }
 
 function editBill(billId) {
-    loadBillFromServer(billId);  // Load data from server and populate the form
-    // Optionally redirect to the billing form page if required
+    if (!billId || billId <= 0) {
+        console.error("Invalid bill ID:", billId);
+        return;
+    }
+    loadBillFromServer(billId); // Load data from the server and populate the form
 }
 
 function populateBillForm(bill) {
