@@ -134,8 +134,12 @@ function generateBill() {
     // Generate the goods entries for the preview table
     updateBillPreview();
     
-    // Show the bill preview
-    document.getElementById("bill-preview").style.display = 'block';
+     // Show the bill preview
+     const previewSection = document.getElementById("bill-preview");
+     previewSection.style.display = 'block';
+     
+     // Scroll to the bill preview
+     previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function updateBillPreview() {
@@ -481,6 +485,7 @@ function addGoodsEntry() {
     // Populate the new goods dropdown
     const goodsSelect = newRow.querySelector('.goods');
     populateGoodsDropdown(goodsSelect);
+    populateGoodsDropdown();
 
     // Attach event listeners for recalculating totals
     newRow.querySelectorAll('.no-articles, .rate-per-article, .gst, .freight').forEach(input => {
@@ -529,6 +534,8 @@ function printBill() {
                              .company-details td { padding: 10px; border: 1px solid black; }
                          }
                          body { font-family: Arial, sans-serif; font-size: 12px; }
+
+                         
                      </style>
                  </head>
                  <body>${printContents}</body>

@@ -6,226 +6,177 @@
     <title>Billing Form</title>
     <link rel="stylesheet" href="billing-style.css">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f7f9;
-            margin: 0;
-            padding: 20px;
-        }
+      /* Base Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-        .billing-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
+/* Container */
+.billing-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
 
-        .logo {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+/* Header Styles */
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 
-        .logo img {
-            height: 80px;
-        }
+.logo img {
+    height: 80px;
+}
 
-        h2, h3, h4 {
-            color: #003366;
-            text-align: center;
-        }
+h2, h3, h4 {
+    color: #003366;
+    margin: 10px 0;
+    text-align: center;
+}
 
-        .form-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #f0f0f0;
-        }
+/* Form Section */
+.form-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
 
-        label {
-            font-weight: bold;
-        }
+label {
+    font-weight: bold;
+    flex: 1 1 150px;
+}
 
-        input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            transition: border 0.3s;
-        }
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+    flex: 2 1 300px;
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border 0.3s;
+}
 
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #003366;
-            outline: none;
-        }
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #003366;
+    outline: none;
+}
 
-        button {
-            background-color: #003366;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-right: 10px;
-        }
+/* Buttons */
+button {
+    background-color: #00509e;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-        button:hover {
-            background-color: #00509e;
-        }
+button:hover {
+    background-color: #003366;
+}
 
-        table {
-            width: 100%;
-            margin: 10px 0;
-            border-collapse: collapse;
-            border-radius: 5px;
-            overflow: hidden;
-        }
+.form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
 
-        th {
-            background-color: #003366;
-            color: white;
-            padding: 8px;
-        }
+/* Table Styles */
+table {
+    width: 100%;
+    margin: 10px 0;
+    border-collapse: collapse;
+    border-radius: 5px;
+}
 
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: center;
-        }
+th {
+    background-color: #003366;
+    color: white;
+    padding: 8px;
+    text-align: left;
+}
 
-        .bill-preview {
-            border: 1px solid #003366;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-            background-color: #ffffff;
-        }
+td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
 
-        .total {
-            font-weight: bold;
-            text-align: right;
-            margin-top: 20px;
-        }
+/* Bill Preview */
+.bill-preview {
+    border: 1px solid #003366;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
 
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-        }
+.total {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 20px;
+}
 
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            .billing-container {
-                padding: 15px;
-            }
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
 
-            button {
-                width: 100%;
-                margin: 5px 0;
-            }
-        }
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .billing-container {
+        padding: 15px;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f4f4f4;
-        }
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
 
-        .billing-container {
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-        }
+/* Print Styles */
+@media print {
+    body {
+        margin: 0;
+    }
+    .billing-container {
+        width: 100%;
+        border: none;
+        box-shadow: none;
+    }
+    .bill-preview {
+        page-break-after: always;
+    }
+}
 
-        /* Styles for the new bill form */
-        #new-bill-form {
-            display: none; /* Hidden by default */
-            margin: 20px 0;
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-
-        h2, h3, h4 {
-            margin: 10px 0;
-            text-align: center;
-        }
-
-        .form-section {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin: 10px 0;
-        }
-
-        .form-section label {
-            flex: 1 1 200px;
-            margin: 5px 0;
-        }
-
-        .form-section input,
-        .form-section select,
-        .form-section textarea {
-            flex: 2 1 250px;
-            padding: 5px;
-            margin: 5px 0;
-        }
-
-        .form-buttons {
-            display: flex;
-            justify-content: center;
-            margin: 10px 0;
-        }
-
-        .form-buttons button {
-            margin: 0 5px;
-            padding: 10px 20px;
-        }
-
-        /* Bill Preview */
-        #bill-preview {
-            border: 1px solid black;
-            padding: 20px;
-            margin: 20px 0;
-            overflow: hidden;
-            page-break-after: always;
-        }
-        
-        @media print {
-            body {
-                margin: 0;
-            }
-            .billing-container {
-                width: 100%;
-            }
-            #bill-preview {
-                display: block;
-            }
-        }
         
     </style>
 
@@ -240,7 +191,6 @@
         <!-- Customer Info Section -->
         <div class="form-section">
             <h4>Customer Info</h4>
-            <button type="button" onclick="newBill()" class="new-bill-btn">New Bill</button>
             <form id="billing-form">
                 <label for="lr-no">LR No.:</label>
                 <input type="text" id="lr-no" placeholder="LR No" required readonly>
@@ -376,40 +326,22 @@
                     </tr>
                 </thead>
                 <tbody id="goods-entries">
-                    <tr>
-                        <td>
-                            <select class="goods" required>
-                                <option value="">Select Goods</option>
-                            </select>
-                        </td>
-                        <td><input type="number" class="no-articles" required oninput="calculateTotal(this)"></td>
-                        <td><input type="number" class="rate-per-article" id="rate-per-article" placeholder="Rate Per Article" required oninput="calculateTotal(this)"></td>
-                        <td>
-                            <select class="gst" id="gst" placeholder="GST" required onchange="calculateTotal(this)">
-                                <option value="0">0%</option>
-                                <option value="5">5%</option>
-                                <option value="12">12%</option>
-                                <option value="18">18%</option>
-                            </select>
-                        </td>
-                        <td><input type="number" id="gst-amt"class="gst-amt" required readonly></td>
-                        <td><input type="number" class="freight" required oninput="calculateTotal(this)"></td>
-                        <td><input type="number" class="total" id="total" placeholder="Total"required readonly></td>
-                        <td><button type="button" onclick="removeGoodsEntry(this)">Remove</button></td>
-                    </tr>
+                    
                 </tbody>
             </table>
             <button type="button" onclick="addGoodsEntry()">Add More Goods</button>
         </div>
 
-        <div class="form-buttons">
-            <button type="button" onclick="generateBill()">View Bill</button>
-            <button type="button" onclick="printBill()">Print Bill</button>
-            <button type="button" onclick="saveBill()">Save Bill</button>
-            <button type="button" onclick="modifyBill()">Modify Bill</button>
-            <button type="button" onclick="deleteBill()">Delete Bill</button>
-        </div>
+       
     </form>
+    <div class="form-buttons">
+        <button type="button" onclick="generateBill()">View Bill</button>
+        <button type="button" onclick="saveBill()">Save Bill</button>
+        <button type="button" onclick="modifyBill()">Modify Bill</button>
+<button type="button" onclick="deleteBill()">Delete Bill</button>
+<button type="button" onclick="newBill()" class="new-bill-btn">New Bill</button>
+      
+    </div>
 </div>
 
 
@@ -426,21 +358,21 @@
         <h2 style="font-size: 16px;"> Email: mbslorryservice@gmail.com | GSTIN: 29ACYPN6946Q2Z1</h2>
         <h2 style="font-size: 16px;"> Mob: 080-41554121, 41283507</h2>
     
-        <div class="row-container">
-            <div class="left">
-                <strong>L.R. No:</strong> <span id="preview-lr-no">BR001</span>
-            </div>
-            <div class="center">
-                <strong>Invoice No:</strong> <span id="preview-Consignee-Invoice-no">INV123</span>
-            </div>
-            <div class="right">
-                <strong>Date:</strong> <span id="preview-date">01/12/2022</span>
-            </div>
-        </div>
+      
         
 
 </div>
+
+<table class="company-details"  style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+    <tr>
+        <td class="left"style="border: 1px solid black; padding: 5px;vertical-align: top;text-align: left;"><strong>L.R. No:</strong> <span id="preview-lr-no">BR001</span></td>
+        <td class="center"style="border: 1px solid black; padding: 5px;vertical-align: top;text-align: center;"><strong>Invoice No:</strong> <span id="preview-Consignee-Invoice-no">INV123</span></td>
+        <td class="right"style="border: 1px solid black; padding: 5px;vertical-align: top;text-align: right;"><strong>Date:</strong> <span id="preview-date">01/12/2022</span></td>
+    </tr>
+</table>
+
     <table class="company-details" style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+      
         <tr>
             <td style="border: 1px solid black; padding: 5px;vertical-align: top;text-align: left;"><strong>From:</strong> <span id="preview-from"></span></td>
             <td style="border: 1px solid black; padding: 5px;vertical-align: top;text-align: left;"><strong>To:</strong> <span id="preview-to"></span></td>
@@ -518,10 +450,15 @@
         <p>For MBS LORRY SERVICE</p>
     </div>
 
-    <a href="report.html" id="goToReportsBtn">Go to Reports</a>
+   
 
 
 </div>
+
+<button type="button" onclick="printBill()">Print Bill</button>
+
+
+<a href="report.html" id="goToReportsBtn">Go to Reports</a>
 
     <script src="billing-script.js"></script>
     <script src="report-script.js"></script>

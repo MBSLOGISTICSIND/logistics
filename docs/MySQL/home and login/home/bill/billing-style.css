@@ -13,19 +13,17 @@ body {
     margin: 0 auto;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+ 
     padding: 40px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.billing-container:hover {
-    transform: scale(1.02);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
 
+
+/* Logo */
 .logo img {
     height: 80px;
     filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2));
@@ -47,8 +45,7 @@ h2, h3, h4 {
     padding: 20px;
     flex: 1 1 48%;
     margin: 10px 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .form-section:hover {
@@ -61,11 +58,7 @@ label {
     color: #003366;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="date"],
-textarea,
-select {
+input[type="text"], input[type="number"], input[type="date"], textarea, select {
     width: 100%;
     padding: 10px;
     margin: 8px 0;
@@ -75,9 +68,7 @@ select {
     transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
-input:focus, 
-textarea:focus, 
-select:focus {
+input:focus, textarea:focus, select:focus {
     border-color: #003366;
     box-shadow: 0 0 10px rgba(0, 51, 102, 0.2);
     outline: none;
@@ -110,7 +101,6 @@ table {
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
-    border-spacing: 0 10px;
 }
 
 th {
@@ -156,36 +146,31 @@ td {
     color: #777;
 }
 
-/* New Bill Button Styles */
 .new-bill-btn {
-    position: fixed; /* Fix the button's position relative to the viewport */
-    right: 20px; /* Adjust distance from the right edge of the page */
-    top: 20px; /* Adjust distance from the top edge of the page */
-    padding: 10px 15px; /* Add padding for a better appearance */
-    background-color: #007bff; /* Button background color */
-    color: white; /* Button text color */
-    border: none; /* Remove default border */
-    border-radius: 5px; /* Slightly rounded corners */
-    cursor: pointer; /* Change cursor to pointer on hover */
-    z-index: 1000; /* Ensure button appears on top of other elements */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
 }
 
 .new-bill-btn:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    background-color: #0056b3;
 }
+
 
 /* Modal Styles */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0); /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
@@ -203,75 +188,115 @@ td {
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.close:hover, .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
 
-/* General layout for the row container */
+/* Row Container */
 .row-container {
     display: flex;
     width: 100%;
-    border: none; /* Optional: Remove border if not needed */
     padding: 5px;
     box-sizing: border-box;
-    justify-content: space-between; /* Align the content in a row */
-    flex-wrap: nowrap; /* Ensure it stays in one row */
+    justify-content: space-between;
+    flex-wrap: nowrap;
 }
 
-/* Left column */
-.row-container .left {
+.row-container .left, .row-container .center, .row-container .right {
     flex: 1;
-    text-align: left;
-}
-
-/* Center column */
-.row-container .center {
-    flex: 1;
+    padding: 0 10px;
     text-align: center;
 }
 
-/* Right column */
-.row-container .right {
-    flex: 1;
-    text-align: right;
+/* Print Styles */
+@media print {
+    body, .row-container {
+        font-size: 12pt;
+        margin: 0;
+    }
+    .row-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+    }
 }
 
-/* Print-specific adjustments */
-@media print {
-    /* Ensure row stays in one line */
-    .row-container {
-        display: flex; /* Maintain flexbox layout */
+
+.company-details {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+}
+
+.company-details td {
+    padding: 5px;
+    vertical-align: top;
+    text-align: left;
+}
+
+.company-details th {
+    padding: 5px;
+    vertical-align: top;
+    text-align: center;
+    font-weight: bold;
+    background-color: #f4f4f4;
+}
+
+.row-container {
+    display: table;
+    width: 100%;
+}
+
+.row-container div {
+    display: table-cell;
+    padding: 5px;
+    text-align: left;
+}
+
+.row-container .left {
+    width: 33.33%;
+}
+
+.row-container .center {
+    width: 33.33%;
+    text-align: center;
+}
+
+.row-container .right {
+    width: 33.33%;
+    text-align: right;
+}
+ /* Print Styling */
+ @media print {
+    /* Ensure no page breaks inside the table */
+    .company-details {
+        page-break-inside: avoid;
         width: 100%;
-        border: none; /* Remove border for print */
-        padding: 5px;
-        box-sizing: border-box;
-        margin: 0;
-        justify-content: space-between; /* Keep items spaced evenly */
-        flex-wrap: nowrap; /* Ensure everything stays on one line */
     }
 
-    .row-container > div {
-        flex: 1;
-        padding: 0 10px;  /* Padding between columns for print */
-        text-align: center; /* Center the content */
-    }
-
-    /* Ensure no unwanted margins or padding */
+    /* Remove unnecessary margins and padding for print */
     body {
-        width: 100%;
         margin: 0;
+        padding: 0;
     }
 
-    /* Adjust font size for print */
-    body, .row-container {
-        font-size: 12pt; /* Adjust size as needed */
+    /* Ensure the table is well formatted for printing */
+    .company-details td, .company-details th {
+        font-size: 12pt; /* Adjust the font size for better readability */
+        border: 1px solid black; /* Border for print */
     }
 
-    /* Remove any extra borders you don’t want in print */
+    /* Ensure the table keeps its 3 columns and doesn't wrap or break */
     .row-container {
-        border: none; /* Remove borders during print if needed */
+        display: table;
+        width: 100%;
+    }
+
+    .row-container div {
+        display: table-cell;
+        width: 33.33%;
+        padding: 5px;
     }
 }

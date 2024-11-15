@@ -94,17 +94,22 @@
             <h2>Create Bill</h2>
             <form id="createBillForm">
                 <h2>Billing Information</h2>
-        <label for="billNoInput">Bill No:</label>
-        <input type="text" id="billNoInput" placeholder="Enter Bill No" required>
+                <label for="billNoInput">Bill No:</label>
+                <input type="text" id="billNoInput" placeholder="Enter Bill No" readonly required>
 
-        <label for="recipientName">To:</label>
-        <input type="text" id="recipientName" placeholder="Enter Name" required>
+               <!-- Recipient Name Dropdown -->
+<label for="recipient">Recipient:</label>
+<select id="recipient">
+    <option value="">Select Recipient</option>
+</select>
+<button onclick="openRecipientModal()">Add New Recipient</button>
 
-        <label for="recipientAddress">Address:</label>
-        <textarea id="recipientAddress" placeholder="Enter Address" required></textarea>
-
-        <label for="monthYearInput">Select Month & Year:</label>
-        <input type="month" id="monthYearInput" required>
+<!-- Recipient Address Input (populated when recipient is selected) -->
+<label for="recipientAddress">Address:</label>
+<textarea id="recipientAddress" placeholder="Recipient Address" readonly></textarea>
+                
+<label for="monthYearInput">Select Month & Year:</label>
+<input type="month" id="monthYearInput" required>
 
                 <table>
                     <thead>
@@ -137,82 +142,346 @@
                 </table>
                 <button type="submit">Submit Bill</button>
                 <button type="button" onclick="printTable()">Print</button>
+                <button id="saveAsBtn">Save </button>
+                <button id="resetBillNumberBtn">Reset Bill Number</button>
+
+
             </form>
+
+            <!-- Modal for Adding Recipient -->
+<div id="recipientModal" style="display: none;">
+    <h3>Add New Recipient</h3>
+    
+    <!-- Fields to Add Recipient -->
+    <label for="recipient-name">Name:</label>
+    <input type="text" id="modal-recipient-name" required>
+    
+    <label for="recipient-address">Address:</label>
+    <textarea id="modal-recipient-address" required></textarea>
+    
+    <button id="modal-save-recipient">Save</button>
+    <button onclick="closeRecipientModal()">Cancel</button>
+
+    
+    <!-- Button to View Recipients -->
+    <button onclick="openRecipientList()">View Recipients</button>
+
+    <!-- Table to Show Saved Recipients -->
+    <div id="recipient-list-container" style="display:none;">
+        <h4>Saved Recipients</h4>
+        <table id="recipient-list-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data rows will be inserted dynamically -->
+            </tbody>
+        </table>
+        <button onclick="closeRecipientList()">Close</button>
+    </div>
+</div>
         </div>
     </div>
+
+
     <script src="report-script.js"></script>
     <script src="billing-script.js"></script>
 
-    <script>
+
+    <script>// Function to set the current bill number when the modal is opened
         document.getElementById("createBillBtn").addEventListener("click", function () {
-    const tableBody = document.getElementById("billTableBody");
-    tableBody.innerHTML = ""; // Clear existing rows
+            const tableBody = document.getElementById("billTableBody");
+            tableBody.innerHTML = ""; // Clear existing rows
+        
+            // Get only visible rows from the reports table
+            const reportRows = Array.from(document.querySelectorAll("#reports-table tbody tr"));
+            const visibleRows = reportRows.filter(row => {
+                return row.style.display !== "none"; // Include only rows that are visible
+            });
+        
+            visibleRows.forEach(function (row) {
+                const cells = row.querySelectorAll("td");
+                const reportData = {
+                    lrNo: cells[1].innerText,
+                    date: cells[0].innerText,
+                    to: cells[5].innerText, // Adjust based on your actual column index for "To"
+                    invoiceNo: cells[10].innerText, // Adjust for "Consignor Invoice No"
+                    articles: parseInt(cells[11].innerText) // Assuming this is the number of articles
+                };
+        
+                const newRow = document.createElement("tr");
+        
+                newRow.innerHTML = `
+                    <td>${reportData.lrNo}</td>
+                    <td>${reportData.date}</td>
+                    <td>${reportData.to}</td>
+                    <td>${reportData.invoiceNo}</td>
+                    <td>${reportData.articles}</td>
+                    <td><input type="number" class="rateInput" data-index="${row.rowIndex - 1}" placeholder="Enter Rate"></td>
+                    <td>10</td> <!-- GC.C is default 10 -->
+                    <td><input type="number" class="totalAmount" readonly></td>
+                `;
+                tableBody.appendChild(newRow);
+                populateRecipientSelectOptions();  // Refresh dropdown list
+            });
+        
 
-    // Get only visible rows from the reports table
-    const reportRows = Array.from(document.querySelectorAll("#reports-table tbody tr"));
-    const visibleRows = reportRows.filter(row => {
-        return row.style.display !== "none"; // Include only rows that are visible
-    });
 
-    visibleRows.forEach(function (row) {
-        const cells = row.querySelectorAll("td");
-        const reportData = {
-            lrNo: cells[1].innerText,
-            date: cells[0].innerText,
-            to: cells[5].innerText, // Adjust based on your actual column index for "To"
-            invoiceNo: cells[10].innerText, // Adjust for "Consignor Invoice No"
-            articles: parseInt(cells[11].innerText) // Assuming this is the number of articles
-        };
 
-        const newRow = document.createElement("tr");
 
-        newRow.innerHTML = `
-            <td>${reportData.lrNo}</td>
-            <td>${reportData.date}</td>
-            <td>${reportData.to}</td>
-            <td>${reportData.invoiceNo}</td>
-            <td>${reportData.articles}</td>
-            <td><input type="number" class="rateInput" data-index="${row.rowIndex - 1}" placeholder="Enter Rate"></td>
-            <td>10</td> <!-- GC.C is default 10 -->
-            <td><input type="number" class="totalAmount" readonly></td>
-        `;
-        tableBody.appendChild(newRow);
-    });
-
-    // Add event listeners for calculating totals
-    const rateInputs = document.querySelectorAll(".rateInput");
-    rateInputs.forEach(function (input) {
-        input.addEventListener("input", function () {
-            const row = input.closest("tr");
-            const articles = parseInt(row.cells[4].innerText); // Get articles count from the corresponding cell
-            const rate = parseFloat(input.value) || 0; // Get rate from the input or default to 0
-            const gcValue = parseFloat(row.cells[6].innerText); // Get GC.C value from the corresponding cell (fixed value of 10)
-            const totalAmountInput = row.querySelector(".totalAmount");
-            const total = (rate * articles) + gcValue; // Calculate total with GC.C
-            totalAmountInput.value = total.toFixed(2); // Set total amount with 2 decimal precision
-
-       
-
+            // Generate the current bill number (but don't increment yet)
+            const lastBillNumber = localStorage.getItem('lastBillNumber') || 'MBS0000';
+            document.getElementById('billNoInput').value = lastBillNumber;
+        
+            // Add event listeners for calculating totals
+            const rateInputs = document.querySelectorAll(".rateInput");
+            rateInputs.forEach(function (input) {
+                input.addEventListener("input", function () {
+                    const row = input.closest("tr");
+                    const articles = parseInt(row.cells[4].innerText); // Get articles count from the corresponding cell
+                    const rate = parseFloat(input.value) || 0; // Get rate from the input or default to 0
+                    const gcValue = parseFloat(row.cells[6].innerText); // Get GC.C value from the corresponding cell (fixed value of 10)
+                    const totalAmountInput = row.querySelector(".totalAmount");
+                    const total = (rate * articles) + gcValue; // Calculate total with GC.C
+                    totalAmountInput.value = total.toFixed(2); // Set total amount with 2 decimal precision
+                });
+            });
+        
+            // Open the modal
+            document.getElementById("billModal").style.display = "block";
         });
-    });
-
-    // Open the modal
-    document.getElementById("billModal").style.display = "block";
-});
-
-
-
-        // Handle closing of the modal
+        
+        // Function to increment and save the new bill number only after saving/printing the bill
+        function incrementBillNumber() {
+            const lastBillNumber = localStorage.getItem('lastBillNumber') || 'MBS0000';
+            const numericPart = parseInt(lastBillNumber.slice(3)) + 1;
+            const newBillNumber = 'MBS' + numericPart.toString().padStart(4, '0');
+            localStorage.setItem('lastBillNumber', newBillNumber);
+            return newBillNumber;
+        }
+        
+        // Handle saving and printing of the bill
+        document.querySelector("#createBillForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent form submission
+        
+            // Save the bill data (you can add your saving logic here)
+        
+            // Increment the bill number only when saving or printing
+            const newBillNumber = incrementBillNumber();
+            document.getElementById('billNoInput').value = newBillNumber;
+        
+            // Optional: Add your print logic here if needed
+            printTable(); // Assuming you have a printTable function that prints the bill
+        
+            // Close the modal after saving and printing
+            document.getElementById("billModal").style.display = "none";
+        });
+        
+        // Modal close functionality (avoid duplicate event listeners)
         document.querySelector(".close").addEventListener("click", function () {
             document.getElementById("billModal").style.display = "none";
         });
-
+        
         // Close the modal when clicking outside of it
         window.onclick = function(event) {
             if (event.target === document.getElementById("billModal")) {
                 document.getElementById("billModal").style.display = "none";
             }
         };
+        
+// Function to populate recipient address when a recipient is selected
+document.getElementById('recipient').addEventListener('change', function() {
+    const selectedRecipientName = this.value;
+    const selectedRecipient = recipientsData.find(recipient => recipient.name === selectedRecipientName);
+    
+    if (selectedRecipient) {
+        document.getElementById('recipientAddress').value = selectedRecipient.address;
+    } else {
+        document.getElementById('recipientAddress').value = '';
+    }
+});
+
+
+
+
+
+// Function to generate the bill data to be saved
+function generateBillData() {
+    // Collect the data you want to save (like the bill number, articles, rates, etc.)
+    const billData = {
+        billNo: document.getElementById('billNoInput').value,
+        items: []
+    };
+
+    const rows = document.querySelectorAll("#billTableBody tr");
+    rows.forEach(row => {
+        const lrNo = row.cells[0].innerText;
+        const date = row.cells[1].innerText;
+        const to = row.cells[2].innerText;
+        const invoiceNo = row.cells[3].innerText;
+        const articles = row.cells[4].innerText;
+        const rate = row.querySelector(".rateInput").value;
+        const gcValue = row.cells[6].innerText;
+        const total = row.querySelector(".totalAmount").value;
+
+        billData.items.push({
+            lrNo,
+            date,
+            to,
+            invoiceNo,
+            articles,
+            rate,
+            gcValue,
+            total
+        });
+    });
+
+    return billData;
+}
+
+
+
+// Reset the bill number to start fresh (MBS0000)
+document.getElementById("resetBillNumberBtn").addEventListener("click", function () {
+    // Remove the 'lastBillNumber' from localStorage
+    localStorage.removeItem('lastBillNumber');
+    
+    // Set the bill number to MBS0000 for the fresh start
+    const freshBillNumber = 'MBS0001';
+    localStorage.setItem('lastBillNumber', freshBillNumber);
+    
+    // Update the bill number input field to reflect the fresh start
+    document.getElementById('billNoInput').value = freshBillNumber;
+
+    alert("Bill number has been reset to MBS0000. You can now start with a fresh bill.");
+});
+
+// Initialize recipient data
+let recipientsData = JSON.parse(localStorage.getItem("recipientsData")) || [];
+
+// Function to populate the recipient select dropdown
+function populateRecipientSelectOptions() {
+    const recipientSelect = document.getElementById('recipient');
+    recipientSelect.innerHTML = '<option value="">Select Recipient</option>'; // Reset the options
+    recipientsData.forEach(recipient => {
+        const newOption = document.createElement('option');
+        newOption.value = recipient.name;
+        newOption.textContent = recipient.name;
+        recipientSelect.appendChild(newOption);
+    });
+}
+
+// Function to open the modal for adding a recipient
+function openRecipientModal() {
+    document.getElementById('recipientModal').style.display = 'block';
+}
+
+// Function to close the recipient modal
+function closeRecipientModal() {
+    document.getElementById('modal-recipient-name').value = '';
+    document.getElementById('modal-recipient-address').value = '';
+    document.getElementById('recipientModal').style.display = 'none';
+}
+
+// Function to save a recipient
+function saveRecipientData() {
+    const recipientName = document.getElementById('modal-recipient-name').value;
+    const recipientAddress = document.getElementById('modal-recipient-address').value;
+
+    if (recipientName && recipientAddress) {
+        const newRecipient = { name: recipientName, address: recipientAddress };
+        
+        // Add the new recipient to the data and update localStorage
+        recipientsData.push(newRecipient);
+        localStorage.setItem('recipientsData', JSON.stringify(recipientsData));
+        
+        // Clear input fields and update the recipient list
+        document.getElementById('modal-recipient-name').value = '';
+        document.getElementById('modal-recipient-address').value = '';
+        closeRecipientModal();
+        displayRecipientList();
+        populateRecipientSelectOptions();  // Refresh dropdown list
+    } else {
+        alert("Please fill in all fields");
+    }
+}
+
+// Function to display the recipient list in the modal
+function displayRecipientList() {
+    const tableBody = document.getElementById('recipient-list-table').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = ''; // Clear the table body
+
+    // Populate the table with saved recipients
+    recipientsData.forEach((recipient, index) => {
+        const row = tableBody.insertRow();
+        row.insertCell(0).innerText = recipient.name;
+        row.insertCell(1).innerText = recipient.address;
+
+        // Add a delete button for each recipient
+        const deleteCell = row.insertCell(2);
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.onclick = function() {
+            deleteRecipientData(index);
+        };
+        deleteCell.appendChild(deleteBtn);
+    });
+}
+
+// Function to delete recipient data
+function deleteRecipientData(index) {
+    recipientsData.splice(index, 1); // Remove the recipient from the array
+    localStorage.setItem('recipientsData', JSON.stringify(recipientsData)); // Update localStorage
+    displayRecipientList(); // Refresh the recipient list
+    populateRecipientSelectOptions();  // Update dropdown list
+}
+
+// Function to open recipient list view
+function openRecipientList() {
+    document.getElementById('recipient-list-container').style.display = 'block';
+    displayRecipientList();
+}
+
+// Function to close recipient list view
+function closeRecipientList() {
+    document.getElementById('recipient-list-container').style.display = 'none';
+}
+
+// Function to open the recipient modal
+function openRecipientModal() {
+    document.getElementById('recipientModal').style.display = 'block';
+    displayRecipientList();
+}
+
+// Function to close the recipient modal
+function closeRecipientModal() {
+    document.getElementById('recipientModal').style.display = 'none';
+}
+
+// Function to save the bill data as a file
+function saveBillAsFile() {
+    const billData = generateBillData();
+    
+    // Convert bill data to a Blob (you can use JSON or any format)
+    const blob = new Blob([JSON.stringify(billData, null, 2)], { type: 'application/json' });
+
+    // Use FileSaver.js to trigger the download
+    const fileName = `bill_${billData.billNo}.json`; // Customize the file name here
+    saveAs(blob, fileName);
+}
+
+// Add event listener for the "Save As" button
+document.getElementById("saveAsBtn").addEventListener("click", function () {
+    saveBillAsFile();
+});
+
+// Event listener for Save Button
+document.getElementById('modal-save-recipient').onclick = saveRecipientData;  
+
     </script>
 </body>
 </html>

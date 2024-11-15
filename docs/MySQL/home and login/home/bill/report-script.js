@@ -245,12 +245,19 @@ function printTable() {
         <tbody>
     `;
 
+       
+
     // Get the bill number, recipient's name and address, and month/year from input fields
     const billNo = document.getElementById('billNoInput').value;
-    const recipientName = document.getElementById('recipientName').value;
+    // Log or display the value
+console.log("Bill No:", billNo);
+
+    const recipient = document.getElementById('recipient').value;
     const recipientAddress = document.getElementById('recipientAddress').value;
     const monthYear = document.getElementById('monthYearInput').value;
 
+
+    
     // Initialize total amount variable and row counter for serial numbers
     let totalAmount = 0;
     let rowCounter = 1; // Serial number starts from 1
@@ -413,13 +420,11 @@ td {
         <h2 style="font-size: 16px;"> Email: mbslorryservice@gmail.com </h2>
                 </div>
                 
-                <p><strong>Bill No:</strong> ${billNo}</p> <!-- Use the bill number from input -->
-                <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
-              
-                  <p><strong>TO:</strong> ${recipientName}<br>${recipientAddress}</p> <!-- Recipient details -->
-
+               <p><strong>Bill No:</strong> ${billNo}</p>
+    <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+    <p><strong>TO:</strong> ${recipient}<br>${recipientAddress}</p>
                 <p><em>Dear Sir,</em></p>
-                <p><em>Statement of Accounts for the monthly bill of ${monthYear ? new Date(monthYear).toLocaleString('default', { month: 'long' }) + ' ' + new Date(monthYear).getFullYear() : 'N/A'}. Kindly confirm and settle the bill at your earliest convenience.</em></p>
+             <p><em>Statement of Accounts for the monthly bill of ${monthYear ? new Date(monthYear + '-01').toLocaleString('default', { month: 'long' }) + ' ' + new Date(monthYear + '-01').getFullYear() : 'N/A'}. Kindly confirm and settle the bill at your earliest convenience.</em></p>
 
                 ${tableHTML}
 
@@ -510,3 +515,8 @@ function recalculateTotalAmount() {
 
     return { totalAmount, totalAmountWords };
 }
+
+
+
+
+
