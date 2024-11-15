@@ -86,8 +86,8 @@ async function loadReports() {
                 <td>${totalNoOfArticles}</td> 
                 <td>${total}</td>
                 <td>
-                    <button onclick="editBill(${index})">Edit</button>
-                    <button onclick="deleteBill(${index})">Delete</button>
+                    <button onclick="editBill('${bill.lrNo}')">Edit</button>
+                    <button onclick="deleteBill('${bill.lrNo}')">Delete</button>
                 </td>
             </tr>`;
             console.log("Adding row for bill:", bill); // Log the bill being added

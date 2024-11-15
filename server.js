@@ -136,23 +136,23 @@ app.post('/api/save-bill', async (req, res) => {
     }
 });
 
-app.get('/api/get-bill/:billId', async (req, res) => {
-    const billId = req.params.billId;
+app.get('/api/get-bill/:lrNo', async (req, res) => {
+    const lrNo = req.params.lrNo;
     
-    // Validate billId
-    if (!billId || billId === '0') {
-        return res.status(400).json({ error: 'Invalid Bill ID' });
+    // Validate lrNo
+    if (!lrNo || lrNo === '0') {
+        return res.status(400).json({ error: 'Invalid LR Number' });
     }
 
-    const query = `SELECT * FROM bills WHERE id = ?`;
+    const query = `SELECT * FROM bills WHERE lrNo = ?`;
 
     try {
-        console.log('Querying for bill ID:', billId);  // Corrected the variable name here
-        const bill = await queryDatabase(query, [billId]); // Use the correct variable name here
+        console.log('Querying for LR Number:', lrNo);
+        const bill = await queryDatabase(query, [lrNo]);
         if (bill.length > 0) {
             res.status(200).json(bill[0]);
         } else {
-            res.status(404).json({ error: 'Bill not found for the given ID' });
+            res.status(404).json({ error: 'Bill not found for the given LR Number' });
         }
     } catch (error) {
         console.error('Error fetching bill:', error);
@@ -161,26 +161,26 @@ app.get('/api/get-bill/:billId', async (req, res) => {
 });
 
 
-app.put('/api/update-bill/:id', async (req, res) => {
-    const { id } = req.params;
+app.put('/api/update-bill/:lrNo', async (req, res) => {
+    const { lrNo } = req.params;  // Use lrNo as the parameter for identifying the bill
     const {
-        lrNo, date, gstPaidBy, paymentMode, from, to,
+        date, gstPaidBy, paymentMode, from, to,
         consignor, consignorAddress, consignee, consigneeAddress,
         consigneeInvoiceNo, noOfArticles, total, goodsEntries
     } = req.body;
 
-    // Update the bill in the database
+    // Update the bill in the database using lrNo
     const query = `
-        UPDATE bills SET lrNo = ?, date = ?, gstPaidBy = ?, paymentMode = ?, \`from\` = ?, \`to\` = ?,
+        UPDATE bills SET date = ?, gstPaidBy = ?, paymentMode = ?, \`from\` = ?, \`to\` = ?,
                         consignor = ?, consignorAddress = ?, consignee = ?, consigneeAddress = ?,
                         consigneeInvoiceNo = ?, \`No of Articles\` = ?, total = ?, goodsEntries = ?
-        WHERE id = ?
+        WHERE lrNo = ?
     `;
     
     try {
         await queryDatabase(query, [
-            lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
-            consignee, consigneeAddress, consigneeInvoiceNo, noOfArticles, total, JSON.stringify(goodsEntries), id
+            date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
+            consignee, consigneeAddress, consigneeInvoiceNo, noOfArticles, total, JSON.stringify(goodsEntries), lrNo
         ]);
         res.status(200).json({ message: "Bill updated successfully" });
     } catch (error) {
