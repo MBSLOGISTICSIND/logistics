@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const { queryDatabase } = require(path.join(__dirname, 'docs/MySQL/db_connection')); // Import queryDatabase correctly
 const cors = require('cors');
+const session = require('express-session'); // For session management
 require('dotenv').config(); // To manage environment variables
 
 const PORT = process.env.PORT || 4000; // Set the port
@@ -13,13 +14,74 @@ app.use(cors({
     origin: 'https://mbslogisticsind.github.io', // Specify your GitHub Pages URL
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
-// Serve static files from the specified directory
+// Configure session
+app.use(session({
+    secret: 'your-secret-key', // Replace with a secure key
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // Use `true` if deploying with HTTPS
+}));
+
+// Serve static files
 app.use(express.static(path.join(__dirname, 'docs/MySQL/home and login')));
 
-// Serve Home.html at the root route
-app.get('/', (req, res) => {
+// Middleware to check authentication
+function isAuthenticated(req, res, next) {
+    if (req.session && req.session.user) {
+        return next(); // User is authenticated
+    }
+    return res.status(401).json({ error: 'Unauthorized. Please log in.' });
+}
+
+// Login route
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        // Replace with your actual query to validate user credentials
+        const query = `SELECT * FROM users WHERE username = ? AND password = ?`;
+        const results = await queryDatabase(query, [username, password]);
+
+        if (results.length > 0) {
+            req.session.user = { id: results[0].id, username: results[0].username }; // Save user info in session
+            return res.json({ message: 'Login successful' });
+        } else {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Logout route
+app.post('/api/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.json({ message: 'Logged out successfully' });
+    });
+});
+
+// Protect all routes below with the isAuthenticated middleware
+app.use(isAuthenticated);
+
+// Protected route example: Fetch vehicles
+app.get('/api/get-vehicles', async (req, res) => {
+    const query = `SELECT * FROM vehicle_records`;
+
+    try {
+        const results = await queryDatabase(query);
+        res.json(results);
+    } catch (error) {
+        console.error('Error fetching vehicle records:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Serve Home.html for authenticated users
+app.get('/', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'docs/MySQL/home and login', 'Home.html'));
 });
+
 
 // API route to fetch all vehicle records
 app.get('/api/get-vehicles', async (req, res) => {
