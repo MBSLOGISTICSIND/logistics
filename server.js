@@ -1,70 +1,72 @@
 const express = require('express');
 const path = require('path');
-const { queryDatabase } = require(path.join(__dirname, 'docs/MySQL/db_connection')); // Import queryDatabase correctly
 const cors = require('cors');
-const session = require('express-session'); // For session management
-require('dotenv').config(); // To manage environment variables
+const session = require('express-session');
+const crypto = require('crypto');
+require('dotenv').config();
+const { queryDatabase } = require(path.join(__dirname, 'docs/MySQL/db_connection')); // Import queryDatabase
 
-const PORT = process.env.PORT || 4000; // Set the port
+const PORT = process.env.PORT || 4000;
 const app = express();
 
 // Middleware
-app.use(express.json({ limit: '10mb' })); // Increased payload limit
+app.use(express.json({ limit: '10mb' })); // Handle larger payloads
 app.use(cors({
-    origin: 'https://mbslogisticsind.github.io', // Specify your GitHub Pages URL
+    origin: 'https://mbslogisticsind.github.io', // Replace with your GitHub Pages URL
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
+
 // Configure session
 app.use(session({
-    secret: 'your-secret-key', // Replace with a secure key
+    secret: 'your-secret-key', // Replace with a strong secret key
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }, // Use `true` if deploying with HTTPS
+    cookie: { secure: false } // Set to true for HTTPS
 }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'docs/MySQL/home and login')));
 
-// Middleware to check authentication
+// Middleware to verify authentication
 function isAuthenticated(req, res, next) {
     if (req.session && req.session.user) {
-        return next(); // User is authenticated
+        return next();
     }
     return res.status(401).json({ error: 'Unauthorized. Please log in.' });
 }
 
-// Login route
+// User login
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        // Replace with your actual query to validate user credentials
         const query = `SELECT * FROM users WHERE username = ? AND password = ?`;
         const results = await queryDatabase(query, [username, password]);
 
         if (results.length > 0) {
-            req.session.user = { id: results[0].id, username: results[0].username }; // Save user info in session
-            return res.json({ message: 'Login successful' });
+            const sessionToken = crypto.randomBytes(64).toString('hex');
+            req.session.user = { id: results[0].id, username: results[0].username, token: sessionToken };
+            res.json({ message: 'Login successful', sessionToken });
         } else {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            res.status(401).json({ error: 'Invalid credentials' });
         }
     } catch (error) {
         console.error('Error during login:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Logout route
+// User logout
 app.post('/api/logout', (req, res) => {
     req.session.destroy(() => {
         res.json({ message: 'Logged out successfully' });
     });
 });
 
-// Protect all routes below with the isAuthenticated middleware
+// Protect routes below this middleware
 app.use(isAuthenticated);
 
-// Protected route example: Fetch vehicles
+// Fetch vehicle records
 app.get('/api/get-vehicles', async (req, res) => {
     const query = `SELECT * FROM vehicle_records`;
 
@@ -73,189 +75,71 @@ app.get('/api/get-vehicles', async (req, res) => {
         res.json(results);
     } catch (error) {
         console.error('Error fetching vehicle records:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Serve Home.html for authenticated users
-app.get('/', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'docs/MySQL/home and login', 'Home.html'));
-});
-
-
-// API route to fetch all vehicle records
-app.get('/api/get-vehicles', async (req, res) => {
-    const query = `SELECT * FROM vehicle_records`;
-
-    try {
-        const results = await queryDatabase(query);
-        console.log('SQL Query:', query);
-        console.log('Results:', results);
-        res.json(results);
-    } catch (error) {
-        console.error('Error fetching vehicle records:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// API route to save a vehicle record
+// Save a vehicle record
 app.post('/api/save-vehicle', async (req, res) => {
     const { image, name, owner, driver, license, fc, expiry, permit } = req.body;
 
-    const maxImageSize = 4294967295; // LongText max size in bytes
+    const maxImageSize = 4294967295; // Maximum size for image data
     if (image.length > maxImageSize) {
-        return res.status(400).send('Image data is too long.');
+        return res.status(400).json({ error: 'Image data is too large.' });
     }
 
     const query = `
         INSERT INTO vehicle_records (image, name, owner, driver, license, fc, expiry, permit)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-
     try {
         await queryDatabase(query, [image, name, owner, driver, license, fc, expiry, permit]);
-        res.status(201).send('Vehicle record saved successfully');
+        res.status(201).json({ message: 'Vehicle record saved successfully' });
     } catch (error) {
         console.error('Error saving vehicle record:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// API route to update a vehicle record
+// Update a vehicle record
 app.put('/api/update-vehicle/:id', async (req, res) => {
     const { id } = req.params;
     const { image, name, owner, driver, license, fc, expiry, permit } = req.body;
 
     const query = `
         UPDATE vehicle_records SET
-            image = ?, name = ?, owner = ?, driver = ?, license = ?,
-            fc = ?, expiry = ?, permit = ?
+        image = ?, name = ?, owner = ?, driver = ?, license = ?,
+        fc = ?, expiry = ?, permit = ?
         WHERE id = ?
     `;
-
     try {
         await queryDatabase(query, [image, name, owner, driver, license, fc, expiry, permit, id]);
-        res.send('Vehicle record updated successfully');
+        res.json({ message: 'Vehicle record updated successfully' });
     } catch (error) {
         console.error('Error updating vehicle record:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// API route to delete a vehicle record
-app.delete('/api/delete-vehicle/:id', async (req, res) => {
-    const { id } = req.params;
-
-    const query = `DELETE FROM vehicle_records WHERE id = ?`;
-
-    try {
-        await queryDatabase(query, [id]);
-        res.send('Vehicle record deleted successfully');
-    } catch (error) {
-        console.error('Error deleting vehicle record:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// API route to fetch all bills
-app.get('/api/get-bills', async (req, res) => {
-    const query = `SELECT * FROM bills`;
-
-    try {
-        const results = await queryDatabase(query);
-        console.log('SQL Query:', query);
-        console.log('Results:', results);
-        res.json(results);
-    } catch (error) {
-        console.error('Error fetching bills:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// API route to save a bill
-app.post('/api/save-bill', async (req, res) => {
-    const {
-        lrNo, date, gstPaidBy, paymentMode, from, to,
-        consignor, consignorAddress, consignee, consigneeAddress,
-        consigneeInvoiceNo, total, goodsEntries
-    } = req.body;
-
-    // Insert the bill into the database (adjust the query according to your schema)
-    const query = `
-        INSERT INTO bills (lrNo, date, gstPaidBy, paymentMode, \`from\`, \`to\`, consignor, consignorAddress,
-                           consignee, consigneeAddress, consigneeInvoiceNo, \`No of Articles\`, total, goodsEntries)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-    try {
-        const result = await queryDatabase(query, [
-            lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
-            consignee, consigneeAddress, consigneeInvoiceNo, consignorAddress, total, JSON.stringify(goodsEntries)
-        ]);
-        res.status(200).json({ message: "Bill saved successfully", billId: result.insertId });
-    } catch (error) {
-        console.error('Error saving bill:', error);
-        res.status(500).send('Error saving bill');
-    }
-});
-
-
-app.get('/api/bill/:id', async (req, res) => {
-    const { id } = req.params;
-
-    // Validate ID
-    if (isNaN(id) || id <= 0) {
-        return res.status(400).json({ error: 'Invalid bill ID' });
-    }
-
-    const query = `SELECT * FROM bills WHERE id = ?`;
-    
-    try {
-        console.log('Querying for bill ID:', id); // Debugging line
-        const bill = await queryDatabase(query, [id]);
-        if (bill.length > 0) {
-            res.status(200).json(bill[0]);
-        } else {
-            res.status(404).json({ error: 'Bill not found for the given ID' });
-        }
-    } catch (error) {
-        console.error('Error fetching bill:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-
-// API route to update a bill
-app.put('/api/update-bill/:id', async (req, res) => {
+// Delete a vehicle record
+app.delete('/api/delete-vehicle/:id', async (req, res) => {
     const { id } = req.params;
-    const {
-        lrNo, date, gstPaidBy, paymentMode, from, to,
-        consignor, consignorAddress, consignee, consigneeAddress,
-        consigneeInvoiceNo, total, goodsEntries
-    } = req.body;
 
-    // Update the bill in the database
-    const query = `
-        UPDATE bills SET lrNo = ?, date = ?, gstPaidBy = ?, paymentMode = ?, \`from\` = ?, \`to\` = ?,
-                        consignor = ?, consignorAddress = ?, consignee = ?, consigneeAddress = ?,
-                        consigneeInvoiceNo = ?, \`No of Articles\` = ?, total = ?, goodsEntries = ?
-        WHERE id = ?
-    `;
+    const query = `DELETE FROM vehicle_records WHERE id = ?`;
     try {
-        await queryDatabase(query, [
-            lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
-            consignee, consigneeAddress, consigneeInvoiceNo, consignorAddress, total, JSON.stringify(goodsEntries), id
-        ]);
-        res.status(200).json({ message: "Bill updated successfully" });
+        await queryDatabase(query, [id]);
+        res.json({ message: 'Vehicle record deleted successfully' });
     } catch (error) {
-        console.error('Error updating bill:', error);
-        res.status(500).send('Error updating bill');
+        console.error('Error deleting vehicle record:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Start the server and set the timeouts
+// Start the server
 const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://0.0.0.0:${PORT}`);
+    console.log(`Server is running on http://0.0.0.0:${PORT}`);
 });
-// Set timeout values
+
+// Set timeout values for long-running requests
 server.keepAliveTimeout = 120000; // 120 seconds
 server.headersTimeout = 120000; // 120 seconds
