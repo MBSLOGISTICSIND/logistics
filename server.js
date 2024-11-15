@@ -1,8 +1,6 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const session = require('express-session');
-const crypto = require('crypto');
 require('dotenv').config();
 const { queryDatabase } = require(path.join(__dirname, 'docs/MySQL/db_connection')); // Import queryDatabase
 
@@ -11,62 +9,14 @@ const app = express();
 
 // Middleware
 app.use(express.json({ limit: '10mb' })); // Handle larger payloads
-// CORS middleware
 app.use(cors({
     origin: 'https://mbslogisticsind.github.io',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
 
-// Configure session
-app.use(session({
-    secret: 'your-secret-key', // Replace with a strong secret key
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false } // Set to true for HTTPS
-}));
-
 // Serve static files
 app.use(express.static(path.join(__dirname, 'docs/MySQL/home and login')));
-
-// Middleware to verify authentication
-function isAuthenticated(req, res, next) {
-    if (req.session && req.session.user) {
-        return next();
-    }
-    return res.status(401).json({ error: 'Unauthorized. Please log in.' });
-}
-
-// User login
-app.post('/api/login', async (req, res) => {
-    const { username, password } = req.body;
-
-    try {
-        const query = `SELECT * FROM users WHERE username = ? AND password = ?`;
-        const results = await queryDatabase(query, [username, password]);
-
-        if (results.length > 0) {
-            const sessionToken = crypto.randomBytes(64).toString('hex');
-            req.session.user = { id: results[0].id, username: results[0].username, token: sessionToken };
-            res.json({ message: 'Login successful', sessionToken });
-        } else {
-            res.status(401).json({ error: 'Invalid credentials' });
-        }
-    } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// User logout
-app.post('/api/logout', (req, res) => {
-    req.session.destroy(() => {
-        res.json({ message: 'Logged out successfully' });
-    });
-});
-
-// Protect routes below this middleware
-app.use(isAuthenticated);
 
 // Fetch vehicle records
 app.get('/api/get-vehicles', async (req, res) => {
