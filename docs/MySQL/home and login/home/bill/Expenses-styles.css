@@ -96,8 +96,15 @@ table {
     margin-top: 20px;
     border-collapse: collapse;
     border-spacing: 0 10px;
+    table-layout: fixed; /* Ensure consistent column width */
 }
 
+/* Make the table horizontally scrollable in mobile view */
+.reports-container {
+    overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+}
+
+/* Th and Td styles remain the same */
 th {
     background: #003366;
     color: white;
@@ -113,6 +120,52 @@ td {
     border-radius: 8px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Responsive Adjustments for smaller screens */
+@media (max-width: 900px) {
+    .reports-container {
+        padding: 20px;
+        overflow-x: auto; /* Allow horizontal scrolling */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS devices */
+    }
+
+    table {
+        width: auto; /* Let table width adjust to the content */
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 12px; /* Adjusted font size for smaller screens */
+    }
+
+    button {
+        width: 100%; /* Full width for buttons on smaller screens */
+        margin-left: 0; /* Remove margin on left */
+        margin-bottom: 10px; /* Space between buttons */
+    }
+}
+
+@media (max-width: 600px) {
+    .reports-container {
+        padding: 15px;
+        overflow-x: auto; /* Ensure scrollability on very small screens */
+    }
+
+    table {
+        width: 100%;
+        overflow-x: auto;
+        display: block; /* Make table block-level so it can scroll horizontally */
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 12px; /* Adjusted font size for smaller screens */
+    }
+
+    .modal-content {
+        width: 90%; /* Maintain responsive width in mobile */
+    }
 }
 
 /* Modal Styling */

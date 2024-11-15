@@ -46,8 +46,11 @@ h2, h3, h4 {
     flex: 1 1 48%;
     margin: 10px 0;
     transition: transform 0.3s ease;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    max-width: 100%; /* Ensure it doesn't exceed the container width */
 }
 
+/* Hover effect */
 .form-section:hover {
     transform: scale(1.01);
 }
@@ -66,8 +69,10 @@ input[type="text"], input[type="number"], input[type="date"], textarea, select {
     border-radius: 8px;
     background: #fff;
     transition: border 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Prevent padding from breaking layout */
 }
 
+/* Focused input styles */
 input:focus, textarea:focus, select:focus {
     border-color: #003366;
     box-shadow: 0 0 10px rgba(0, 51, 102, 0.2);
@@ -120,7 +125,176 @@ td {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-/* Bill Preview Styles */
+/* Responsive Styles for Mobile */
+@media (max-width: 768px) {
+    .form-section {
+        flex: 1 1 100%; /* Take up full width on smaller screens */
+        margin: 10px 0;
+        padding: 10px; /* Adjust padding for smaller screens */
+        box-sizing: border-box; /* Prevent overflow */
+    }
+
+    table {
+        font-size: 14px; /* Adjust table font size for mobile */
+    }
+
+    th, td {
+        padding: 8px; /* Reduce padding for table cells */
+    }
+
+    button {
+        width: 100%; /* Make buttons full width on mobile */
+        padding: 12px;
+        margin-top: 15px;
+    }
+
+    input[type="text"], input[type="number"], input[type="date"], textarea, select {
+        font-size: 14px; /* Smaller font size for inputs */
+    }
+}
+
+/* Additional responsiveness for very small screens (mobile portrait) */
+@media (max-width: 480px) {
+    .form-section {
+        padding: 15px; /* Reduce padding for very small screens */
+    }
+
+    input[type="text"], input[type="number"], input[type="date"], textarea, select {
+        padding: 8px; /* Adjust padding for smaller screens */
+    }
+
+    table {
+        font-size: 12px; /* Smaller font size for very small screens */
+    }
+
+    button {
+        padding: 12px 18px;
+        font-size: 14px;
+    }
+}
+
+/* Style for the container that will allow horizontal scroll */
+.goods-table-container {
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scroll if the table exceeds the container width */
+    -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS devices */
+    margin-bottom: 10px; /* Add some space below the table */
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    margin: 10px 0;
+    border-collapse: collapse;
+    table-layout: fixed; /* Ensures the table will respect its width */
+}
+
+/* Header Styling */
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #003366;
+    color: white;
+}
+
+/* Button Styles */
+button {
+    background: linear-gradient(135deg, #003366, #00509e);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #004080, #0060bf);
+    transform: translateY(-3px);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Mobile view: Apply to devices with max width of 768px */
+@media (max-width: 768px) {
+    /* Ensure the table can scroll horizontally on smaller screens */
+    .goods-table-container {
+        margin-left: -10px;
+        margin-right: -10px; /* Reduce container margins for mobile */
+    }
+
+    table {
+        width: 100%;
+        min-width: 600px; /* Prevent table from shrinking too much */
+    }
+
+    /* Resize the button for better mobile UX */
+    button {
+        width: 100%; /* Make the button full-width on mobile */
+        padding: 15px; /* Larger padding for easier tapping */
+        font-size: 16px; /* Increase font size for better readability */
+    }
+
+    /* Optional: Adjust padding and margins for better spacing */
+    .form-section {
+        padding: 15px;
+    }
+
+    th, td {
+        font-size: 14px; /* Smaller font size for better fitting */
+        padding: 6px; /* Adjust padding for mobile screens */
+    }
+}
+
+
+/* Style for the form buttons */
+.form-buttons {
+    display: flex;                /* Display buttons in a row */
+    justify-content: space-between; /* Space buttons evenly across the row */
+    gap: 10px;                    /* Add space between buttons */
+    width: 100%;
+    margin-top: 20px;             /* Space between table and buttons */
+    flex-wrap: wrap;              /* Allow buttons to wrap on smaller screens */
+}
+
+/* Button Styling */
+.form-buttons button {
+    background: linear-gradient(135deg, #003366, #00509e);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-size: 14px;
+    flex-grow: 1;                 /* Allow buttons to grow and fill the space */
+    min-width: 150px;             /* Ensure buttons do not become too small */
+}
+
+.form-buttons button:hover {
+    background: linear-gradient(135deg, #004080, #0060bf);
+    transform: translateY(-3px);
+}
+
+.form-buttons button:active {
+    transform: translateY(1px);
+}
+
+/* Button Styling for the 'New Bill' button */
+.new-bill-btn {
+    background: linear-gradient(135deg, #ff9900, #ff6600);
+    color: white;
+}
+
+/* General Styling for Bill Preview */
 .bill-preview {
     border: 1px solid #003366;
     padding: 20px;
@@ -128,6 +302,9 @@ td {
     border-radius: 8px;
     background: linear-gradient(135deg, #ffffff, #e6f7ff);
     box-shadow: 0 6px 20px rgba(0, 51, 102, 0.1);
+    width: 100%; /* Ensure full width for responsiveness */
+    box-sizing: border-box; /* Include padding and border in the width */
+    overflow-x: auto; /* Add horizontal scrolling if necessary */
 }
 
 .total {
@@ -138,29 +315,54 @@ td {
     color: #00509e;
 }
 
-/* Footer Styles */
-.footer {
+/* Company Details Table */
+.company-details {
+    width: 100%; /* Use full width */
+    margin: 20px 0;
+    border-collapse: collapse;
+    overflow-x: auto; /* Ensure no horizontal scrolling issues */
+}
+
+.company-details td, .company-details th {
+    padding: 5px;
+    vertical-align: top;
+    text-align: left;
+    border: 1px solid #ccc; /* Add border for better structure */
+}
+
+.company-details th {
     text-align: center;
-    margin-top: 40px;
-    font-size: 14px;
-    color: #777;
+    font-weight: bold;
+    background-color: #f4f4f4;
 }
 
-.new-bill-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
+/* Row Container */
+.row-container {
+    display: flex; /* Use flex for responsiveness */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    width: 100%; /* Full width */
+    padding: 5px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: center; /* Align items for better vertical spacing */
+    gap: 10px; /* Space between items */
 }
 
-.new-bill-btn:hover {
-    background-color: #0056b3;
+.row-container .left, .row-container .center, .row-container .right {
+    flex: 1 1 100%; /* Make sections stack by default */
+    padding: 10px;
+    text-align: center; /* Center-align text */
 }
 
+/* Adjust Layout for Larger Screens */
+@media (min-width: 768px) {
+    .row-container .left, .row-container .center, .row-container .right {
+        flex: 1 1 33%; /* Three sections in a row */
+        text-align: left; /* Reset alignment for larger screens */
+    }
+}
 
-/* Modal Styles */
+/* Modal Styling */
 .modal {
     display: none;
     position: fixed;
@@ -179,116 +381,21 @@ td {
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    max-width: 600px; /* Limit width for large screens */
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover, .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Row Container */
-.row-container {
-    display: flex;
-    width: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-}
-
-.row-container .left, .row-container .center, .row-container .right {
-    flex: 1;
-    padding: 0 10px;
-    text-align: center;
-}
-
-/* Print Styles */
+/* Print Styling */
 @media print {
-    body, .row-container {
-        font-size: 12pt;
-        margin: 0;
-    }
-    .row-container {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: nowrap;
-    }
-}
-
-
-.company-details {
-    width: 100%;
-    margin: 20px 0;
-    border-collapse: collapse;
-}
-
-.company-details td {
-    padding: 5px;
-    vertical-align: top;
-    text-align: left;
-}
-
-.company-details th {
-    padding: 5px;
-    vertical-align: top;
-    text-align: center;
-    font-weight: bold;
-    background-color: #f4f4f4;
-}
-
-.row-container {
-    display: table;
-    width: 100%;
-}
-
-.row-container div {
-    display: table-cell;
-    padding: 5px;
-    text-align: left;
-}
-
-.row-container .left {
-    width: 33.33%;
-}
-
-.row-container .center {
-    width: 33.33%;
-    text-align: center;
-}
-
-.row-container .right {
-    width: 33.33%;
-    text-align: right;
-}
- /* Print Styling */
- @media print {
-    /* Ensure no page breaks inside the table */
-    .company-details {
-        page-break-inside: avoid;
-        width: 100%;
+    .bill-preview {
+        border: 1px solid black; /* Print-friendly borders */
+        box-shadow: none; /* Remove shadow for printing */
     }
 
-    /* Remove unnecessary margins and padding for print */
-    body {
-        margin: 0;
-        padding: 0;
-    }
-
-    /* Ensure the table is well formatted for printing */
     .company-details td, .company-details th {
-        font-size: 12pt; /* Adjust the font size for better readability */
-        border: 1px solid black; /* Border for print */
+        font-size: 12pt;
+        border: 1px solid black;
     }
 
-    /* Ensure the table keeps its 3 columns and doesn't wrap or break */
     .row-container {
         display: table;
         width: 100%;
@@ -298,5 +405,29 @@ td {
         display: table-cell;
         width: 33.33%;
         padding: 5px;
+    }
+}
+
+/* Table Styling */
+.responsive-table-container table {
+    width: 100%; /* Table fits within the container width */
+    table-layout: auto; /* Let the table adjust based on content */
+    border-collapse: collapse; /* Collapse borders for a cleaner look */
+    border: 1px solid black; /* Add a border for clarity */
+}
+
+.responsive-table-container td {
+    border: 1px solid black;
+    padding: 8px; /* Default padding for desktop */
+    text-align: left;
+    font-size: 16px; /* Default font size for desktop */
+    box-sizing: border-box;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .responsive-table-container td {
+        padding: 4px; /* Reduce padding for smaller screens */
+        font-size: 12px; /* Reduce font size to fit content */
     }
 }

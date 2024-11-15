@@ -56,35 +56,39 @@
             <label for="search-input">Search:</label>
             <input type="text" id="search-input" placeholder="Search by LR No, Consignor, or Date">
         </div>
-         <!-- Export and Print Buttons -->
-         <div class="buttons">
+    
+        <!-- Export and Print Buttons -->
+        <div class="buttons">
             <button onclick="exportToExcel()">Export to Excel</button>
             <button id="createBillBtn">Create Bill</button>
         </div>
-
-        <table id="reports-table">
-            <thead>
-                <tr>
-                    <th onclick="sortTable(0)">LR No</th>
-                    <th onclick="sortTable(1)">Date</th>
-                    <th onclick="sortTable(2)">GST Paid By</th>
-                    <th onclick="sortTable(3)">Payment Mode</th>
-                    <th onclick="sortTable(4)">From</th>
-                    <th onclick="sortTable(5)">To</th>
-                    <th onclick="sortTable(6)">Consignor</th>
-                    <th onclick="sortTable(7)">Consignor Address</th>
-                    <th onclick="sortTable(9)">Consignee</th>
-                    <th onclick="sortTable(10)">Consignee Address</th>
-                    <th onclick="sortTable(11)">Invoice No</th>
-                    <th onclick="sortTable(12)">No Of Articles</th>
-                    <th onclick="sortTable(13)">Total Amount</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="reportsBody">
-                <!-- Data will be dynamically populated here -->
-            </tbody>
-        </table>
+    
+        <!-- Table Container with Horizontal Scroll -->
+        <div class="table-container">
+            <table id="reports-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">LR No</th>
+                        <th onclick="sortTable(1)">Date</th>
+                        <th onclick="sortTable(2)">GST Paid By</th>
+                        <th onclick="sortTable(3)">Payment Mode</th>
+                        <th onclick="sortTable(4)">From</th>
+                        <th onclick="sortTable(5)">To</th>
+                        <th onclick="sortTable(6)">Consignor</th>
+                        <th onclick="sortTable(7)">Consignor Address</th>
+                        <th onclick="sortTable(9)">Consignee</th>
+                        <th onclick="sortTable(10)">Consignee Address</th>
+                        <th onclick="sortTable(11)">Invoice No</th>
+                        <th onclick="sortTable(12)">No Of Articles</th>
+                        <th onclick="sortTable(13)">Total Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="reportsBody">
+                    <!-- Data will be dynamically populated here -->
+                </tbody>
+            </table>
+        </div>
     </div>
     
     <!-- Modal Structure -->

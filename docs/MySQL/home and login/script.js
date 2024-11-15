@@ -566,3 +566,33 @@ window.onload = function() {
     }
 };
 
+// Function to toggle the menu
+function toggleMenu() {
+    const nav = document.getElementById("main-nav").querySelector("ul");
+    nav.classList.toggle("show");
+}
+
+// Function to close the menu when a link is clicked
+function closeMenu() {
+    const nav = document.getElementById("main-nav").querySelector("ul");
+    nav.classList.remove("show");
+}
+
+// Attach event listeners to all nav links to close the menu after selection
+document.querySelectorAll(".main-nav ul li a").forEach(link => {
+    link.addEventListener("click", closeMenu);
+});
+
+// Close the menu when clicking outside of it
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('main-nav').querySelector('ul');
+    const hamburger = document.querySelector('.hamburger');
+    
+    // Check if the click was outside the menu and hamburger
+    if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
+        menu.classList.remove('show');  // Close the menu
+    }
+});
+
+
+

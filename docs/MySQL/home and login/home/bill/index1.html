@@ -309,28 +309,30 @@ td {
         </table>
     </div>
 </div>
-        <!-- Goods Info Section -->
-        <div class="form-section">
-            <h4>Goods Info</h4>
-            <table id="goods-table" style="width: 100%; margin: 10px 0; border-collapse: collapse;">
-                <thead>
-                    <tr style="background-color: #003366; color: white;">
-                        <th style="border: 1px solid black; padding: 8px;">Goods</th>
-                        <th style="border: 1px solid black; padding: 8px;">No of Articles</th>
-                        <th style="border: 1px solid black; padding: 8px;">Rate per Article</th>
-                        <th style="border: 1px solid black; padding: 8px;">GST %</th>
-                        <th style="border: 1px solid black; padding: 8px;">GST Amount</th>
-                        <th style="border: 1px solid black; padding: 8px;">Freight</th>
-                        <th style="border: 1px solid black; padding: 8px;">Total Amount</th>
-                        <th style="border: 1px solid black; padding: 8px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="goods-entries">
-                    
-                </tbody>
-            </table>
-            <button type="button" onclick="addGoodsEntry()">Add More Goods</button>
-        </div>
+     <!-- Goods Info Section -->
+<div class="form-section">
+    <h4>Goods Info</h4>
+    <div class="goods-table-container">
+        <table id="goods-table" style="width: 100%; margin: 10px 0; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #003366; color: white;">
+                    <th style="border: 1px solid black; padding: 8px;">Goods</th>
+                    <th style="border: 1px solid black; padding: 8px;">No of Articles</th>
+                    <th style="border: 1px solid black; padding: 8px;">Rate per Article</th>
+                    <th style="border: 1px solid black; padding: 8px;">GST %</th>
+                    <th style="border: 1px solid black; padding: 8px;">GST Amount</th>
+                    <th style="border: 1px solid black; padding: 8px;">Freight</th>
+                    <th style="border: 1px solid black; padding: 8px;">Total Amount</th>
+                    <th style="border: 1px solid black; padding: 8px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="goods-entries">
+                
+            </tbody>
+        </table>
+    </div>
+    <button type="button" onclick="addGoodsEntry()">Add More Goods</button>
+</div>
 
        
     </form>
@@ -413,20 +415,23 @@ td {
             <td style="border: 1px solid black; padding: 8px;" contenteditable="true"></td>
             <!-- Nested table for Particulars column -->
             <td style="border: 1px solid black; padding: 8px;">
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tr>
-                        <td style="border: 1px solid black; padding: 4px; width: 50%;">DD/C</td>
-                        <td style="border: 1px solid black; padding: 4px; width: 50%;"></td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black; padding: 4px;">DC/C</td>
-                        <td style="border: 1px solid black; padding: 4px;"></td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black; padding: 4px;">GST 5%</td>
-                        <td style="border: 1px solid black; padding: 4px;"></td>
-                    </tr>
-                </table>
+                <div class="responsive-table-container">
+                    <table>
+                        <tr>
+                            <td>DD/C</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>DC/C</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>GST 5%</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                
             </td>
         </tr>
     </tbody>

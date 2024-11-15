@@ -10,29 +10,31 @@
     
 </head>
 <body>
-    <!-- Header with Main Tabs and Logo -->
-    <header>
-        <div class="header-container">
-            <!-- Logo -->
-            <div class="logo">
-                <img src="LOGO.png" alt="Company Logo" style="height: 80px;">
-            </div>
-            <!-- Navigation -->
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#" onclick="event.preventDefault(); showSection('home')">Home</a></li>
-                    <li><a href="#" onclick="event.preventDefault(); showSection('vehicle-records')">Vehicle Records</a></li>
-                    <li><a href="#" onclick="event.preventDefault(); showSection('transactions')">E-Way Billing</a></li>
-                    <li><a href="#" onclick="event.preventDefault(); showSection('services')">Services</a></li>
-                    <li><a href="#" onclick="event.preventDefault(); showSection('reports')">Reports</a></li>
-                    <li><a href="#" onclick="event.preventDefault(); showSection('money-reports')">Money Reports</a></li>
-                    <li><a href="#" onclick="event.preventDefault(); showSection('security')">Security</a></li>
-                    <li><a href="#" onclick="event.preventDefault(); showSection('help')">Help</a></li>
-                    
-                </ul>
-            </nav>
+   <!-- Header with Main Tabs and Logo -->
+<header>
+    <div class="header-container">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="LOGO.png" alt="Company Logo" style="height: 80px;">
         </div>
-    </header>
+        <!-- Hamburger Icon -->
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <!-- Navigation -->
+        <nav class="main-nav" id="main-nav">
+            <ul>
+                <li><a href="#" onclick="event.preventDefault(); showSection('home')">Home</a></li>
+                <li><a href="#" onclick="event.preventDefault(); showSection('vehicle-records')">Vehicle Records</a></li>
+                <li><a href="#" onclick="event.preventDefault(); showSection('transactions')">E-Way Billing</a></li>
+                <li><a href="#" onclick="event.preventDefault(); showSection('services')">Services</a></li>
+                <li><a href="#" onclick="event.preventDefault(); showSection('reports')">Reports</a></li>
+                <li><a href="#" onclick="event.preventDefault(); showSection('money-reports')">Money Reports</a></li>
+                <li><a href="#" onclick="event.preventDefault(); showSection('security')">Security</a></li>
+                <li><a href="#" onclick="event.preventDefault(); showSection('help')">Help</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
 
 <!-- Secondary Navigation Bar -->
 <nav class="secondary-nav">
@@ -42,6 +44,7 @@
         <li><a href="#" onclick="showSection('billing')">Billing Software</a></li>
     </ul>
 </nav>
+
 <!-- Billing Section in the Main Content -->
 <div id="billing" class="content-section" style="display: none;">
     <div id="billing-content">
@@ -73,31 +76,36 @@
     </div>
 </section>
 
-        <!-- Vehicle Records Section -->
-        <section id="vehicle-records" class="content-section" style="display: none;">
-            <h2>Vehicle Records</h2>
-            <div id="vehicle-container">
-                <table id="vehicle-table">
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Vehicle Number</th>
-                            <th>Owner Name</th>
-                            <th>Driver Name</th>
-                            <th>Driver License</th>
-                            <th>Vehicle FC</th>
-                            <th>Insurance Expiry Date</th>
-                            <th>Permit Expiry Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="vehicle-body">
-                        <!-- Rows will be dynamically added here -->
-                    </tbody>
-                </table>
-                <button onclick="addVehicleRow()">Add Vehicle</button>
-            </div>
-        </section>
+      <!-- Vehicle Records Section -->
+<section id="vehicle-records" class="content-section" style="display: none;">
+    <h2>Vehicle Records</h2>
+    <div id="vehicle-container">
+        <!-- Container for the table with scroll enabled on mobile -->
+        <div id="vehicle-records-container">
+            <table id="vehicle-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Vehicle Number</th>
+                        <th>Owner Name</th>
+                        <th>Driver Name</th>
+                        <th>Driver License</th>
+                        <th>Vehicle FC</th>
+                        <th>Insurance Expiry Date</th>
+                        <th>Permit Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="vehicle-body">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Button to add vehicle rows -->
+        <button onclick="addVehicleRow()">Add Vehicle</button>
+    </div>
+</section>
+
 
 <!-- Modal Structure -->
 <div id="insuranceModal" class="modal">

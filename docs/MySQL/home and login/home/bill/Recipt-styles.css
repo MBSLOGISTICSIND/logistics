@@ -14,7 +14,7 @@ body {
     background: rgba(255, 255, 255, 0.9);
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    padding: 40px;
+    padding: 20px;  /* Reduced padding for more compact look */
     transition: all 0.3s ease;
 }
 
@@ -35,20 +35,21 @@ h2, h3, h4 {
 /* Form Styles */
 form {
     display: grid;
-    gap: 15px;
+    gap: 10px; /* Reduced gap between form elements */
+    margin-bottom: 15px; /* Reduced margin at the bottom of the form */
 }
 
 /* Input Group */
 .input-group {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-bottom: 10px;  /* Reduced margin between input groups */
     align-items: center;
 }
 
 label {
     flex: 1;
-    margin-right: 10px;
+    margin-right: 8px;  /* Reduced margin */
     text-align: right;
     font-weight: bold;
     color: #003366;
@@ -60,9 +61,9 @@ input[type="number"],
 input[type="date"],
 select {
     flex: 2;
-    padding: 12px;
+    padding: 10px;  /* Reduced padding */
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 6px;  /* Slightly smaller border radius */
     transition: border 0.3s ease, box-shadow 0.3s ease;
     background: #fff;
 }
@@ -79,12 +80,12 @@ button {
     background: linear-gradient(135deg, #28a745, #34d058);
     color: white;
     border: none;
-    padding: 12px 18px;
-    border-radius: 8px;
+    padding: 10px 16px;  /* Slightly smaller padding */
+    border-radius: 6px;  /* Reduced border radius */
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
     font-size: 14px;
-    margin-left: 10px;
+    margin-left: 8px;  /* Reduced left margin */
 }
 
 button:hover {
@@ -123,15 +124,15 @@ td {
 
 /* Modal styling */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; 
+    display: none;
+    position: fixed;
     z-index: 1;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
@@ -139,7 +140,7 @@ td {
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 50%; /* Adjust the width as per your requirement */
+    width: 50%;
     border-radius: 10px;
 }
 
@@ -160,7 +161,7 @@ td {
 /* Responsive Adjustments */
 @media (max-width: 900px) {
     .reports-container {
-        padding: 20px;
+        padding: 15px;  /* Reduced padding for more compact view */
     }
 
     .input-group {
@@ -187,5 +188,37 @@ td {
 
     .modal-content {
         width: 90%; /* Make modal content responsive */
+    }
+}
+
+
+/* Add a wrapper around the table for scroll */
+.table-wrapper {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    margin-top: 20px;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0 10px;
+}
+
+/* Responsive Table Styling */
+@media (max-width: 600px) {
+    .table-wrapper {
+        -webkit-overflow-scrolling: touch; /* Ensure smooth scrolling on iOS */
+    }
+
+    table {
+        width: 100%;
+        min-width: 600px; /* Ensures the table doesn't shrink too much */
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 12px;
     }
 }

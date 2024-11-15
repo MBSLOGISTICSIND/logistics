@@ -109,6 +109,11 @@ button:active {
     color: #00509e;
 }
 
+/* Table Container */
+.table-container {
+    overflow-x: auto; /* Horizontal scrolling enabled for mobile only */
+}
+
 /* Responsive Adjustments */
 @media (max-width: 900px) {
     .reports-container {
@@ -141,5 +146,9 @@ button:active {
     h2, h3, h4 {
         font-size: 1.5em; /* Adjust heading size for mobile */
     }
-}
 
+    /* Table container scroll only for mobile */
+    .table-container {
+        overflow-x: auto; /* Enable horizontal scroll for mobile */
+    }
+}
