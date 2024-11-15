@@ -11,9 +11,11 @@ const app = express();
 
 // Middleware
 app.use(express.json({ limit: '10mb' })); // Handle larger payloads
+// CORS middleware
 app.use(cors({
-    origin: 'https://mbslogisticsind.github.io/logistics/', // Replace with your GitHub Pages URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
+    origin: 'https://mbslogisticsind.github.io',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
 }));
 
 // Configure session
