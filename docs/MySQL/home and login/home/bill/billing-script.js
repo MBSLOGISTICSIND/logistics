@@ -766,37 +766,42 @@ async function editBill(lrNo) {
 
 
 function populateBillForm(bill) {
-    // Populate the form fields with bill details
-    document.getElementById('lr-no').value = bill.lrNo;
-    document.getElementById('date').value = bill.date;
-    document.getElementById('gst-paid-by').value = bill.gstPaidBy;
-    document.getElementById('payment-mode').value = bill.paymentMode;
-    document.getElementById('from').value = bill.from;
-    document.getElementById('to').value = bill.to;
-    document.getElementById('consigner').value = bill.consignor;
-    document.getElementById('consigner-address').value = bill.consignorAddress;
-    document.getElementById('consignee').value = bill.consignee;
-    document.getElementById('consignee-address').value = bill.consigneeAddress;
-    document.getElementById('Consignee-Invoice-no').value = bill.consigneeInvoiceNo;
+    // Check if bill data exists before assigning values
+    if (bill) {
+        document.getElementById('lr-no').value = bill.lrNo || '';
+        document.getElementById('date').value = bill.date || '';
+        document.getElementById('gst-paid-by').value = bill.gstPaidBy || '';
+        document.getElementById('payment-mode').value = bill.paymentMode || '';
+        document.getElementById('from').value = bill.from || '';
+        document.getElementById('to').value = bill.to || '';
+        document.getElementById('consigner').value = bill.consignor || '';
+        document.getElementById('consigner-address').value = bill.consignorAddress || '';
+        document.getElementById('consignee').value = bill.consignee || '';
+        document.getElementById('consignee-address').value = bill.consigneeAddress || '';
+        document.getElementById('Consignee-Invoice-no').value = bill.consigneeInvoiceNo || '';
 
-    // Populate goods entries
-    const goodsEntries = bill.goodsEntries;
-    const goodsTable = document.getElementById('goods-entries');
-    goodsTable.innerHTML = ''; // Clear existing rows
+        // Populate goods entries
+        const goodsEntries = bill.goodsEntries || [];
+        const goodsTable = document.getElementById('goods-entries');
+        goodsTable.innerHTML = ''; // Clear existing rows
 
-    goodsEntries.forEach((entry) => {
-        const row = goodsTable.insertRow();
-        row.innerHTML = `
-            <td><input type="text" class="goods" value="${entry.goods}"></td>
-            <td><input type="number" class="no-articles" value="${entry.noOfArticles}"></td>
-            <td><input type="number" class="rate-per-article" value="${entry.ratePerArticle}"></td>
-            <td><input type="number" class="gst" value="${entry.gst}"></td>
-            <td><input type="number" class="gst-amt" value="${entry.gstAmt}"></td>
-            <td><input type="number" class="freight" value="${entry.freight}"></td>
-            <td><input type="number" class="total" value="${entry.total}"></td>
-        `;
-    });
+        goodsEntries.forEach((entry) => {
+            const row = goodsTable.insertRow();
+            row.innerHTML = `
+                <td><input type="text" class="goods" value="${entry.goods || ''}"></td>
+                <td><input type="number" class="no-articles" value="${entry.noOfArticles || 0}"></td>
+                <td><input type="number" class="rate-per-article" value="${entry.ratePerArticle || 0}"></td>
+                <td><input type="number" class="gst" value="${entry.gst || 0}"></td>
+                <td><input type="number" class="gst-amt" value="${entry.gstAmt || 0}"></td>
+                <td><input type="number" class="freight" value="${entry.freight || 0}"></td>
+                <td><input type="number" class="total" value="${entry.total || 0}"></td>
+            `;
+        });
+    } else {
+        console.error("No bill data available.");
+    }
 }
+
 
 document.addEventListener("DOMContentLoaded", function() {
     const editBillIndex = localStorage.getItem("editBillIndex");
