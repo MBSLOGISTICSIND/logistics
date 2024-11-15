@@ -136,20 +136,19 @@ app.post('/api/save-bill', async (req, res) => {
     }
 });
 
-
-app.get('/api/bill/:id', async (req, res) => {
-    const { id } = req.params;
-
-    // Validate ID
-    if (isNaN(id) || id <= 0) {
-        return res.status(400).json({ error: 'Invalid bill ID' });
+app.get('/api/get-bill/:billId', async (req, res) => {
+    const billId = req.params.billId;
+    
+    // Validate billId
+    if (!billId || billId === '0') {
+        return res.status(400).json({ error: 'Invalid Bill ID' });
     }
 
     const query = `SELECT * FROM bills WHERE id = ?`;
-    
+
     try {
-        console.log('Querying for bill ID:', id); // Debugging line
-        const bill = await queryDatabase(query, [id]);
+        console.log('Querying for bill ID:', billId);  // Corrected the variable name here
+        const bill = await queryDatabase(query, [billId]); // Use the correct variable name here
         if (bill.length > 0) {
             res.status(200).json(bill[0]);
         } else {
@@ -162,13 +161,12 @@ app.get('/api/bill/:id', async (req, res) => {
 });
 
 
-// API route to update a bill
 app.put('/api/update-bill/:id', async (req, res) => {
     const { id } = req.params;
     const {
         lrNo, date, gstPaidBy, paymentMode, from, to,
         consignor, consignorAddress, consignee, consigneeAddress,
-        consigneeInvoiceNo, total, goodsEntries
+        consigneeInvoiceNo, noOfArticles, total, goodsEntries
     } = req.body;
 
     // Update the bill in the database
@@ -178,10 +176,11 @@ app.put('/api/update-bill/:id', async (req, res) => {
                         consigneeInvoiceNo = ?, \`No of Articles\` = ?, total = ?, goodsEntries = ?
         WHERE id = ?
     `;
+    
     try {
         await queryDatabase(query, [
             lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
-            consignee, consigneeAddress, consigneeInvoiceNo, consignorAddress, total, JSON.stringify(goodsEntries), id
+            consignee, consigneeAddress, consigneeInvoiceNo, noOfArticles, total, JSON.stringify(goodsEntries), id
         ]);
         res.status(200).json({ message: "Bill updated successfully" });
     } catch (error) {
@@ -189,6 +188,7 @@ app.put('/api/update-bill/:id', async (req, res) => {
         res.status(500).send('Error updating bill');
     }
 });
+
 
 app.use((req, res) => {
     res.status(404).json({ error: 'Not Found' });

@@ -730,12 +730,14 @@ function loadBillFromServer(billId) {
 }
 
 function editBill(billId) {
-    if (!billId || billId <= 0) {
-        console.error("Invalid bill ID:", billId);
-        return;
+    if (billId > 0) {
+        loadBillFromServer(billId);  // Load data from server and populate the form
+    } else {
+        console.error('Invalid bill ID:', billId);
     }
-    loadBillFromServer(billId); // Load data from the server and populate the form
 }
+
+
 
 function populateBillForm(bill) {
     // Populate the form fields with bill details
