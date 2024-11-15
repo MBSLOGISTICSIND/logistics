@@ -702,7 +702,6 @@ function saveBillToServer(bill) {
     })
     .then(data => {
         console.log("Bill saved to server:", data);
-        // Optionally, update local storage with the server's response if needed
         loadReports(); // Reload reports after saving
     })
     .catch(error => {
@@ -721,6 +720,7 @@ function loadBillFromServer(lrNo) {
             return response.json();
         })
         .then(bill => {
+            console.log(bill);  // Log the response to see the bill data
             populateBillForm(bill);
             localStorage.setItem("editBillIndex", bill.lrNo);  // Store lrNo in local storage
         })
@@ -763,10 +763,7 @@ async function editBill(lrNo) {
     }
 }
 
-
-
 function populateBillForm(bill) {
-    // Check if bill data exists before assigning values
     if (bill) {
         document.getElementById('lr-no').value = bill.lrNo || '';
         document.getElementById('date').value = bill.date || '';
@@ -802,13 +799,13 @@ function populateBillForm(bill) {
     }
 }
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const editBillIndex = localStorage.getItem("editBillIndex");
     if (editBillIndex !== null) {
         loadBillFromServer(editBillIndex);  // Load the bill from server if editing
     }
 });
+
 function newBill() {
     // Clear all input fields
     document.getElementById('lr-no').value = '';
