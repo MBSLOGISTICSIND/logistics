@@ -682,8 +682,8 @@ function saveBill() {
 
 // Function to save bill to server
 function saveBillToServer(bill) {
-    const url = bill.id ? `https://logistics-87vc.onrender.com/api/update-bill/${bill.id}` : 'https://logistics-87vc.onrender.com/api/save-bill'; // Dynamic URL
-    const method = bill.id ? 'PUT' : 'POST';  // Use PUT for updating and POST for new bills
+    const url = bill.lrNo ? `https://logistics-87vc.onrender.com/api/update-bill/${bill.lrNo}` : 'https://logistics-87vc.onrender.com/api/save-bill'; // Dynamic URL based on lrNo
+    const method = bill.lrNo ? 'PUT' : 'POST';  // Use PUT for updating and POST for new bills
 
     fetch(url, {
         method: method,
@@ -710,8 +710,8 @@ function saveBillToServer(bill) {
     });
 }
 
-function loadBillFromServer(billId) {
-    fetch(`https://logistics-87vc.onrender.com/api/get-bill/${billId}`)
+function loadBillFromServer(lrNo) {
+    fetch(`https://logistics-87vc.onrender.com/api/get-bill/${lrNo}`)  // Use lrNo instead of billId
         .then(response => {
             if (!response.ok) {
                 return response.text().then(text => {
@@ -722,18 +722,44 @@ function loadBillFromServer(billId) {
         })
         .then(bill => {
             populateBillForm(bill);
-            localStorage.setItem("editBillIndex", bill.id);
+            localStorage.setItem("editBillIndex", bill.lrNo);  // Store lrNo in local storage
         })
         .catch(error => {
             console.error("Error loading bill from server:", error);
         });
 }
 
-function editBill(billId) {
-    if (billId > 0) {
-        loadBillFromServer(billId);  // Load data from server and populate the form
+// Function to handle the "Edit" button click
+async function editBill(lrNo) {
+    console.log("Editing bill with LR No:", lrNo);
+
+    // Fetch the bill data from either server or local storage
+    let billData = null;
+    
+    // Check local storage first
+    const allBills = JSON.parse(localStorage.getItem('bills')) || [];
+    const billFromLocalStorage = allBills.find(bill => bill.lrNo === lrNo);
+
+    if (billFromLocalStorage) {
+        billData = billFromLocalStorage;
     } else {
-        console.error('Invalid bill ID:', billId);
+        // If not found in local storage, fetch from the server
+        try {
+            const response = await fetch(`https://logistics-87vc.onrender.com/api/get-bill-by-lrno/${lrNo}`);
+            if (response.ok) {
+                billData = await response.json();
+            } else {
+                console.error("Failed to fetch bill data from the server");
+            }
+        } catch (error) {
+            console.error("Error fetching bill from server:", error);
+        }
+    }
+
+    if (billData) {
+        populateBillForm(billData); // Populate the form with the bill data
+    } else {
+        alert("Bill not found.");
     }
 }
 
