@@ -529,12 +529,38 @@ function printBill() {
                      <title>Print Bill</title>
                      <style>
                          @media print {
-                             body { margin: 0; }
-                             .company-details { width: 100%; border-collapse: collapse; }
-                             .company-details td { padding: 10px; border: 1px solid black; }
-                         }
-                         body { font-family: Arial, sans-serif; font-size: 12px; }
+                        /* Set the page size and orientation */
+                        @page {
+                            size: A4 portrait;
+                            margin: 0;
+                        }
 
+                        /* Ensure content fits half the A4 page */
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            font-family: Arial, sans-serif;
+                            font-size: 12px;
+                        }
+
+                        .print-container {
+                            width: 100%;
+                            height: 50%; /* Use half the page height */
+                            box-sizing: border-box;
+                            border: 1px solid black; /* Optional border for clarity */
+                            padding: 10px;
+                        }
+
+                        .company-details {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+
+                        .company-details td {
+                            padding: 10px;
+                            border: 1px solid black;
+                        }
+                    }
                          
                      </style>
                  </head>
