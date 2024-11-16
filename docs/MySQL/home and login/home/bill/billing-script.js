@@ -161,19 +161,22 @@ function updateBillPreview() {
     goodsRows.forEach((row, index) => {
         // Get the selected text of the dropdown option for goods name
         const goodsNameDropdown = row.querySelector(".goods");
-        const goodsName = goodsNameDropdown.options[goodsNameDropdown.selectedIndex].text;
 
-        const noArticles = row.querySelector(".no-articles").value;
-        const ratePerArticle = row.querySelector(".rate-per-article").value;
-        const totalAmount = row.querySelector(".total").value;
-
-        // Append each value to the corresponding concatenated string with a line break after each entry
-        goodsNames += goodsName + "<br>";
-        noOfArticles += noArticles + "<br>";
-        ratesPerArticle += ratePerArticle + "<br>";
-        totalAmounts += totalAmount + "<br>";
+        if (goodsNameDropdown) {
+            const goodsName = goodsNameDropdown.options[goodsNameDropdown.selectedIndex].text;
+            const noArticles = row.querySelector(".no-articles")?.value || '';
+            const ratePerArticle = row.querySelector(".rate-per-article")?.value || '';
+            const totalAmount = row.querySelector(".total")?.value || '';
+    
+            // Append each value to the corresponding concatenated string with a line break after each entry
+            goodsNames += goodsName + "<br>";
+            noOfArticles += noArticles + "<br>";
+            ratesPerArticle += ratePerArticle + "<br>";
+            totalAmounts += totalAmount + "<br>";
+        } else {
+            console.warn(`Row ${index + 1} is missing a '.goods' dropdown`);
+        }
     });
-
     // Get the entered DD/C and DC/C amounts
     const ddCAmount = parseFloat(document.getElementById("ddc-amount").value) || 0;
     const dcCAmount = parseFloat(document.getElementById("dcc-amount").value) || 0;
@@ -774,7 +777,7 @@ function populateBillForm(bill) {
     if (!bill) {
         console.error("No bill data provided for populating the form.");
         return;}
-        
+
     if (bill) {
           // Safely check for each field before setting its value
           const lrNoField = document.getElementById('lr-no');
