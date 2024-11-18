@@ -98,7 +98,6 @@ app.delete('/api/delete-vehicle/:id', async (req, res) => {
 // API route to fetch all bills
 app.get('/api/get-bills', async (req, res) => {
     const query = `SELECT * FROM bills`;
-
     try {
         const results = await queryDatabase(query);
         console.log('SQL Query:', query);
@@ -109,7 +108,6 @@ app.get('/api/get-bills', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
 // API route to save a bill
 app.post('/api/save-bill', async (req, res) => {
     const {
@@ -117,7 +115,6 @@ app.post('/api/save-bill', async (req, res) => {
         consignor, consignorAddress, consignee, consigneeAddress,
         consigneeInvoiceNo, total, goodsEntries
     } = req.body;
-
     // Insert the bill into the database (adjust the query according to your schema)
     const query = `
         INSERT INTO bills (lrNo, date, gstPaidBy, paymentMode, \`from\`, \`to\`, consignor, consignorAddress,
@@ -135,24 +132,21 @@ app.post('/api/save-bill', async (req, res) => {
         res.status(500).send('Error saving bill');
     }
 });
-
-app.get('/api/get-bill/:lrNo', async (req, res) => {
-    const lrNo = req.params.lrNo;
-    
-    // Validate lrNo
-    if (!lrNo || lrNo === '0') {
-        return res.status(400).json({ error: 'Invalid LR Number' });
+app.get('/api/bill/:id', async (req, res) => {
+    const { id } = req.params;
+    // Validate ID
+    if (isNaN(id) || id <= 0) {
+        return res.status(400).json({ error: 'Invalid bill ID' });
     }
-
-    const query = `SELECT * FROM bills WHERE lrNo = ?`;
-
+    const query = `SELECT * FROM bills WHERE id = ?`;
+    
     try {
-        console.log('Querying for LR Number:', lrNo);
-        const bill = await queryDatabase(query, [lrNo]);
+        console.log('Querying for bill ID:', id); // Debugging line
+        const bill = await queryDatabase(query, [id]);
         if (bill.length > 0) {
             res.status(200).json(bill[0]);
         } else {
-            res.status(404).json({ error: 'Bill not found for the given LR Number' });
+            res.status(404).json({ error: 'Bill not found for the given ID' });
         }
     } catch (error) {
         console.error('Error fetching bill:', error);
@@ -160,27 +154,25 @@ app.get('/api/get-bill/:lrNo', async (req, res) => {
     }
 });
 
-
-app.put('/api/update-bill/:lrNo', async (req, res) => {
-    const { lrNo } = req.params;  // Use lrNo as the parameter for identifying the bill
+// API route to update a bill
+app.put('/api/update-bill/:id', async (req, res) => {
+    const { id } = req.params;
     const {
-        date, gstPaidBy, paymentMode, from, to,
+        lrNo, date, gstPaidBy, paymentMode, from, to,
         consignor, consignorAddress, consignee, consigneeAddress,
-        consigneeInvoiceNo, noOfArticles, total, goodsEntries
+        consigneeInvoiceNo, total, goodsEntries
     } = req.body;
-
-    // Update the bill in the database using lrNo
+    // Update the bill in the database
     const query = `
-        UPDATE bills SET date = ?, gstPaidBy = ?, paymentMode = ?, \`from\` = ?, \`to\` = ?,
+        UPDATE bills SET lrNo = ?, date = ?, gstPaidBy = ?, paymentMode = ?, \`from\` = ?, \`to\` = ?,
                         consignor = ?, consignorAddress = ?, consignee = ?, consigneeAddress = ?,
                         consigneeInvoiceNo = ?, \`No of Articles\` = ?, total = ?, goodsEntries = ?
-        WHERE lrNo = ?
+        WHERE id = ?
     `;
-    
     try {
         await queryDatabase(query, [
-            date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
-            consignee, consigneeAddress, consigneeInvoiceNo, noOfArticles, total, JSON.stringify(goodsEntries), lrNo
+            lrNo, date, gstPaidBy, paymentMode, from, to, consignor, consignorAddress,
+            consignee, consigneeAddress, consigneeInvoiceNo, consignorAddress, total, JSON.stringify(goodsEntries), id
         ]);
         res.status(200).json({ message: "Bill updated successfully" });
     } catch (error) {
