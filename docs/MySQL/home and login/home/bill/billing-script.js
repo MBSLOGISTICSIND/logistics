@@ -685,8 +685,8 @@ function saveBill() {
 
 // Function to save bill to server
 function saveBillToServer(bill) {
-    const url = bill.lrNo ? `https://logistics-87vc.onrender.com/api/update-bill/${bill.lrNo}` : 'https://logistics-87vc.onrender.com/api/save-bill'; // Dynamic URL based on lrNo
-    const method = bill.lrNo ? 'PUT' : 'POST';  // Use PUT for updating and POST for new bills
+    const url = bill.id ? `https://logistics-87vc.onrender.com/api/update-bill/${bill.id}` : 'https://logistics-87vc.onrender.com/api/save-bill'; // Dynamic URL
+    const method = bill.id ? 'PUT' : 'POST';  // Use PUT for updating and POST for new bills
 
     fetch(url, {
         method: method,
@@ -712,8 +712,8 @@ function saveBillToServer(bill) {
     });
 }
 
-function loadBillFromServer(lrNo) {
-    fetch(`https://logistics-87vc.onrender.com/api/get-bill/${lrNo}`)  // Use lrNo instead of billId
+function loadBillFromServer(billId) {
+    fetch(`https://logistics-87vc.onrender.com/api/get-bill/${billId}`)
         .then(response => {
             if (!response.ok) {
                 return response.text().then(text => {
@@ -725,133 +725,53 @@ function loadBillFromServer(lrNo) {
         .then(bill => {
             console.log(bill);  // Log the response to see the bill data
             populateBillForm(bill);
-            localStorage.setItem("editBillIndex", bill.lrNo);  // Store lrNo in local storage
+            localStorage.setItem("editBillIndex", bill.id);
         })
         .catch(error => {
             console.error("Error loading bill from server:", error);
         });
 }
 
-// Function to handle the "Edit" button click
-async function editBill(lrNo) {
-    console.log("Editing bill with LR No:", lrNo);
-
-    // Fetch the bill data from either server or local storage
-    let billData = null;
-    
-    // Check local storage first
-    const allBills = JSON.parse(localStorage.getItem('bills')) || [];
-    const billFromLocalStorage = allBills.find(bill => bill.lrNo === lrNo);
-
-      // Store LR No in local storage for access on the billing form page
-      localStorage.setItem("editBillIndex", lrNo);
-
-      // Redirect to the billing form page
-      window.location.href = "index1.html"; // Replace with the correct path to your billing form
-
-    if (billFromLocalStorage) {
-        billData = billFromLocalStorage;
-    } else {
-        // If not found in local storage, fetch from the server
-        try {
-            const response = await fetch(`https://logistics-87vc.onrender.com/api/get-bill-by-lrno/${lrNo}`);
-            if (response.ok) {
-                billData = await response.json();
-            } else {
-                console.error("Failed to fetch bill data from the server");
-            }
-        } catch (error) {
-            console.error("Error fetching bill from server:", error);
-        }
-    }
-
-    if (billData) {
-        populateBillForm(billData); // Populate the form with the bill data
+function editBill(billId) {
+    if (billId > 0) {
+        loadBillFromServer(billId);  // Load data from server and populate the form
         
     } else {
-        alert("Bill not found.");
+        console.error('Invalid bill ID:', billId);
     }
 }
 
 function populateBillForm(bill) {
-    if (!bill) {
-        console.error("No bill data provided for populating the form.");
-        return;}
+    // Populate the form fields with bill details
+    document.getElementById('lr-no').value = bill.lrNo;
+    document.getElementById('date').value = bill.date;
+    document.getElementById('gst-paid-by').value = bill.gstPaidBy;
+    document.getElementById('payment-mode').value = bill.paymentMode;
+    document.getElementById('from').value = bill.from;
+    document.getElementById('to').value = bill.to;
+    document.getElementById('consigner').value = bill.consignor;
+    document.getElementById('consigner-address').value = bill.consignorAddress;
+    document.getElementById('consignee').value = bill.consignee;
+    document.getElementById('consignee-address').value = bill.consigneeAddress;
+    document.getElementById('Consignee-Invoice-no').value = bill.consigneeInvoiceNo;
 
-    if (bill) {
-          // Safely check for each field before setting its value
-          const lrNoField = document.getElementById('lr-no');
-          if (lrNoField) {
-              lrNoField.value = bill.lrNo || '';
-          }
-  
-          const dateField = document.getElementById('date');
-          if (dateField) {
-              dateField.value = bill.date || '';
-          }
-  
-          const gstPaidByField = document.getElementById('gst-paid-by');
-          if (gstPaidByField) {
-              gstPaidByField.value = bill.gstPaidBy || '';
-          }
-  
-          const paymentModeField = document.getElementById('payment-mode');
-          if (paymentModeField) {
-              paymentModeField.value = bill.paymentMode || '';
-          }
-          const fromField =  document.getElementById('from');
-          if (fromField) {
-            fromField.value = bill.from || '';
-        }
-        const toField = document.getElementById('to');
-        if (toField) {
-        toField.value = bill.to || '';
-        }
-        const consignorField = document.getElementById('consigner');
-        if (consignorField) {
-            consignorField.value = bill.consignor || '';
-        }
-        const consignorAddressField = document.getElementById('consigner-address');
-        if (consignorAddressField) {
-            consignorAddressField.value = bill.consignorAddress || '';
-        }
-        const consigneeField = document.getElementById('consignee');
-        if (consigneeField) {
-            consigneeField.value = bill.consignee || '';
-        }
-        const consigneeAddressField = document.getElementById('consignee-address');
-        if (consigneeAddressField) {
-            consigneeAddressField.value = bill.consigneeAddress || '';
-        }
-        const consigneeInvoiceNoField = document.getElementById('Consignee-Invoice-no');
-        if (consigneeInvoiceNoField) {
-            consigneeInvoiceNoField.value = bill.consigneeInvoiceNo || '';
-        }
+    // Populate goods entries
+    const goodsEntries = bill.goodsEntries;
+    const goodsTable = document.getElementById('goods-entries');
+    goodsTable.innerHTML = ''; // Clear existing rows
 
-    
-
-        // Populate goods entries
-        const goodsEntries = bill.goodsEntries || [];
-        const goodsTable = document.getElementById('goods-entries');
-        if (goodsTable) {
-            goodsTable.innerHTML = ''; // Clear existing rows
-            goodsEntries.forEach((entry) => {
-                const row = goodsTable.insertRow();
-                row.innerHTML = `
-                    <td><input type="text" class="goods" value="${entry.goods || ''}"></td>
-                    <td><input type="number" class="no-articles" value="${entry.noOfArticles || 0}"></td>
-                    <td><input type="number" class="rate-per-article" value="${entry.ratePerArticle || 0}"></td>
-                    <td><input type="number" class="gst" value="${entry.gst || 0}"></td>
-                    <td><input type="number" class="gst-amt" value="${entry.gstAmt || 0}"></td>
-                    <td><input type="number" class="freight" value="${entry.freight || 0}"></td>
-                    <td><input type="number" class="total" value="${entry.total || 0}"></td>
-                `;
-            });
-        }
-    } else {
-        console.error("No bill data available.");
-    }
-
+    goodsEntries.forEach((entry) => {
+        const row = goodsTable.insertRow();
+        row.innerHTML = `
+            <td><input type="text" class="goods" value="${entry.goods}"></td>
+            <td><input type="number" class="no-articles" value="${entry.noOfArticles}"></td>
+            <td><input type="number" class="rate-per-article" value="${entry.ratePerArticle}"></td>
+            <td><input type="number" class="gst" value="${entry.gst}"></td>
+            <td><input type="number" class="gst-amt" value="${entry.gstAmt}"></td>
+            <td><input type="number" class="freight" value="${entry.freight}"></td>
+            <td><input type="number" class="total" value="${entry.total}"></td>
+        `;
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -860,29 +780,6 @@ document.addEventListener("DOMContentLoaded", function() {
         loadBillFromServer(editBillIndex);  // Load the bill from server if editing
     }
 });
-
-// Listen for DOMContentLoaded to ensure the form is ready
-document.addEventListener("DOMContentLoaded", async function () {
-    const lrNo = localStorage.getItem("editBillIndex"); // Retrieve LR No from local storage
-    if (lrNo) {
-        try {
-            console.log(`Fetching bill data for LR No: ${lrNo}`);
-            const response = await fetch(`https://logistics-87vc.onrender.com/api/get-bill-by-lrno/${lrNo}`);
-            if (response.ok) {
-                const billData = await response.json();
-                console.log("Bill data retrieved:", billData);
-                populateBillForm(billData); // Populate the form
-            } else {
-                console.error("Failed to fetch bill data from the server", response.statusText);
-            }
-        } catch (error) {
-            console.error("Error fetching bill data:", error);
-        }
-    } else {
-        console.error("No LR No found in local storage for editing.");
-    }
-});
-
 
 function newBill() {
     // Clear all input fields
