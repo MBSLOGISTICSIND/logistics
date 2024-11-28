@@ -135,7 +135,7 @@ app.post('/api/save-bill', async (req, res) => {
 // Update GET endpoint to fetch by lrNo
 app.get('/api/bill/:lrNo', async (req, res) => {
     const { lrNo } = req.params; // Use lrNo from URL params
-    
+    console.log('Received bill ID:', id); // Debugging line
     const query = `SELECT * FROM bills WHERE lrNo = ?`; // Query by lrNo, not id
     
     try {
