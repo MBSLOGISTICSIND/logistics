@@ -132,31 +132,105 @@ function searchReports() {
     }
 }
 
-// Function to sort table by column
+function filterByDateRange() {
+    // Get date inputs
+    const startDateInput = document.getElementById("start-date").value;
+    const endDateInput = document.getElementById("end-date").value;
+
+    // Select all rows in the reports table
+    const rows = document.querySelectorAll("#reports-table tbody tr");
+
+    // Ensure both dates are selected
+    if (!startDateInput || !endDateInput) {
+        alert("Please select both 'From' and 'To' dates.");
+        return;
+    }
+
+    const startDate = new Date(startDateInput); // From input (YYYY-MM-DD)
+    const endDate = new Date(endDateInput); // To input (YYYY-MM-DD)
+
+    // Validate date range
+    if (startDate > endDate) {
+        alert("Invalid date range! 'From' date cannot be later than 'To' date.");
+        return;
+    }
+
+    // Parse the date from the table (DD/MM/YYYY)
+    function parseDate(dateStr) {
+        const [day, month, year] = dateStr.split("/").map(Number);
+        return new Date(year, month - 1, day); // JavaScript Date uses 0-based months
+    }
+
+    // Filter rows based on date range
+    rows.forEach(row => {
+        const dateCell = row.cells[1]; // Assuming Date is in the 2nd column
+        const rowDateStr = dateCell.textContent.trim(); // e.g., "14/11/2024"
+        const rowDate = parseDate(rowDateStr);
+
+        // Check if the rowDate is valid
+        if (isNaN(rowDate)) {
+            console.error(`Invalid date format in table: ${rowDateStr}`);
+            row.style.display = "none"; // Hide rows with invalid dates
+            return;
+        }
+
+        // Show or hide rows based on date range
+        if (rowDate >= startDate && rowDate <= endDate) {
+            row.style.display = ""; // Show rows within the range
+        } else {
+            row.style.display = "none"; // Hide rows outside the range
+        }
+    });
+}
+
+function resetFilters() {
+    // Clear date inputs
+    document.getElementById("start-date").value = "";
+    document.getElementById("end-date").value = "";
+
+    // Show all rows
+    const rows = document.querySelectorAll("#reports-table tbody tr");
+    rows.forEach(row => {
+        row.style.display = ""; // Reset all rows to visible
+    });
+}
+
+
+
+
+
 function sortTable(columnIndex) {
     const table = document.getElementById("reports-table");
+    const tbody = table.tBodies[0]; // Get the table body
+    const rows = Array.from(tbody.rows); // Convert rows to an array for sorting
+    let dir = "asc"; // Default sorting order
     let switching = true;
-    let shouldSwitch;
-    let switchCount = 0;
-    let dir = "asc";
 
     while (switching) {
         switching = false;
-        const rows = table.rows;
 
-        for (let i = 1; i < rows.length - 1; i++) {
-            shouldSwitch = false;
+        for (let i = 0; i < rows.length - 1; i++) {
+            let shouldSwitch = false;
 
-            const x = rows[i].getElementsByTagName("TD")[columnIndex];
-            const y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+            const x = rows[i].cells[columnIndex].textContent.trim();
+            const y = rows[i + 1].cells[columnIndex].textContent.trim();
 
-            if (dir === "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            if (columnIndex === 1) { // Sort by Date column
+                const xDate = new Date(x);
+                const yDate = new Date(y);
+
+                if (
+                    (dir === "asc" && xDate > yDate) || 
+                    (dir === "desc" && xDate < yDate)
+                ) {
                     shouldSwitch = true;
                     break;
                 }
-            } else if (dir === "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            } else { // Sort other columns as strings
+                if (
+                    (dir === "asc" && x.toLowerCase() > y.toLowerCase()) || 
+                    (dir === "desc" && x.toLowerCase() < y.toLowerCase())
+                ) {
                     shouldSwitch = true;
                     break;
                 }
@@ -164,17 +238,18 @@ function sortTable(columnIndex) {
         }
 
         if (shouldSwitch) {
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            tbody.appendChild(rows[i + 1]); // Move the row
             switching = true;
-            switchCount++;
         } else {
-            if (switchCount === 0 && dir === "asc") {
+            if (dir === "asc") {
                 dir = "desc";
                 switching = true;
             }
         }
     }
 }
+
+
 
 // Function to edit a bill
 function editBill(index) {

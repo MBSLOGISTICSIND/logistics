@@ -55,6 +55,18 @@
         <div class="search-bar">
             <label for="search-input">Search:</label>
             <input type="text" id="search-input" placeholder="Search by LR No, Consignor, or Date">
+
+            <div>
+                <label for="start-date">From:</label>
+                <input type="date" id="start-date" />
+            
+                <label for="end-date">To:</label>
+                <input type="date" id="end-date" />
+            
+                <button onclick="filterByDateRange()">Filter</button>
+                <button onclick="resetFilters()">Reset</button>
+            </div>
+            
         </div>
     
         <!-- Export and Print Buttons -->
