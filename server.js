@@ -136,16 +136,18 @@ app.post('/api/save-bill', async (req, res) => {
 app.get('/api/get-bill/:lrNo', async (req, res) => {
     const lrNo = req.params.lrNo;
     try {
+        console.log(`Fetching bill for LR No: ${lrNo}`);
         const result = await db.query('SELECT * FROM bills WHERE lrNo = ?', [lrNo]);
-        if (result.length > 0) {
-            res.json(result[0]);  // Return the bill data
-        } else {
-            res.status(404).json({ error: 'Not Found' });
+        if (!result) {
+            throw new Error(`No result found for LR No: ${lrNo}`);
         }
+        res.json(result[0]);
     } catch (error) {
-        res.status(500).json({ error: 'Server Error' });
+        console.error('Error fetching bill:', error.message);
+        res.status(500).json({ error: 'Server Error', details: error.message });
     }
 });
+
 
 
 // API route to update a bill
