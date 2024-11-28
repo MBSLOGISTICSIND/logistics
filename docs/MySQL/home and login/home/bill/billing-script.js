@@ -712,24 +712,20 @@ function saveBillToServer(bill) {
     });
 }
 
-function loadBillFromServer(billId) {
-    fetch(`https://logistics-87vc.onrender.com/api/get-bill/${billId}`) // Use the `id`
+function loadBillFromServer(lrNo) {
+    fetch(`https://logistics-87vc.onrender.com/api/get-bill/${lrNo}`)
         .then(response => {
             if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(`Server Error ${response.status}: ${text}`);
-                });
+                throw new Error(`Server Error ${response.status}: ${response.statusText}`);
             }
             return response.json();
         })
-        .then(bill => {
-            console.log(bill); // Log the response to see the bill data
-            populateBillForm(bill);
-            localStorage.setItem("editBillIndex", billId); // Save the ID for reference
+        .then(data => {
+            console.log('Loaded bill:', data);
+            // Process the bill data (populate the form, etc.)
         })
         .catch(error => {
-            console.error("Error loading bill from server:", error);
-            alert("Failed to load bill. Please try again.");
+            console.error('Error loading bill from server:', error);
         });
 }
 
