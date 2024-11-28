@@ -251,15 +251,20 @@ function sortTable(columnIndex) {
 
 
 
-// Function to edit a bill
 function editBill(index) {
     const bills = JSON.parse(localStorage.getItem("bills")) || [];
     const bill = bills[index];
 
-    // Redirect to billing form and load the selected bill
-    window.location.href = "index1.html";
-    localStorage.setItem("editBillIndex", index); // Save the index for editing in the form
+    // Check if the `bill` object has a valid `id`
+    if (bill && bill.id) {
+        const billId = bill.id; // Use the unique `id` field for the API call
+        loadBillFromServer(billId); // Call the function to fetch the bill details
+    } else {
+        console.error('Invalid bill data or missing ID:', bill);
+        alert('Unable to edit this bill. Please check the data.');
+    }
 }
+
 
 // Function to delete a bill
 function deleteBill(index) {

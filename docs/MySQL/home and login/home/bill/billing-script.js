@@ -713,7 +713,7 @@ function saveBillToServer(bill) {
 }
 
 function loadBillFromServer(billId) {
-    fetch(`https://logistics-87vc.onrender.com/api/get-bill/${billId}`)
+    fetch(`https://logistics-87vc.onrender.com/api/get-bill/${billId}`) // Use the `id`
         .then(response => {
             if (!response.ok) {
                 return response.text().then(text => {
@@ -723,14 +723,16 @@ function loadBillFromServer(billId) {
             return response.json();
         })
         .then(bill => {
-            console.log(bill);  // Log the response to see the bill data
+            console.log(bill); // Log the response to see the bill data
             populateBillForm(bill);
-            localStorage.setItem("editBillIndex", bill.id);
+            localStorage.setItem("editBillIndex", billId); // Save the ID for reference
         })
         .catch(error => {
             console.error("Error loading bill from server:", error);
+            alert("Failed to load bill. Please try again.");
         });
 }
+
 
 function editBill(billId) {
     if (billId > 0) {
