@@ -133,22 +133,17 @@ app.post('/api/save-bill', async (req, res) => {
     }
 });
 // Update GET endpoint to fetch by lrNo
-app.get('/api/bill/:lrNo', async (req, res) => {
-    const { lrNo } = req.params; // Use lrNo from URL params
-    console.log('Received bill ID:', id); // Debugging line
-    const query = `SELECT * FROM bills WHERE lrNo = ?`; // Query by lrNo, not id
-    
+app.get('/api/get-bill/:lrNo', async (req, res) => {
+    const lrNo = req.params.lrNo;
     try {
-        console.log('Querying for bill LR No:', lrNo); // Debugging line
-        const bill = await queryDatabase(query, [lrNo]);
-        if (bill.length > 0) {
-            res.status(200).json(bill[0]); // Return the bill if found
+        const result = await db.query('SELECT * FROM bills WHERE lrNo = ?', [lrNo]);
+        if (result.length > 0) {
+            res.json(result[0]);  // Return the bill data
         } else {
-            res.status(404).json({ error: 'Bill not found for the given LR No' });
+            res.status(404).json({ error: 'Not Found' });
         }
     } catch (error) {
-        console.error('Error fetching bill:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: 'Server Error' });
     }
 });
 
