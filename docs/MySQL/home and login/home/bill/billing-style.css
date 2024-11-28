@@ -431,3 +431,6 @@ button:active {
         font-size: 12px; /* Reduce font size to fit content */
     }
 }
+.error {
+    border: 2px solid red;
+}

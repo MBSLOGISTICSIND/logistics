@@ -342,6 +342,8 @@ console.log("Bill No:", billNo);
     let totalAmount = 0;
     let rowCounter = 1; // Serial number starts from 1
 
+
+
     // Loop through each row in the billTableBody
     Array.from(billTableBody.rows).forEach(row => {
         tableHTML += '<tr>';
@@ -350,17 +352,30 @@ console.log("Bill No:", billNo);
         tableHTML += `<td style="border: 1px solid black; padding: 8px; text-align: center;">${rowCounter}</td>`;
         rowCounter++; // Increment the counter for the next row
 
-        // Loop through each cell in the row
-        Array.from(row.cells).forEach((cell, index) => {
+          // Loop through each cell in the row
+          Array.from(row.cells).forEach((cell, index) => {
             const input = cell.querySelector('input');
             if (input) {
                 tableHTML += `<td style="border: 1px solid black; padding: 8px;">${input.value}</td>`;
             } else {
-                tableHTML += `<td style="border: 1px solid black; padding: 8px;">${cell.innerHTML}</td>`;
+                // For the "GC.C" column, we create a dropdown
+                if (index === 6) { // GC.C column index
+                    tableHTML += `
+                        <td style="border: 1px solid black; padding: 8px;">
+                            <select class="gc-c-dropdown" style="width: 100%; padding: 4px;">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                        </td>`;
+                } else {
+                    tableHTML += `<td style="border: 1px solid black; padding: 8px;">${cell.innerHTML}</td>`;
+                }
             }
 
             // If it's the last cell (Total Amount), add its value to the totalAmount
-            if (index === 7) {
+            if (index === 8) {
                 totalAmount += parseFloat(cell.innerText) || 0;
             }
         });
@@ -533,6 +548,7 @@ td {
     printWindow.document.close();
     printWindow.focus();
 }
+
 
 
 // Function to convert numbers to words

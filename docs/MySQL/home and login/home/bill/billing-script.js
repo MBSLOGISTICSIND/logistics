@@ -801,6 +801,16 @@ function newBill() {
 generateLRNo();
 setCurrentDate();
 
+    // Hide all sections and show the Customer Info section
+    const sections = document.querySelectorAll('.form-section');
+    sections.forEach(section => {
+        section.style.display = 'none'; // Hide all sections
+    });
+
+    const customerInfoSection = document.getElementById('customer-info-section');
+    if (customerInfoSection) {
+        customerInfoSection.style.display = 'block'; // Show Customer Info section
+    }
 }
 
 
@@ -845,4 +855,49 @@ function closeForm() {
     document.getElementById("goods-form").reset();
     document.getElementById("billing-details-form").reset();
     document.getElementById("bill-preview").style.display = 'none'; // Hide the bill preview
+}
+
+
+// Validate a section before proceeding
+function validateSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const inputs = section.querySelectorAll('input, select, textarea');
+    let valid = true;
+
+    inputs.forEach(input => {
+        if (input.hasAttribute('required') && !input.value.trim()) {
+            input.classList.add('error');
+            valid = false;
+        } else {
+            input.classList.remove('error');
+        }
+    });
+
+    return valid;
+}
+
+// Go to the next section
+function goToNextSection(currentSectionId, nextSectionId) {
+    if (validateSection(currentSectionId)) {
+        document.getElementById(currentSectionId).style.display = 'none';
+        document.getElementById(nextSectionId).style.display = 'block';
+    } else {
+        alert('Please fill out all required fields.');
+    }
+}
+
+// Go to the previous section
+function goToPreviousSection(currentSectionId, previousSectionId) {
+    document.getElementById(currentSectionId).style.display = 'none';
+    document.getElementById(previousSectionId).style.display = 'block';
+}
+
+// Function to handle form submission
+function submitForm() {
+    if (validateSection('consignor-consignee-section')) {
+        alert('Form submitted successfully!');
+        // Add form submission logic here
+    } else {
+        alert('Please fill in all required fields.');
+    }
 }

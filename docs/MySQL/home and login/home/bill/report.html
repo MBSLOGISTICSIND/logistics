@@ -149,8 +149,15 @@
                             <td><input type="text" value="Mr. XYZ" /></td>
                             <td><input type="text" value="INV1234" /></td>
                             <td><input type="text" value="Box" /></td>
-                            <td><input type="number" value="100" /></td>
-                            <td><input type="number" value="10" /></td>
+                            <td>
+                                <!-- GC.C Dropdown -->
+                                <select class="gc-c-dropdown" style="width: 100%; padding: 4px;">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                </select>
+                            </td>
                             <td><input type="number" value="1000" /></td>
                         </tr>
                         <!-- More rows can be added here -->
@@ -238,7 +245,15 @@
                     <td>${reportData.invoiceNo}</td>
                     <td>${reportData.articles}</td>
                     <td><input type="number" class="rateInput" data-index="${row.rowIndex - 1}" placeholder="Enter Rate"></td>
-                    <td>10</td> <!-- GC.C is default 10 -->
+                  <td>
+        <!-- GC.C Dropdown -->
+        <select class="gc-c-dropdown" style="width: 100%; padding: 4px;" onchange="updateTotal(${row.rowIndex - 1})">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+        </select>
+    </td>
                     <td><input type="number" class="totalAmount" readonly></td>
                 `;
                 tableBody.appendChild(newRow);
@@ -323,6 +338,27 @@ document.getElementById('recipient').addEventListener('change', function() {
 
 
 
+// Function to update the total for a given row based on rate, qty, and GC.C value
+function updateTotal(rowIndex) {
+    // Get the rate, GC.C value, and quantity from the respective row
+    const rate = parseFloat(document.querySelector(`#reportTable tr:nth-child(${rowIndex + 1}) .rateInput`).value) || 0; // Default to 0 if empty
+    const gcValue = parseFloat(document.querySelector(`#reportTable tr:nth-child(${rowIndex + 1}) .gc-c-dropdown`).value);
+    const qty = parseFloat(document.querySelector(`#reportTable tr:nth-child(${rowIndex + 1}) .qtyInput`).value) || 0; // Default to 0 if empty
+    
+    // Calculate the total amount: Total = Rate * GC.C * Qty
+    const totalAmount = rate * gcValue * qty;
+
+    // Set the total amount in the respective row's total amount input field
+    document.querySelector(`#reportTable tr:nth-child(${rowIndex + 1}) .totalAmount`).value = totalAmount.toFixed(2); // Round to 2 decimals
+}
+
+// Add event listeners to the rate and quantity inputs as well
+document.addEventListener('input', function(event) {
+    if (event.target.classList.contains('rateInput') || event.target.classList.contains('qtyInput')) {
+        const rowIndex = event.target.getAttribute('data-index');
+        updateTotal(rowIndex);
+    }
+});
 
 
 // Function to generate the bill data to be saved

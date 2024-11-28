@@ -189,48 +189,63 @@ td {
         <h3>Billing Form</h3>
         <button type="button" onclick="newBill()" class="new-bill-btn" style="background-color: blue; color: white;">New Bill</button>
 
+        <div id="form-container">
+<!-- Customer Info Section -->
+<div class="form-section" id="customer-info-section">
+    <h4>Customer Info</h4>
+    <form id="billing-form">
+        <label for="lr-no">LR No.:</label>
+        <input type="text" id="lr-no" placeholder="LR No" required readonly>
+    
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+        
+        <label for="gst-paid-by">GST Paid By:</label>
+        <select id="gst-paid-by" required>
+            <option value="">Select</option>
+            <option value="consigner">Consigner</option>
+            <option value="consignee">Consignee</option>
+            <option value="To be billed">To be billed</option>
+        </select><br>
 
-        <!-- Customer Info Section -->
-        <div class="form-section">
-            <h4>Customer Info</h4>
-            <form id="billing-form">
-                
-                <label for="lr-no">LR No.:</label>
-                <input type="text" id="lr-no" placeholder="LR No" required readonly>
-            
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
-                
-                <label for="gst-paid-by">GST Paid By:</label>
-                <select id="gst-paid-by" required>
-                    <option value="consigner">consigner</option>
-                    <option value="consignee">consignee</option>
-                    <option value="To be billed">To be billed</option>
-                </select><br>
+        <label for="payment-mode">Payment Mode:</label>
+        <select id="payment-mode" required>
+            <option value="">Select</option>
+            <option value="Paid">Paid</option>
+            <option value="To Pay">To Pay</option>
+            <option value="To be Billed">To be Billed</option>
+        </select><br>
+        
+        <!-- Next Button -->
+        <button type="button" onclick="goToNextSection('customer-info-section', 'from-to-section')">Next</button>
+    </form>
+</div>
 
-                <label for="payment-mode">Payment Mode:</label>
-                <select id="payment-mode" required>
-                    <option value="Paid">Paid</option>
-                    <option value="To Pay">To Pay</option>
-                    <option value="To be Billed">To be Billed</option>
-                </select><br>
 
-              <!-- From and To Section -->
-<label for="from">From:</label>
-<select id="from" placeholder="From" required>
-    <option value="">Select Location</option>
-</select>
-<button type="button" onclick="addNewOption('from')">Add New Location</button>
-<button type="button" onclick="removeOption('from')">Remove Location</button><br>
+          <!-- From and To Section -->
+<div class="form-section" id="from-to-section" style="display: none;">
+    <h4>From and To Section</h4>
+    <label for="from">From:</label>
+    <select id="from" placeholder="From" required>
+        <option value="">Select Location</option>
+    </select>
+    <button type="button" onclick="addNewOption('from')">Add New Location</button>
+    <button type="button" onclick="removeOption('from')">Remove Location</button><br>
 
-<label for="to">To:</label>
-<select id="to" placeholder="To" required>
-    <option value="">Select Destination</option>
-</select>
-<button type="button" onclick="addNewOption('to')">Add New Destination</button>
-<button type="button" onclick="removeOption('to')">Remove Destination</button><br>
+    <label for="to">To:</label>
+    <select id="to" placeholder="To" required>
+        <option value="">Select Destination</option>
+    </select>
+    <button type="button" onclick="addNewOption('to')">Add New Destination</button>
+    <button type="button" onclick="removeOption('to')">Remove Destination</button><br>
+
+    <!-- Back and Next Buttons -->
+    <button type="button" onclick="goToPreviousSection('from-to-section', 'customer-info-section')">Back</button>
+    <button type="button" onclick="goToNextSection('from-to-section', 'consignor-consignee-section')">Next</button>
+</div>
 
 <!-- Consignor and Consignee Section -->
+<div class="form-section" id="consignor-consignee-section" style="display: none;">
 <h4>Consignor & Consignee</h4>
 <form id="consignor-consignee-form">
     <!-- Consignor Section -->
@@ -267,6 +282,9 @@ td {
     <label for="bill-no">Invoice No.:</label>
     <input type="text" id="Consignee-Invoice-no" placeholder="Consignee Invoice No." required><br><br>
 
+
+  
+
     <!-- Add DD/C Amount and DC/C Amount fields -->
 <label for="ddc-amount">DD/C Amount:</label>
 <input type="number" id="ddc-amount" placeholder="Enter DD/C Amount" step="0.01"><br><br>
@@ -274,6 +292,10 @@ td {
 <label for="dcc-amount">DC/C Amount:</label>
 <input type="number" id="dcc-amount" placeholder="Enter DC/C Amount" step="0.01"><br><br>
 
+  <!-- Back and Next Buttons -->
+  <button type="button" onclick="goToPreviousSection('consignor-consignee-section', 'from-to-section')">Back</button>
+  <button type="button" onclick="goToNextSection('consignor-consignee-section', 'goods-info-section')">Next</button>
+</div>
 </form>
 
 <!-- Modal HTML -->
@@ -313,7 +335,7 @@ td {
     </div>
 </div>
      <!-- Goods Info Section -->
-<div class="form-section">
+     <div class="form-section" id="goods-info-section" style="display: none;">
     <h4>Goods Info</h4>
     <div class="goods-table-container">
         <table id="goods-table" style="width: 100%; margin: 10px 0; border-collapse: collapse;">
@@ -335,7 +357,7 @@ td {
         </table>
     </div>
     <button type="button" onclick="addGoodsEntry()">Add More Goods</button>
-</div>
+
 
        
     </form>
@@ -345,14 +367,16 @@ td {
         <button type="button" onclick="modifyBill()">Modify Bill</button>
 <button type="button" onclick="deleteBill()">Delete Bill</button>
 <button type="button" onclick="newBill()" class="new-bill-btn">New Bill</button>
-      
+
     </div>
 </div>
 
+</div>
 
 
        <!-- Bill Preview Section -->
-<div id="bill-preview" class="bill-preview" style="border: 1px solid black; padding: 20px; margin: 20px 0;">
+       <div id="bill-preview" class="bill-preview" style="border: 1px solid black; padding: 20px; margin: 20px 0; display: none;">
+     
     <div class="header" style="text-align: center;">
             <p>Subject to Benglore Jurisdiction</p>
         <h1> <div class="logo"></div>
@@ -460,13 +484,41 @@ td {
 
    
 
-
+ 
 </div>
+<!-- Print Button -->
 
-<button type="button" onclick="printBill()">Print Bill</button>
-
-
+<button id="print-bill-button" onclick="printBill()">Print Bill</button>
 <a href="report.html" id="goToReportsBtn">Go to Reports</a>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const viewBillButton = document.getElementById('view-bill-button');
+        const billPreview = document.getElementById('bill-preview');
+        // Ensure the bill preview and Print Bill button are hidden initially
+        billPreview.style.display = 'none';
+      
+
+        // Add event listener to the View Bill button to toggle visibility
+        viewBillButton.addEventListener('click', () => {
+            if (billPreview.style.display === 'none' || billPreview.style.display === '') {
+                // Show the bill preview and Print Bill button
+                billPreview.style.display = 'block';
+                viewBillButton.textContent = 'Hide Bill'; // Update button text
+            } else {
+                // Hide the bill preview and Print Bill button
+                billPreview.style.display = 'none';
+                viewBillButton.textContent = 'View Bill'; // Reset button text
+            }
+        });
+    });
+
+</script>
+
+
+
+
 
     <script src="billing-script.js"></script>
     <script src="report-script.js"></script>
