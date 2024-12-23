@@ -512,8 +512,7 @@ window.onload = function() {
 // Function to print the bill preview
 function printBill() {
     const printContents = document.getElementById("bill-preview").innerHTML;
-    const newWindow = window.open('', '', 'width=600,height=400');
-    newWindow.document.write('<html><head><title>Print Bill</title></head><body>');
+    const newWindow = window.open('', '', 'width=595,height=421');
     newWindow.document.write(printContents);
     newWindow.document.write('</body></html>');
     newWindow.document.close();
@@ -524,21 +523,20 @@ function printBill() {
      .then(() => {
          // Only proceed with printing if save was successful
          const printContents = document.getElementById("bill-preview").innerHTML;
-         const newWindow = window.open('', '', 'width=600,height=400');
+         const newWindow = window.open('', '', 'width=595,height=421');
 
          newWindow.document.write(`
              <html>
-                 <head>
-                     <title>Print Bill</title>
-                     <style>
-                         @media print {
+            <head>
+                <title>Print Bill</title>
+                <style>
+                    @media print {
                         /* Set the page size and orientation */
                         @page {
                             size: A4 portrait;
-                            margin: 0;
+                            margin: 0; /* Remove default margins */
                         }
 
-                        /* Ensure content fits half the A4 page */
                         body {
                             margin: 0;
                             padding: 0;
@@ -548,27 +546,35 @@ function printBill() {
 
                         .print-container {
                             width: 100%;
-                            height: 50%; /* Use half the page height */
+                            height: 50%; /* Exact half of the A4 page height */
                             box-sizing: border-box;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
                             border: 1px solid black; /* Optional border for clarity */
-                            padding: 10px;
+                            position: absolute;
                         }
 
+                        /* Add a border to the content (optional) */
                         .company-details {
                             width: 100%;
                             border-collapse: collapse;
                         }
 
                         .company-details td {
-                            padding: 10px;
+                            padding: 5px;
                             border: 1px solid black;
                         }
                     }
-                         
-                     </style>
-                 </head>
-                 <body>${printContents}</body>
-             </html>
+                </style>
+            </head>
+            <body>
+                <div class="print-container">
+                    ${printContents}
+                </div>
+            </body>
+        </html>
          `);
 
          newWindow.document.close();
